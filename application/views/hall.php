@@ -16,98 +16,26 @@
     <div class="container">
         <div class="marketing" class="row">
             <ul id="portfolio-list" class="thumbnails">
+                <?php foreach($votes as $vote):?>
+                <li class="span3">
+                    <div>
+                        <div class="sengal-thumbnail thumbnail">
+                            <?php if(!empty($vote['image'])):?>
+                            <a href="<?=  base_url('vote/join/' . $vote['start_voteid'])?>">
+                                <img src="<?=$vote['image']?>" alt="<?=$vote['title']?>" />
+                            </a>
+                            <?php endif;?>
+                            <div class="caption">
+                                <a href="<?=  base_url('vote/join/' . $vote['start_voteid'])?>">
+                                    <h4><?=$vote['title']?></h4>
+                                </a>
+                                <p><?=$vote['summary']?></p>
+                            </div></a>
+                        </div>
+                    </div>
+                </li>
+                <?php endforeach;?>
 
-                <li class="span3">
-                    <div>
-                        <div class="sengal-thumbnail thumbnail">
-                            <a href="#">
-                                <img src="http://placehold.it/300x250""" alt="" />
-                            </a>
-                            <div class="caption">
-                                <h4>Aliquam maecenas molestie</h4>
-                                <p>Pellentesque risus diam vestibulum phasellus, aliquam vivamus.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="span3">
-                    <div>
-                        <div class="sengal-thumbnail thumbnail">
-                            <a href="#">
-                                <img src="http://placehold.it/300x250""" alt="" />
-                            </a>
-                            <div class="caption">
-                                <h4>Aliquam maecenas molestie</h4>
-                                <p>Pellentesque risus diam vestibulum phasellus, aliquam vivamus.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="span3">
-                    <div>
-                        <div class="sengal-thumbnail thumbnail">
-                            <a href="#">
-                                <img src="http://placehold.it/300x250""" alt="" />
-                            </a>
-                            <div class="caption">
-                                <h4>Aliquam maecenas molestie</h4>
-                                <p>Pellentesque risus diam vestibulum phasellus, aliquam vivamus.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="span3">
-                    <div>
-                        <div class="sengal-thumbnail thumbnail">
-                            <a href="#">
-                                <img src="http://placehold.it/300x250""" alt="" />
-                            </a>
-                            <div class="caption">
-                                <h4>Aliquam maecenas molestie</h4>
-                                <p>Pellentesque risus diam vestibulum phasellus, aliquam vivamus.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="span3">
-                    <div>
-                        <div class="sengal-thumbnail thumbnail">
-                            <a href="#">
-                                <img src="http://placehold.it/300x250""" alt="" />
-                            </a>
-                            <div class="caption">
-                                <h4>Aliquam maecenas molestie</h4>
-                                <p>Pellentesque risus diam vestibulum phasellus, aliquam vivamus.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="span3">
-                    <div>
-                        <div class="sengal-thumbnail thumbnail">
-                            <a href="#">
-                                <img src="http://placehold.it/300x250""" alt="" />
-                            </a>
-                            <div class="caption">
-                                <h4>Aliquam maecenas molestie</h4>
-                                <p>Pellentesque risus diam vestibulum phasellus, aliquam vivamus.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="span3">
-                    <div>
-                        <div class="sengal-thumbnail thumbnail">
-                            <a href="#">
-                                <img src="http://placehold.it/300x250""" alt="" />
-                            </a>
-                            <div class="caption">
-                                <h4>Aliquam maecenas molestie</h4>
-                                <p>Pellentesque risus diam vestibulum phasellus, aliquam vivamus.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
             </ul>
         </div>
     </div>

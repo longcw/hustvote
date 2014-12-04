@@ -26,7 +26,7 @@ class Vote extends MY_Controller {
 
     private function _showStartVote($count = 2, $error = '') {
         $header ['userinfo'] = $this->userinfo;
-        $header ['title'] = 'HustVote 在线投票';
+        $header ['title'] = '发起新投票 HustVote 在线投票';
         $header ['act'] = 'hall';
         $header['css'] = array('jquery.datetimepicker', 'umeditor/themes/default/css/umeditor');
         $footer['js'] = array('jquery.datetimepicker', 'startvote', 'umeditor/umeditor.config', 'umeditor/umeditor.min');
@@ -72,8 +72,25 @@ class Vote extends MY_Controller {
             
             $callback = null;
             $this->vote_model->addNewVote($data, $callback);
-            var_dump($callback);
+            //var_dump($callback);
             // TODO 发起投票成功
+            redirect('home/hall');
         }
+    }
+    
+    public function join($id) {
+        $header ['userinfo'] = $this->userinfo;
+        $header ['title'] = '参与投票 HustVote 在线投票';
+        $header ['act'] = 'hall';
+        $header['css'] = array('umeditor/themes/default/css/umeditor', 'icheck-skins/square/green');
+        $footer['js'] = array('umeditor/umeditor.config', 'umeditor/umeditor.min', 'icheck', 'joinvote');
+        $data['detail'] = $this->vote_model->getVoteDetailById($id);
+        if(empty($data['detail'])) {
+            return;
+        }
+        //var_dump($data);
+        $this->load->view('header', $header);
+        $this->load->view('join_vote', $data);
+        $this->load->view('footer', $footer);
     }
 }
