@@ -65,9 +65,13 @@
 
     </div>
 </div>
-<script src="<?php echo base_url('js/jquery.min.js')?>"
-	type="text/javascript"></script>
+<script src="<?php echo base_url('js/jquery.min.js')?>" type="text/javascript"></script>
 <script src="<?php echo base_url('js/bootstrap.min.js')?>"></script>
 
+<?php if(isset($js)):?>
+<?php foreach ($js as $value):?>
+<script src="<?php echo base_url('js/' . $value . '.js')?>" type="text/javascript"></script>
+<?php endforeach;?>
+<?php endif;?>
 </body>
 </html>
