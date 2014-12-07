@@ -30,15 +30,15 @@
                             <label class="control-label" for="start_time">开始时间<i class="icon-calendar"></i></label>
                             <div class="controls">
                                 <label class="radio inline">
-                                    <input type="radio" name="start_select" value="0" <?=!set_value('start_select')? 'checked="checked"':'';?> class="start-select">
+                                    <input type="radio" name="start_select" value="0" <?= !set_value('start_select') ? 'checked="checked"' : ''; ?> class="start-select">
                                     立即开始
                                 </label>
                                 <label class="radio inline">
-                                    <input type="radio" name="start_select" value="1" <?=set_value('start_select')? 'checked="checked"':'';?> class="start-select">
+                                    <input type="radio" name="start_select" value="1" <?= set_value('start_select') ? 'checked="checked"' : ''; ?> class="start-select">
                                     指定时间
                                 </label>
                                 <p class="help-block">
-                                    <input style="display:<?=set_value('start_select')? 'block':'none';?>" id="start-time" class="date" type="text" name="start_time" placeholder="点击选择日期" value="<?php echo set_value('start_time'); ?>" readonly="readonly"/>
+                                    <input style="display:<?= set_value('start_select') ? 'block' : 'none'; ?>" id="start-time" class="date" type="text" name="start_time" placeholder="点击选择日期" value="<?php echo set_value('start_time'); ?>" readonly="readonly"/>
                                 </p>
                             </div>
                         </div>
@@ -48,15 +48,15 @@
                             <label class="control-label" for="end_time">结束时间<i class="icon-calendar"></i></label>
                             <div class="controls">
                                 <label class="radio inline">
-                                    <input type="radio" name="end_select" value="0" <?=!set_value('end_select')? 'checked="checked"':'';?> class="end-select">
+                                    <input type="radio" name="end_select" value="0" <?= !set_value('end_select') ? 'checked="checked"' : ''; ?> class="end-select">
                                     长期有效
                                 </label>
                                 <label class="radio inline">
-                                    <input type="radio" name="end_select" value="1" <?=set_value('end_select')? 'checked="checked"':'';?> class="end-select">
+                                    <input type="radio" name="end_select" value="1" <?= set_value('end_select') ? 'checked="checked"' : ''; ?> class="end-select">
                                     指定时间
                                 </label>
                                 <p class="help-block">
-                                    <input style="display:<?=set_value('end_select')? 'block':'none';?>" id="end-time" class="date" type="text" name="end_time" placeholder="点击选择日期" value="<?php echo set_value('end_time'); ?>" readonly="readonly"/>
+                                    <input style="display:<?= set_value('end_select') ? 'block' : 'none'; ?>" id="end-time" class="date" type="text" name="end_time" placeholder="点击选择日期" value="<?php echo set_value('end_time'); ?>" readonly="readonly"/>
                                 </p>
                             </div>
 
@@ -66,8 +66,7 @@
                             <!-- Textarea -->
                             <label class="control-label" for="umeditor">投票描述</label>
                             <div class="controls">
-                                <div id="umeditor_intro" style="height:150px;"><?php echo htmlspecialchars_decode(set_value('intro')); ?></div>
-                                <textarea style="display: none" name="intro" id="intro_content"></textarea>
+                                <script id="umeditor_intro" name="intro" type="text/plain" style="height:150px;"><?php echo htmlspecialchars_decode(set_value('intro')); ?></script>
                                 <?php echo form_error('intro', '<div class="alert alert-error">', '</div>'); ?>
                             </div>
                         </div>
@@ -84,14 +83,15 @@
                                     <div class="input-prepend input-append">
                                         <span class="add-on choice-index"><?= $i + 1 ?></span>
                                         <input class="span3 choice" placeholder="选项描述" name="choice[]" type="text" value="<?php echo ($chv = set_value('choice[]')); ?>">
-                                        <span class="add-on">更多细节 <input type="checkbox" class="has-detail" <?= $tag ? '' : 'checked=""'; ?>></span>
+                                        <button class="btn has-detail" type="button"><?= $tag ? '详情' : '隐藏'; ?></button>
+
                                         <?php if ($i >= 2) : ?>
-                                            <span class="add-on del-choice"><a><i class="icon-trash"></i>删除</a></span>
+                                            <button class="btn del-choice"><i class="icon-trash"></i>删除</button>
                                         <?php endif; ?>
                                     </div>
                                     <div class="textarea" style="display: <?= $tag ? 'none' : 'block'; ?>">
-                                        <div id="ume<?= $i ?>" class="umeditor-detail" style="width: 500px; height:150px;"><?php echo $detail; ?></div>
-                                        <textarea style="display: none" name="detail[]" id="detail<?= $i ?>" class="detail-content"></textarea>
+                                        <script id="ume<?= $i ?>" class="umeditor-detail" type="text/plain" style="height:150px;"><?php echo $detail; ?></script>
+                                        <textarea class="detail-content" name="detail[]" style="display:none"></textarea>
                                     </div>
                                     <?php echo empty($chv) ? form_error('choice[]', '<div class="alert alert-error">', '</div>') : ''; ?>
                                 </div>
@@ -115,8 +115,16 @@
                             </div>
 
                         </div>
+                        
+                        <div class="control-group">
+
+                            <div class="controls">
+                                <button type="submit" class="btn btn-primary btn-block">下一步</button> 
+                            </div>
+
+                        </div>
                     </fieldset>
-                    <button type="submit" class="btn btn-primary">发布</button> 
+                    
                 </form></div>
         </div>
     </div>

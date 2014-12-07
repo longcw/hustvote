@@ -1,61 +1,42 @@
 $(document).ready(function(){
-    //实例化编辑器
-    var um_intro = UM.getEditor('umeditor_intro');
     
+    //实例化编辑器
+    UM.getEditor('umeditor_intro');
+    var detailEditor = [];
     var choice_count = $(".choice").size();
-    var um_detail = new Array();
     
     $(".has-detail").each(function(){
-        if($(this).attr("checked")) {
-            var choice = $(this).parent().parent();
-            var id = choice.parent().find(".umeditor-detail").attr("id");
-            var key = choice.parent().find(".detail-content").attr("id");
-            um_detail[key] = UM.getEditor(id);
-        }
+        var choice = $(this).parent().parent();
+        var id = choice.find(".umeditor-detail").attr("id");
+        detailEditor[id] = UM.getEditor(id);
     });
     
-    //提交表单
-    $("#startForm").submit(function(e) {
+    //提交
+    $('#startForm').submit(function(e) {
         e.preventDefault();
-        var intro_content = um_intro.getContent();
-        $("#intro_content").text(intro_content);
-        
-        for(var key in um_detail) {
-            var detail_content = $("#"+key);
-            var choice = detail_content.parent().parent();
-            if(choice.find(".has-detail").attr("checked")) {
-                var detail = um_detail[key].getContent();
-                detail_content.text(detail);
-            } else {
-                detail_content.text("");
-            }
-        }
-
+        $('.textarea').each(function() {
+            var id = $(this).find('.umeditor-detail').attr('id');
+            var content = detailEditor[id].getContent();
+            $(this).find('.detail-content').text(content);
+        });
         this.submit();
     });
-    
 
     //显示选项细节输入框
     $(".has-detail").die().live("click", function() {
         var choice = $(this).parent().parent();
-        if($(this).attr("checked")) {
-            var key = choice.parent().find(".detail-content").attr("id");
-            if(um_detail[key] === undefined) {
-                var id = choice.parent().find(".umeditor-detail").attr("id");
-                um_detail[key] = UM.getEditor(id);
-            }
-            choice.parent().find(".textarea").css("display", "block");
+        if($(this).html() === '详情') {
+            choice.find(".textarea").css("display", "block");
+            $(this).html('隐藏');
         } else {
-            choice.parent().find(".textarea").css("display", "none");
+            choice.find(".textarea").css("display", "none");
+            $(this).html('详情');
         }
     });
     
     $(".del-choice").die().live("click", function() {
        var choice = $(this).parent().parent().parent();
        var index = choice.find(".choice-index").html();
-       var key = choice.find(".detail-content").attr("id");
-       delete um_detail[key];
-       
        var indexs = choice.parent().find(".choice-index");
        indexs.each(function() {
            if($(this).html() > index) {
@@ -74,13 +55,15 @@ $(document).ready(function(){
                                 '<div class="input-prepend input-append">'+
                                     '<span class="add-on choice-index">' + (count+1) + '</span>'+
                                     '<input class="span3 choice" placeholder="选项描述" name="choice[]" type="text">'+
-                                    '<span class="add-on">更多细节 <input type="checkbox" class="has-detail" ></span>'+
-                                    '<span class="add-on del-choice"><a><i class="icon-trash"></i>删除</a></span>'+
+                                    '<button class="btn has-detail" type="button">详情</button>'+
+                                    '<button class="btn del-choice"><i class="icon-trash"></i>删除</button>'+
                                 '</div><div class="textarea" style="display: none">'+
-                                    '<div id="ume'+ choice_count + '" class="umeditor-detail" style="height:150px;"></div>'+
-                                    '<textarea style="display: none" name="detail[]" id="detail'+ choice_count + '"  class="detail-content"></textarea>'+
+                                    '<script id="ume'+ choice_count + '" class="umeditor-detail" type="text/plain" style="height:150px;"></script>'+
+                                    '<textarea class="detail-content" name="detail[]" style="display:none"></textarea>' +
                                 '</div></div></div>';
         $(".choice-end").before(plus);
+        id = 'ume' + choice_count;
+        detailEditor[id] = UM.getEditor(id);
         choice_count++;
     });
     

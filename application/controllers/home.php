@@ -21,8 +21,14 @@ class Home extends MY_Controller {
 
     public function hall($page = 1) {
         $this->load->model('vote_model');
+        $data['total_page'] = $this->vote_model->getVotePage();
+        if(!is_numeric($page) || $page <= 0 || $page > $data['total_page']) {
+            echo $this->errorhandler->getErrorDes('ErrorPage');
+            return;
+        }
+        
         $data['votes'] = $this->vote_model->getVotesByPage($page - 1);
-        //var_dump($data);exit;
+        $data['cpage'] = $page;
         $header['userinfo'] = $this->userinfo;
         $header['lastdiv'] = false;
         $header['title'] = '投票大厅 HustVote 在线投票';

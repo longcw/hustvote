@@ -34,11 +34,11 @@
                             <div class="nav-collapse collapse">
                                 <ul id="bricks-nav" class="nav nav-pills pull-right">
                                     <li<?php echo isset($act) && $act == 'home' ? ' class="active"' : ''; ?>><a href="<?php echo base_url('home') ?>">首页</a></li>
-                                    <li<?php echo isset($act) && $act == 'download' ? ' class="active"' : ''; ?>><a href="services.html">下载</a></li>
+                                    <li<?php echo isset($act) && $act == 'download' ? ' class="active"' : ''; ?>><a href="#">下载</a></li>
                                     <li<?php echo isset($act) && $act == 'hall' ? ' class="active"' : ''; ?>><a href="<?php echo base_url('home/hall') ?>">投票大厅</a></li>
-                                    <li<?php echo isset($act) && $act == 'about' ? ' class="active"' : ''; ?>><a href="blog.html">关于</a></li>
+                                    <li<?php echo isset($act) && $act == 'about' ? ' class="active"' : ''; ?>><a href="#">关于</a></li>
 
-                                    <?php if (!empty($userinfo)) : ?>
+                                    <?php if (!empty($userinfo['uid'])) : ?>
                                         <li class="dropdown"><a href="#" class="dropdown-toggle"
                                                                 data-toggle="dropdown"><?php echo $userinfo['nickname'] ?> <b class="caret"></b></a>
                                             <ul class="dropdown-menu">

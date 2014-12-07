@@ -6,6 +6,9 @@ class ErrorHandler {
 		'ArrayCountWrong' => 'array count wrong',
 		'EmailNotExist' => '邮箱不存在',
 		'PasswordWrong' => '密码错误',
+                'TokenError'    =>  'token error',
+                'NoRight'   => '权限不足',
+                'ErrorPage' => '错误的页码'
 	);
 	
 	/**
@@ -15,7 +18,7 @@ class ErrorHandler {
 	 */
 	public function getErrorDes($errorcode) {
 		if(isset($this->errorMap[$errorcode])) {
-			return $this->errorMap[$errorcode];
+			return $errorcode . ':' . $this->errorMap[$errorcode];
 		} else {
 			return 'Unknown';
 		}

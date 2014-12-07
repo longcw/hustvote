@@ -18,7 +18,7 @@ class User extends MY_Controller {
 	}
 	
 	public function login() {
-		if(!empty($this->userinfo)) {
+		if(!empty($this->userinfo['uid'])) {
 			redirect();
 			return;
 		}
