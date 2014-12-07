@@ -114,6 +114,11 @@ class Uploader
             $destFileName = $this->fileName;
             $srcFileName = $file['tmp_name'];
             $result = $storage->upload($domain, $destFileName, $srcFileName);
+            if (!empty($result)) {
+                $this->fullName = $result;
+            } else {
+                $this->stateInfo = $this->getStateInfo("MOVE");
+            }
         }
     }
 
