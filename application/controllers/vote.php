@@ -156,14 +156,27 @@ class Vote extends MY_Controller {
         var_dump($id);
     }
     
-    private function _hasRightToVote($start_voteid, $code = null) {
+    private function _hasRightToVote(&$callback, $start_voteid, $code = null) {
+        $callback = "unknown";
         $id['uid'] = empty($this->userinfo['uid']) ? null : $this->userinfo['uid'];
         $id['email'] = empty($this->userinfo['uid']) ? null : $this->userinfo['email'];
         $id['session_id'] = $this->session->userdata('session_id');
         $id['ip_address'] = $this->session->userdata('ip_address');
         
+        $this->load->model('code_model');
         $limit = $this->vote_model->getVoteLimit($start_voteid);
         if(!empty($limit['code_need'])) {
+            //需要邀请码
+            $codeInfo = $this->code_model->getCodeInfo($code);
+            if(!empty($codeInfo) && !$codeInfo['is_voted'] && $codeInfo['start_voteid'] == $start_voteid) {
+                return true;
+            } else {
+                $callback = 'code_need';
+                return false;
+            }
+            
+            
+            
             
         }
         

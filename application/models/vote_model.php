@@ -105,9 +105,9 @@ class Vote_model extends CI_Model {
             return array();
         }
 
-        $data = [];
+        $data = array();
 
-        $images = [];
+        $images = array();
         preg_match('/<img.*src="(.*)"\s*.*>/iU', $content, $images);
         if (isset($images[1])) {
             $data['image'] = $images[1];
@@ -192,7 +192,7 @@ class Vote_model extends CI_Model {
         if (empty($id) || !is_numeric($id)) {
             return array();
         }
-        $data = [];
+        $data = array();
         $choices = $this->db->get_where('Choice', array('start_voteid' => $id));
         $data['choices'] = $choices->result_array();
 
