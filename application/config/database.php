@@ -48,11 +48,12 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '123456';
-$db['default']['database'] = 'hustvote';
-$db['default']['dbdriver'] = 'mysql';
+$db['default']['hostname'] = SAE_MYSQL_HOST_M;
+$db['default']['username'] = SAE_MYSQL_USER;
+$db['default']['password'] = SAE_MYSQL_PASS;
+$db['default']['database'] = SAE_MYSQL_DB;
+$db['default']['port'] = SAE_MYSQL_PORT;
+$db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;

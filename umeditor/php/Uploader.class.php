@@ -33,7 +33,7 @@ class Uploader
         "MOVE" => "文件保存时出错",
         "DIR_ERROR" => "创建目录失败"
     );
-
+    
     /**
      * 构造函数
      * @param string $fileField 表单名称
@@ -90,19 +90,30 @@ class Uploader
             return;
         }
 
-        $folder = $this->getFolder();
-
+        /*$folder = $this->getFolder();
+              
         if ( $folder === false ) {
             $this->stateInfo = $this->getStateInfo( "DIR_ERROR" );
             return;
         }
 
         $this->fullName = $folder . '/' . $this->getName();
-
+         * 
+         */
+        $this->getName();  
         if ( $this->stateInfo == $this->stateMap[ 0 ] ) {
+            /*
             if ( !move_uploaded_file( $file[ "tmp_name" ] , $this->fullName ) ) {
                 $this->stateInfo = $this->getStateInfo( "MOVE" );
             }
+             * 
+             */
+             //sae storage
+            $storage = new SaeStorage();
+            $domain = $this->config['domain'];
+            $destFileName = $this->fileName;
+            $srcFileName = $file['tmp_name'];
+            $result = $storage->upload($domain, $destFileName, $srcFileName);
         }
     }
 
@@ -157,7 +168,8 @@ class Uploader
      */
     private function getName()
     {
-        return $this->fileName = time() . rand( 1 , 10000 ) . $this->getFileExt();
+        //return $this->fileName = time() . rand( 1 , 10000 ) . $this->getFileExt();
+         return $this->fileName = md5(uniqid(rand(), true)) . $this->getFileExt();
     }
 
     /**

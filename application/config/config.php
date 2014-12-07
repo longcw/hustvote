@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://10.42.0.1:8088/';
+$config['base_url']	= 'http://hustvote.sinaapp.com/';
 
 /*
 |--------------------------------------------------------------------------

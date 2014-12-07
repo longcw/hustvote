@@ -5,6 +5,7 @@
     include "Uploader.class.php";
     //上传配置
     $config = array(
+        "domain" => "img",
         "savePath" => "upload/" ,             //存储文件夹
         "maxSize" => 1000 ,                   //允许的文件最大尺寸，单位KB
         "allowFiles" => array( ".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp" )  //允许的文件格式
