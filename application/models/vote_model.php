@@ -41,6 +41,7 @@ class Vote_model extends CI_Model {
         $id = $this->db->insert_id();
 
         $this->addChoice($choices, $details, $id);
+        $this->setVoteLimit(array('start_voteid'=>$id));
         $callback = $id;
         return true;
     }
@@ -53,7 +54,9 @@ class Vote_model extends CI_Model {
      * @return int
      */
     public function setVoteLimit($data) {
-        $limit = $this->getVoteLimit($data['start_voteid']);
+        $where['start_voteid'] = $data['start_voteid'];
+        $query = $this->db->limit(1)->get_where('VoteLimit', $where);
+        $limit = $query->row_array();
         if (!empty($limit)) {
             //已经存在
             $this->db->where('limitid', $limit['limitid']);
@@ -71,9 +74,16 @@ class Vote_model extends CI_Model {
      * @return array
      */
     public function getVoteLimit($id) {
+        $limit = array(
+            'ip_address' => 0,
+            'captcha_need' => 0,
+            'cycle_time' => 0,
+            'code_need' => 0,
+            'email_need' => 0
+        );
         $where['start_voteid'] = $id;
         $query = $this->db->limit(1)->get_where('VoteLimit', $where);
-        return $query->row_array();
+        return array_merge($limit, $query->row_array());
     }
 
     /**
@@ -105,9 +115,9 @@ class Vote_model extends CI_Model {
             return array();
         }
 
-        $data = [];
+        $data = array();
 
-        $images = [];
+        $images = array();
         preg_match('/<img.*src="(.*)"\s*.*>/iU', $content, $images);
         if (isset($images[1])) {
             $data['image'] = $images[1];
@@ -192,7 +202,7 @@ class Vote_model extends CI_Model {
         if (empty($id) || !is_numeric($id)) {
             return array();
         }
-        $data = [];
+        $data = array();
         $choices = $this->db->get_where('Choice', array('start_voteid' => $id));
         $data['choices'] = $choices->result_array();
 
@@ -202,6 +212,91 @@ class Vote_model extends CI_Model {
         $data['limit'] = $this->getVoteLimit($id);
 
         return $data;
+    }
+    
+    public function getVoteChoiceMax($id) {
+        $this->db->limit(1);
+        $this->db->select('choice_max');
+        $query = $this->db->get_where('StartVote', array('start_voteid'=>$id));
+        $row = $query->row_array();
+        return empty($row) ? 0 : $row['choice_max'];
+    }
+    
+    public function getVoteTime($id) {
+        $this->db->limit(1);
+        $this->db->select('start_time,end_time');
+        $query = $this->db->get_where('StartVote', array('start_voteid'=>$id));
+        $row = $query->row_array();
+        return $row;
+    }
+
+    /**
+     * 获取邀请码信息
+     * @param string $code
+     * @return array
+     */
+    public function getCodeInfo($code) {
+        if (empty($code)) {
+            return array();
+        }
+        $query = $this->db->get_where('Code', array('code' => $code));
+        return $query->row_array();
+    }
+
+    /**
+     * 获取最近的一条投票记录
+     * @param int $voteid
+     * @param array $id
+     * @return array
+     */
+    public function getLastVoteLog($voteid, $id) {
+        if (!empty($id['openid'])) {
+            $id['openid'] = $id['thirdtype'] . ':' . $id['openid'];
+            unset($id['thirdtype']);
+        }
+
+        $qstr = 'SELECT * FROM VoteLog WHERE start_voteid=? ';
+        $data = array($voteid);
+
+        $idstr = 'AND (';
+        $id = array_filter($id);
+        $i = 0;
+        $count = count($id);
+        foreach ($id as $key => $value) {
+            $i++;
+            $idstr .= "$key=?";
+            array_push($data, $value);
+            if ($i < $count) {
+                $idstr .= ' OR ';
+            }
+        }
+        $idstr .= ')';
+        $qstr .= $idstr;
+        $qstr .= " ORDER BY vote_time DESC LIMIT 1";
+        $query = $this->db->query($qstr, $data);
+        return $query->row_array();
+    }
+
+    public function addaVote($start_voteid, $choices, $logid) {
+        $data = array(
+            'start_voteid' => $start_voteid,
+            'logid' => $logid,
+            'createtime' => time(),
+        );
+        foreach ($choices as $choice) {
+            $data['choiceid'] = $choice;
+            $this->db->insert('JoinVote', $data);
+        }
+    }
+
+    public function addVoteLog($start_voteid, $identify) {
+        $identify['start_voteid'] = $start_voteid;
+        $identify['vote_time'] = time();
+        if (!empty($identify['openid'])) {
+            $identify['openid'] = $identify['thirdtype'] . ':' . $identify['openid'];
+        }
+        $this->db->insert('VoteLog', $identify);
+        return $this->db->insert_id();
     }
 
 }
