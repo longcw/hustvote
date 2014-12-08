@@ -8,7 +8,8 @@ class ErrorHandler {
 		'PasswordWrong' => '密码错误',
                 'TokenError'    =>  'token error',
                 'NoRight'   => '权限不足',
-                'ErrorPage' => '错误的页码'
+                'ErrorPage' => '错误的页码',
+                'ErrorVote' => '投票错误'
 	);
 	
 	/**
