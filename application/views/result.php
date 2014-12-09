@@ -20,10 +20,12 @@
                                 highlightFill: "rgba(151,187,205,0.75)",
                                 highlightStroke: "rgba(151,187,205,1)",
                                 data: [<?php
-                                foreach ($result as $r) {
-                                    echo "\"$r\",";
+                                foreach ($vote['choices'] as $v) {
+                                    //var_dump($v);
+                                    $cid = $v['choiceid'];
+                                    echo "\"$result[$cid]\",";
                                 }
-                                ?>]
+                                ?>],
                             }
                         ]
                     };
