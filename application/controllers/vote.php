@@ -38,6 +38,16 @@ class Vote extends MY_Controller {
         $this->load->view('start_vote', $data);
         $this->load->view('footer', $footer);
     }
+    
+    public function choice() {
+        $cid = $this->input->get('cid');
+        $choice = $this->vote_model->getChoiceDetail($cid);
+        $choice['status'] = empty($choice) ? false : TRUE;
+        if(empty($choice['choice_intro'])) {
+            $choice['choice_intro'] = $choice['choice_name'];
+        }
+        $this->output->set_output(json_encode($choice));
+    }
 
     public function start() {
         $uid = $this->userinfo['uid'];
@@ -131,12 +141,17 @@ class Vote extends MY_Controller {
         redirect('home/hall');
     }
 
-    public function join($id, $code = null) {
-        $callback = null;
-        if(!$this->_hasRightToVote($callback, $id, array(), $code)) {
-            echo $callback;
+    public function join($id) {
+        $code = $this->input->get('code');
+        $callback = array('type'=>'none');
+        $this->_hasRightToVote($callback, $id, array(), $code);
+        $data['error'] = $callback;
+        if($callback['type'] == 'errorvote' && empty($callback['vtime'])) {
+            //不存在的投票
+            echo $this->errorhandler->getErrorDes('ErrorVote');
+            return;
         }
-        
+                
         $header ['userinfo'] = $this->userinfo;
         $header ['title'] = '参与投票 HustVote 在线投票';
         $header ['act'] = 'hall';
@@ -164,7 +179,7 @@ class Vote extends MY_Controller {
         $id['code'] = empty($pdata['code']) ? '' : $pdata['code'];
         $callback = null;
         if(!$this->_hasRightToVote($callback, $pdata['start_voteid'], $id, $id['code'])) {
-            echo $callback;
+            var_dump($callback) ;
             return;
         }
 
@@ -188,11 +203,12 @@ class Vote extends MY_Controller {
 
 
     private function _hasRightToVote(&$callback, $start_voteid, $otherid, $code = null) {
-        $callback = "unknown";
+        $callback = array('type' => 'none');
         $vtime = $this->vote_model->getVoteTime($start_voteid);
         $ctime = time();
         if(empty($vtime) || $vtime['start_time'] > $ctime || ( $vtime['end_time'] > 0 && $vtime['end_time'] < $ctime)) {
-            $callback = 'errorvote';
+            $callback['type'] = 'errorvote';
+            $callback['vtime'] = $vtime;
             return false;
         }
         
@@ -208,21 +224,25 @@ class Vote extends MY_Controller {
             if(!empty($codeInfo) && !$codeInfo['is_voted'] && $codeInfo['start_voteid'] == $start_voteid) {
                 return true;
             } else {
-                $callback = 'code_need';
+                $callback['type'] = 'code_need';
                 return false;
             }
         }
         //需要验证邮箱
         if(!empty($limit['email_need'])) {
-            $callback = 'email_need';
+            
             if(empty($identify['email']) || empty($is_verified)) {
+                $callback['type'] = 'email_need';
                 return false;
             }
             if(!empty($limit['email_limit'])) {
                 $apos = strpos($identify['email'], '@');
                 $area = substr($identify['email'], $apos+1);
-                if($area != $limit['email_area']) {
-                    $callback = 'email_limit';
+                $email_area = explode(';', $limit['email_area']);
+                $email_area = array_filter(array_map('trim', $email_area));
+                if(!in_array($area, $email_area)) {
+                    $callback['type'] = 'email_limit';
+                    $callback['email_area'] = $limit['email_area'];
                     return false;
                 }
             }
@@ -234,7 +254,8 @@ class Vote extends MY_Controller {
         }
         $votelog = $this->vote_model->getLastVoteLog($start_voteid, $identify);
         if(!empty($votelog) && ( empty($limit['cycle_time']) || (time() - $votelog['vote_time'] < $limit['cycle_time']*60*60))) {
-            $callback = 'cycle_time';
+            $callback['type'] = 'cycle_time';
+            $callback['votetime'] = $votelog['vote_time'];
             return false;
         }
         return true;

@@ -104,6 +104,19 @@ class Vote_model extends CI_Model {
         $this->db->where('start_voteid', $id);
         $this->db->update('StartVote', $data);
     }
+    
+    /**
+     * 获取选项详情
+     * @param type $cid
+     * @return type
+     */
+    public function getChoiceDetail($cid) {
+        if(!is_numeric($cid)) {
+            return array();
+        }
+        $query = $this->db->get_where('Choice', array('choiceid'=>$cid));
+        return $query->row_array();
+    }
 
     /**
      * 获取摘要
@@ -203,8 +216,8 @@ class Vote_model extends CI_Model {
             return array();
         }
         $data = array();
-        $choices = $this->db->get_where('Choice', array('start_voteid' => $id));
-        $data['choices'] = $choices->result_array();
+        
+        $data['choices'] = $this->getVoteChoices($id);
 
         $content = $this->db->get_where('StartVote', array('start_voteid' => $id), 1);
         $data['content'] = $content->row_array();
@@ -214,6 +227,23 @@ class Vote_model extends CI_Model {
         return $data;
     }
     
+    /**
+     * 获取所有选项（不包括选项详情）
+     * @param int $id
+     * @return array
+     */
+    public function getVoteChoices($id) {
+        $this->db->select('choiceid, start_voteid, choice_name');
+        $choices = $this->db->get_where('Choice', array('start_voteid' => $id));
+        return $choices->result_array();
+    }
+
+
+    /**
+     * 最多可选几项
+     * @param int $id
+     * @return int
+     */
     public function getVoteChoiceMax($id) {
         $this->db->limit(1);
         $this->db->select('choice_max');
@@ -222,6 +252,11 @@ class Vote_model extends CI_Model {
         return empty($row) ? 0 : $row['choice_max'];
     }
     
+    /**
+     * 获取投票开始时间和结束时间
+     * @param type $id
+     * @return type
+     */
     public function getVoteTime($id) {
         $this->db->limit(1);
         $this->db->select('start_time,end_time');
@@ -276,19 +311,33 @@ class Vote_model extends CI_Model {
         $query = $this->db->query($qstr, $data);
         return $query->row_array();
     }
-
+    
+    /**
+     * 参与投票
+     * @param int $start_voteid
+     * @param array $choices 选择的编号
+     * @param int $logid
+     */
     public function addaVote($start_voteid, $choices, $logid) {
-        $data = array(
+        $tmp = array(
             'start_voteid' => $start_voteid,
             'logid' => $logid,
             'createtime' => time(),
         );
+        $data = array();
         foreach ($choices as $choice) {
-            $data['choiceid'] = $choice;
-            $this->db->insert('JoinVote', $data);
+            $tmp['choiceid'] = $choice;
+            array_push($data, $tmp);
         }
+        $this->db->insert_batch('JoinVote', $data);
     }
-
+    
+    /**
+     * 添加一条投票记录
+     * @param int $start_voteid
+     * @param array $identify
+     * @return int 投票记录编号
+     */
     public function addVoteLog($start_voteid, $identify) {
         $identify['start_voteid'] = $start_voteid;
         $identify['vote_time'] = time();
@@ -298,5 +347,25 @@ class Vote_model extends CI_Model {
         $this->db->insert('VoteLog', $identify);
         return $this->db->insert_id();
     }
-
+    
+    public function getVoteResult($vid) {
+        $choices = $this->getVoteChoices($vid);
+        
+        $query = $this->db->get_where('JoinVote', array('start_voteid'=>$vid));
+        $votes = $query->result_array();
+        $temp = array();
+        foreach ($votes as $vote) {
+            $cid = $vote['choiceid'];
+            if(!array_key_exists($cid, $temp)) {
+                $temp[$cid] = 0;
+            }
+            $temp[$cid]++;
+        }
+        $result = array();
+        foreach ($choices as $choice) {
+            $cid = $choice['choiceid'];
+            $result[$cid] = array_key_exists($cid, $temp) ? $temp[$cid] : 0;
+        }
+        return $result;
+    }
 }

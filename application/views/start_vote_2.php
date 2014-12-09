@@ -3,13 +3,8 @@
     <div class="row">
         <div class="span8 offset2 well">
             <legend>设置投票规则</legend> 
-            <?php if (!empty(validation_errors())) : ?>
-                <div class="alert alert-error">
-                    <a class="close" data-dismiss="alert" href="#">×</a><?php echo validation_errors(); ?>
-                </div> 
-            <?php endif; ?>
             <div class="row span6">
-                <form class="form-horizontal" id="startForm" method="POST" action="<?=  base_url("vote/doSetLimit/$start_voteid")?>" accept-charset="UTF-8">
+                <form class="form-horizontal" id="startForm" method="POST" action="<?= base_url("vote/doSetLimit/$start_voteid") ?>" accept-charset="UTF-8">
                     <fieldset>
 
                         <div class="control-group">
@@ -126,7 +121,8 @@
                         </div>
                     </fieldset>
 
-                </form></div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

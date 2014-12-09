@@ -67,7 +67,7 @@ class User extends MY_Controller {
 	}
 	
 	public function register() {
-		if(!empty($this->userinfo)) {
+		if(!empty($this->userinfo['uid'])) {
 			redirect();
 			return;
 		}
