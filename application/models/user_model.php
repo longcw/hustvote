@@ -84,5 +84,38 @@ class User_model extends CI_Model {
             return $result;
         }
     }
+    
+    /**
+     * 设置验证信息
+     * @param int $uid
+     * @return array
+     */
+    public function setVerifyToken($uid) {
+        if(!is_numeric($uid)) {
+            return null;
+        }
+        $data['verify_token'] = md5(uniqid(rand(), true) . $uid);
+        $data['exp_time'] = time() + 24*60*60;
+        $this->db->update('User', $data, array('uid'=>$uid));
+        return $data;
+    }
+    
+    public function verifyToken($uid, $token) {
+        $where = array(
+            'uid' => $uid,
+            'verify_token' => $token,
+            'exp_time >' =>time(),
+        );
+        $this->db->select('uid')->limit(1);
+        $query = $this->db->get_where('User', $where);
+        $row = $query->row_array();
+        if(!empty($row)) {
+            $this->db->update('User', array('exp_time'=> 0, 'is_verified'=>1), array('uid'=>$row['uid']));
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
 
 }

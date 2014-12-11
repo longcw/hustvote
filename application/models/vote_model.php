@@ -64,8 +64,16 @@ class Vote_model extends CI_Model {
         } else {
             $this->db->insert('VoteLimit', $data);
         }
-
-        return $this->db->affected_rows();
+        
+        return true;
+    }
+    
+    public function setVoteCompleted($vid) {
+        if(!is_numeric($vid)) {
+            return false;
+        }
+        $this->db->update('StartVote', array('is_completed'=>1), array('start_voteid'=>$vid));
+        return true;
     }
 
     /**
@@ -177,7 +185,7 @@ class Vote_model extends CI_Model {
      * 按页获取投票
      * @param int $page
      * @param array $limit
-     *  支持 is_end, is_start
+     *  支持 is_end, is_start, is_completed
      * 
      * @param int $count
      * @return array
@@ -193,12 +201,17 @@ class Vote_model extends CI_Model {
             $op = $limit['is_start'] ? '<' : '>=';
             $this->db->where('end_time' . $op, $ctime);
         }
+        if(isset($limit['is_completed'])) {
+            $this->db->where('is_completed', 1);
+        }
+        
         //获取页数
         if ($getcount) {
             $query = $this->db->get('StartVote');
             return $query->num_rows();
         }
-
+        
+        
         $this->db->order_by('create_time desc');
 
         $offset = $page * $count;
@@ -272,10 +285,37 @@ class Vote_model extends CI_Model {
      */
     public function getCodeInfo($code) {
         if (empty($code)) {
-            return array();
+            return null;
         }
         $query = $this->db->get_where('Code', array('code' => $code));
         return $query->row_array();
+    }
+    
+    public function setCodeUsed($vid ,$code, $logid) {
+        if (empty($code)) {
+            return null;
+        }
+        $set = array(
+            'is_voted'=>1,
+            'vote_time'=>time(),
+            'logid'=>$logid
+        );
+        $this->db->update('Code', $set, array('code'=>$code, 'start_voteid'=>$vid));
+        return $this->db->affected_rows();
+    }
+    
+    public function addCode($start_voteid, $uid, $count = 1) {
+        $data = array();
+        while($count--) {
+            $row = array(
+                'start_voteid' => $start_voteid,
+                'uid' => $uid,
+                'code' => dechex(rand(100, 999) . ($uid.$start_voteid) . rand(100, 999)),
+            );
+            array_push($data, $row);
+        }
+        $this->db->insert_batch('Code', $data);
+        return $data;
     }
 
     /**
@@ -313,6 +353,52 @@ class Vote_model extends CI_Model {
     }
     
     /**
+     * 获取用户所有的一条投票记录
+     * @param int $voteid
+     * @param array $id
+     * @return array
+     */
+    public function getUserVoteLog($id) {
+        if (!empty($id['openid'])) {
+            $id['openid'] = $id['thirdtype'] . ':' . $id['openid'];
+            unset($id['thirdtype']);
+        }
+        if(isset($id['ip_address'])) {
+            unset($id['ip_address']);
+        }
+        
+        foreach ($id as $key => $value) {
+            $this->db->or_where("VoteLog.$key", $value);
+        }
+        $this->db->select('VoteLog.start_voteid, logid, via, vote_time, title, start_time, end_time');
+        $this->db->join('StartVote', 'StartVote.start_voteid=VoteLog.start_voteid');
+        $this->db->order_by('vote_time desc');
+        $query = $this->db->get('VoteLog');
+        $log = $query->result_array();
+        
+        foreach($log as &$row) {
+            $this->db->select('JoinVote.choiceid, choice_name');
+            $this->db->join('Choice', 'Choice.choiceid=JoinVote.choiceid');
+            $q = $this->db->get_where('JoinVote', array('logid'=>$row['logid']));
+            $row['choice'] = $q->result_array();
+        }
+        
+        return $log;
+    }
+    
+    public function getUserStartVote($uid) {
+        if(!is_numeric($uid)) {
+            return null;
+        }
+        $this->db->select('title, start_time, end_time, create_time, is_completed')->order_by('create_time desc');
+        $this->db->join('VoteLimit', 'StartVote.start_voteid=VoteLimit.start_voteid');
+        $this->db->select('VoteLimit.*');
+        $query = $this->db->get_where('StartVote', array('uid'=>$uid));
+        return $query->result_array();
+    }
+
+
+    /**
      * 参与投票
      * @param int $start_voteid
      * @param array $choices 选择的编号
@@ -348,24 +434,33 @@ class Vote_model extends CI_Model {
         return $this->db->insert_id();
     }
     
+    /**
+     * 获取投票结果
+     * @param int $vid
+     * @return array
+     */
     public function getVoteResult($vid) {
-        $choices = $this->getVoteChoices($vid);
+        $votes = $this->getVoteChoices($vid);
         
-        $query = $this->db->get_where('JoinVote', array('start_voteid'=>$vid));
-        $votes = $query->result_array();
-        $temp = array();
-        foreach ($votes as $vote) {
-            $cid = $vote['choiceid'];
-            if(!array_key_exists($cid, $temp)) {
-                $temp[$cid] = 0;
-            }
-            $temp[$cid]++;
+        $this->db->select("JoinVote.choiceid, COUNT(JoinVote.choiceid) AS 'count'");
+        $this->db->where('JoinVote.start_voteid', $vid);
+        $this->db->group_by('JoinVote.choiceid');
+        $query = $this->db->get('JoinVote');
+        $vdata = $query->result_array();
+        $new = array();
+        foreach ($vdata as $row) {
+            $new[$row['choiceid']] = $row;
         }
-        $result = array();
-        foreach ($choices as $choice) {
-            $cid = $choice['choiceid'];
-            $result[$cid] = array_key_exists($cid, $temp) ? $temp[$cid] : 0;
+        
+        foreach ($votes as &$row) {
+            $row['count'] = isset($new[$row['choiceid']]) ? $new[$row['choiceid']]['count'] : 0;
         }
-        return $result;
+        return $votes;
+    }
+    
+    public function getVoteTitle($vid) {
+        $this->db->select('title, start_voteid')->where('start_voteid', $vid)->limit(1);
+        $query = $this->db->get('StartVote');
+        return $query->row_array();
     }
 }

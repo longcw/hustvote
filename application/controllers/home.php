@@ -21,13 +21,15 @@ class Home extends MY_Controller {
 
     public function hall($page = 1) {
         $this->load->model('vote_model');
-        $data['total_page'] = $this->vote_model->getVotePage();
+        
+        $limit = array('is_completed'=>1);
+        $data['total_page'] = $this->vote_model->getVotePage($limit);
         if(!is_numeric($page) || $page <= 0 || ($page > $data['total_page'] && $page != 1)) {
             echo $this->errorhandler->getErrorDes('ErrorPage');
             return;
         }
         
-        $data['votes'] = $this->vote_model->getVotesByPage($page - 1);
+        $data['votes'] = $this->vote_model->getVotesByPage($page - 1, $limit);
         $data['cpage'] = $page;
         $header['userinfo'] = $this->userinfo;
         $header['lastdiv'] = false;

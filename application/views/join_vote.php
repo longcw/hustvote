@@ -26,6 +26,7 @@
                         </div>
                     <?php endforeach; ?>
                         <input type="text" value="<?= $detail['content']['start_voteid'] ?>" style="display:none" name="start_voteid" id="start_voteid"/>
+                        <input type="text" value="<?= $code ?>" style="display:none" name="code" id="code"/>
                     <input type="text" value="0" style="display:none" id="fingerprint" name="fingerprint" />
                 </form>
             </div> 
@@ -103,7 +104,7 @@
                     <?php if ($error['type'] != 'none') : ?>
                         <a href="#modal-<?= $error['type'] ?>" class="btn btn-primary" role="button" data-toggle="modal">提示</a>
                     <?php endif; ?>
-                        <a href="<?=  base_url('voted/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+                        <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
                 </p>
             </div>
 
@@ -142,7 +143,7 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?=  base_url('voted/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
@@ -161,7 +162,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?=  base_url('voted/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
@@ -180,7 +181,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/register') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?=  base_url('voted/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/register') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
@@ -199,7 +200,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?=  base_url('voted/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
@@ -218,7 +219,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/register') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?=  base_url('voted/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/register') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
