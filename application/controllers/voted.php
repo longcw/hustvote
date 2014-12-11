@@ -24,11 +24,26 @@ class Voted extends MY_Controller {
         
         $header ['userinfo'] = $this->userinfo;
         $header ['title'] = $data['vote']['content']['title'] . ' 投票结果 --HustVote 在线投票';
-        $header['css'] = array();
-        $footer['js'] = array('ChartNew', 'result');
+        $header['css'] = array('icheck-skins/flat/blue');
+        $footer['js'] = array('ChartNew', 'icheck' ,'result');
 
         $this->load->view('header', $header);
         $this->load->view('result', $data);
+        $this->load->view('footer', $footer);
+    }
+    
+    /**
+     * 参与的投票
+     */
+    public function join() {
+        
+        $header ['userinfo'] = $this->userinfo;
+        $header ['title'] = '我参与的投票 --HustVote 在线投票';
+        $header['css'] = array('icheck-skins/flat/blue');
+        $footer['js'] = array('ChartNew', 'icheck' ,'result');
+
+        $this->load->view('header', $header);
+        $this->load->view('joined');
         $this->load->view('footer', $footer);
     }
     

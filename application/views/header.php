@@ -42,9 +42,10 @@
                                         <li class="dropdown"><a href="#" class="dropdown-toggle"
                                                                 data-toggle="dropdown"><?php echo $userinfo['nickname'] ?> <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="#">Action</a></li>
-                                                <li><a href="#">Another action</a></li>
-                                                <li><a href="#">Something else here</a></li>
+                                                <li><a href="<?=  base_url('vote/started')?>">我发起的投票</a></li>
+                                                <li><a href="<?=  base_url('vote/joined')?>">我参与的投票</a></li>
+                                                <li><a href="<?=  base_url('user/change')?>">修改密码</a></li>
+                                                <li><a href="<?=  base_url('user/verify')?>">验证邮箱</a></li>
                                                 <li class="divider"></li>
                                                 <li><a href="<?php echo base_url('user/logout'); ?>">退出</a></li>
                                             </ul>
