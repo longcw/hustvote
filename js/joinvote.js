@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var vid = $('#start_voteid').value;
-    
+
     //检测投票权限
     var vote_error = $('#vote-error').attr('value').toString();
     if (vote_error !== 'modal-none') {
@@ -90,6 +90,8 @@ $(document).ready(function () {
         }
     });
 
+
+
     //提交
     $('#submit-btn').click(function () {
         if (choice_count === 0) {
@@ -101,14 +103,49 @@ $(document).ready(function () {
         }
     });
 
+
+    //真正提交，验证验证码
     $('#confirm-button').click(function () {
         if (choice_count === 0) {
             alert('请至少选择一个选项');
         } else {
-            $('#joinForm').submit();
+            var cpinput = $('#captcha-input');
+            if (cpinput.size() > 0) {
+                var cphint = $('#cphint');
+                cphint.css('display', 'block');
+                cphint.html('验证中...');
+                $.ajax(
+                        {
+                            url: "../../home/captcha_test",
+                            async: true,
+                            method: "get",
+                            data: 'captcha=' + cpinput.val(),
+                            dataType: "json",
+                            success: function (status) {
+                                if (status !== true) {
+                                    cphint.html('验证码错误');
+                                } else {
+                                    $('#captcha').val(cpinput.val());
+                                    $('#joinForm').submit();
+                                }
+                            }
+
+                        });
+            } else {
+                $('#joinForm').submit();
+            }
+
         }
 
     });
-    
-    
+
+
 });
+
+//验证码
+function changeCaptcha() {
+    var img = $('#captcha-img');
+    var origin = img.attr('src');
+    var src = origin.substring(0, origin.lastIndexOf("?")) + "?rand=" + Math.random() * 1000;
+    img.attr('src', src);
+}

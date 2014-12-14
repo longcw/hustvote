@@ -41,7 +41,7 @@ class Vote_model extends CI_Model {
         $id = $this->db->insert_id();
 
         $this->addChoice($choices, $details, $id);
-        $this->setVoteLimit(array('start_voteid'=>$id));
+        $this->setVoteLimit(array('start_voteid' => $id));
         $callback = $id;
         return true;
     }
@@ -64,15 +64,15 @@ class Vote_model extends CI_Model {
         } else {
             $this->db->insert('VoteLimit', $data);
         }
-        
+
         return true;
     }
-    
+
     public function setVoteCompleted($vid) {
-        if(!is_numeric($vid)) {
+        if (!is_numeric($vid)) {
             return false;
         }
-        $this->db->update('StartVote', array('is_completed'=>1), array('start_voteid'=>$vid));
+        $this->db->update('StartVote', array('is_completed' => 1), array('start_voteid' => $vid));
         return true;
     }
 
@@ -112,17 +112,17 @@ class Vote_model extends CI_Model {
         $this->db->where('start_voteid', $id);
         $this->db->update('StartVote', $data);
     }
-    
+
     /**
      * 获取选项详情
      * @param type $cid
      * @return type
      */
     public function getChoiceDetail($cid) {
-        if(!is_numeric($cid)) {
+        if (!is_numeric($cid)) {
             return array();
         }
-        $query = $this->db->get_where('Choice', array('choiceid'=>$cid));
+        $query = $this->db->get_where('Choice', array('choiceid' => $cid));
         return $query->row_array();
     }
 
@@ -201,17 +201,17 @@ class Vote_model extends CI_Model {
             $op = $limit['is_start'] ? '<' : '>=';
             $this->db->where('end_time' . $op, $ctime);
         }
-        if(isset($limit['is_completed'])) {
+        if (isset($limit['is_completed'])) {
             $this->db->where('is_completed', 1);
         }
-        
+
         //获取页数
         if ($getcount) {
             $query = $this->db->get('StartVote');
             return $query->num_rows();
         }
-        
-        
+
+
         $this->db->order_by('create_time desc');
 
         $offset = $page * $count;
@@ -229,7 +229,7 @@ class Vote_model extends CI_Model {
             return array();
         }
         $data = array();
-        
+
         $data['choices'] = $this->getVoteChoices($id);
 
         $content = $this->db->get_where('StartVote', array('start_voteid' => $id), 1);
@@ -239,7 +239,7 @@ class Vote_model extends CI_Model {
 
         return $data;
     }
-    
+
     /**
      * 获取所有选项（不包括选项详情）
      * @param int $id
@@ -251,7 +251,6 @@ class Vote_model extends CI_Model {
         return $choices->result_array();
     }
 
-
     /**
      * 最多可选几项
      * @param int $id
@@ -260,11 +259,11 @@ class Vote_model extends CI_Model {
     public function getVoteChoiceMax($id) {
         $this->db->limit(1);
         $this->db->select('choice_max');
-        $query = $this->db->get_where('StartVote', array('start_voteid'=>$id));
+        $query = $this->db->get_where('StartVote', array('start_voteid' => $id));
         $row = $query->row_array();
         return empty($row) ? 0 : $row['choice_max'];
     }
-    
+
     /**
      * 获取投票开始时间和结束时间
      * @param type $id
@@ -273,7 +272,7 @@ class Vote_model extends CI_Model {
     public function getVoteTime($id) {
         $this->db->limit(1);
         $this->db->select('start_time,end_time');
-        $query = $this->db->get_where('StartVote', array('start_voteid'=>$id));
+        $query = $this->db->get_where('StartVote', array('start_voteid' => $id));
         $row = $query->row_array();
         return $row;
     }
@@ -290,27 +289,27 @@ class Vote_model extends CI_Model {
         $query = $this->db->get_where('Code', array('code' => $code));
         return $query->row_array();
     }
-    
-    public function setCodeUsed($vid ,$code, $logid) {
+
+    public function setCodeUsed($vid, $code, $logid) {
         if (empty($code)) {
             return null;
         }
         $set = array(
-            'is_voted'=>1,
-            'vote_time'=>time(),
-            'logid'=>$logid
+            'is_voted' => 1,
+            'vote_time' => time(),
+            'logid' => $logid
         );
-        $this->db->update('Code', $set, array('code'=>$code, 'start_voteid'=>$vid));
+        $this->db->update('Code', $set, array('code' => $code, 'start_voteid' => $vid));
         return $this->db->affected_rows();
     }
-    
+
     public function addCode($start_voteid, $uid, $count = 1) {
         $data = array();
-        while($count--) {
+        while ($count--) {
             $row = array(
                 'start_voteid' => $start_voteid,
                 'uid' => $uid,
-                'code' => dechex(rand(100, 999) . ($uid.$start_voteid) . rand(100, 999)),
+                'code' => dechex(rand(100, 999) . ($uid . $start_voteid) . rand(100, 999)),
             );
             array_push($data, $row);
         }
@@ -351,7 +350,7 @@ class Vote_model extends CI_Model {
         $query = $this->db->query($qstr, $data);
         return $query->row_array();
     }
-    
+
     /**
      * 获取用户所有的一条投票记录
      * @param int $voteid
@@ -363,10 +362,10 @@ class Vote_model extends CI_Model {
             $id['openid'] = $id['thirdtype'] . ':' . $id['openid'];
             unset($id['thirdtype']);
         }
-        if(isset($id['ip_address'])) {
+        if (isset($id['ip_address'])) {
             unset($id['ip_address']);
         }
-        
+
         foreach ($id as $key => $value) {
             $this->db->or_where("VoteLog.$key", $value);
         }
@@ -375,28 +374,27 @@ class Vote_model extends CI_Model {
         $this->db->order_by('vote_time desc');
         $query = $this->db->get('VoteLog');
         $log = $query->result_array();
-        
-        foreach($log as &$row) {
+
+        foreach ($log as &$row) {
             $this->db->select('JoinVote.choiceid, choice_name');
             $this->db->join('Choice', 'Choice.choiceid=JoinVote.choiceid');
-            $q = $this->db->get_where('JoinVote', array('logid'=>$row['logid']));
+            $q = $this->db->get_where('JoinVote', array('logid' => $row['logid']));
             $row['choice'] = $q->result_array();
         }
-        
+
         return $log;
     }
-    
+
     public function getUserStartVote($uid) {
-        if(!is_numeric($uid)) {
+        if (!is_numeric($uid)) {
             return null;
         }
         $this->db->select('title, start_time, end_time, create_time, is_completed')->order_by('create_time desc');
         $this->db->join('VoteLimit', 'StartVote.start_voteid=VoteLimit.start_voteid');
         $this->db->select('VoteLimit.*');
-        $query = $this->db->get_where('StartVote', array('uid'=>$uid));
+        $query = $this->db->get_where('StartVote', array('uid' => $uid));
         return $query->result_array();
     }
-
 
     /**
      * 参与投票
@@ -417,7 +415,7 @@ class Vote_model extends CI_Model {
         }
         $this->db->insert_batch('JoinVote', $data);
     }
-    
+
     /**
      * 添加一条投票记录
      * @param int $start_voteid
@@ -433,7 +431,7 @@ class Vote_model extends CI_Model {
         $this->db->insert('VoteLog', $identify);
         return $this->db->insert_id();
     }
-    
+
     /**
      * 获取投票结果
      * @param int $vid
@@ -441,7 +439,7 @@ class Vote_model extends CI_Model {
      */
     public function getVoteResult($vid) {
         $votes = $this->getVoteChoices($vid);
-        
+
         $this->db->select("JoinVote.choiceid, COUNT(JoinVote.choiceid) AS 'count'");
         $this->db->where('JoinVote.start_voteid', $vid);
         $this->db->group_by('JoinVote.choiceid');
@@ -451,16 +449,93 @@ class Vote_model extends CI_Model {
         foreach ($vdata as $row) {
             $new[$row['choiceid']] = $row;
         }
-        
+
         foreach ($votes as &$row) {
             $row['count'] = isset($new[$row['choiceid']]) ? $new[$row['choiceid']]['count'] : 0;
         }
         return $votes;
     }
-    
+
     public function getVoteTitle($vid) {
         $this->db->select('title, start_voteid')->where('start_voteid', $vid)->limit(1);
         $query = $this->db->get('StartVote');
         return $query->row_array();
     }
+
+    
+    /**
+     * 验证是否可以投票
+     * @param array $callback 返回的错误信息
+     * @param int $start_voteid
+     * @param array $identify 用户身份信息
+     *  至少包括is_verified,email
+     * @param 邀请码 $code
+     * @return boolean
+     */
+    public function hasRightToVote(&$callback, $start_voteid, $identify, $code = null) {
+        $callback = array('type' => 'none');
+        $vtime = $this->getVoteTime($start_voteid);
+        $ctime = time();
+        if (empty($vtime) || $vtime['start_time'] > $ctime || ( $vtime['end_time'] > 0 && $vtime['end_time'] < $ctime)) {
+            $callback['type'] = 'errorvote';
+            $callback['vtime'] = $vtime;
+            return false;
+        }
+
+        $limit = $this->getVoteLimit($start_voteid);
+
+        if (!empty($limit['code_need'])) {
+            //需要邀请码
+            $codeInfo = $this->getCodeInfo($code);
+            if (!empty($codeInfo) && !$codeInfo['is_voted'] && $codeInfo['start_voteid'] == $start_voteid) {
+                return true;
+            } else {
+                $callback['type'] = 'code_need';
+                return false;
+            }
+        }
+        
+        //需要验证邮箱
+        if (!empty($limit['email_need'])) {
+
+            if (empty($identify['email']) || empty($identify['is_verified'])) {
+                $callback['type'] = 'email_need';
+                return false;
+            }
+            if (!empty($limit['email_limit'])) {
+                $apos = strpos($identify['email'], '@');
+                $area = substr($identify['email'], $apos + 1);
+                $email_area = explode(';', $limit['email_area']);
+                $email_area = array_filter(array_map('trim', $email_area));
+                if (!in_array($area, $email_area)) {
+                    $callback['type'] = 'email_limit';
+                    $callback['email_area'] = $limit['email_area'];
+                    return false;
+                }
+            }
+        }
+        //时间验证
+        //是否验证ip
+        if (!$limit['ip_address'] && isset($identify['ip_address'])) {
+            unset($identify['ip_address']);
+        }
+        $votelog = $this->getLastVoteLog($start_voteid, $identify);
+        if (!empty($votelog) && ( empty($limit['cycle_time']) || (time() - $votelog['vote_time'] < $limit['cycle_time'] * 60 * 60))) {
+            $callback['type'] = 'cycle_time';
+            $callback['votetime'] = $votelog['vote_time'];
+            return false;
+        }
+        
+        //验证码
+        if(!empty($limit['captcha_need'])) {
+            $captcha = $this->session->userdata('captcha_code');
+            $this->session->unset_userdata('captcha_code');
+            if(empty($identify['captcha']) || $captcha != $identify['captcha']) {
+                $callback['type'] = 'captcha_need';
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
