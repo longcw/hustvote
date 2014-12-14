@@ -25,9 +25,10 @@
                             </div>
                         </div>
                     <?php endforeach; ?>
-                        <input type="text" value="<?= $detail['content']['start_voteid'] ?>" style="display:none" name="start_voteid" id="start_voteid"/>
-                        <input type="text" value="<?= $code ?>" style="display:none" name="code" id="code"/>
+                    <input type="text" value="<?= $detail['content']['start_voteid'] ?>" style="display:none" name="start_voteid" id="start_voteid"/>
+                    <input type="text" value="<?= $code ?>" style="display:none" name="code" id="code"/>
                     <input type="text" value="0" style="display:none" id="fingerprint" name="fingerprint" />
+                    <input id="captcha" value="" name="captcha" style="display: none" />
                 </form>
             </div> 
 
@@ -98,13 +99,16 @@
                             echo "<dd>仅限邮箱域名为$limit[email_area]的用户</dd>";
                         }
                     }
+                    if (!empty($limit['captcha_need'])) {
+                        echo "<dd>须要输入验证码</dd>";
+                    }
                     ?>
                 </dl>
                 <p>
                     <?php if ($error['type'] != 'none') : ?>
                         <a href="#modal-<?= $error['type'] ?>" class="btn btn-primary" role="button" data-toggle="modal">提示</a>
                     <?php endif; ?>
-                        <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+                    <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
                 </p>
             </div>
 
@@ -121,7 +125,7 @@
     </div>
 </div>
 
-<div id="vote-error" value="modal-<?= $error['type'] ?>"></div>
+<div id="vote-error" value="modal-<?= $error['type']=='captcha_need'?'none':$error['type'] ?>"></div>
 
 <?php if ($error['type'] == 'code_need') : ?>
     <div id="modal-<?= $error['type'] ?>" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -143,7 +147,7 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
@@ -162,7 +166,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
@@ -181,7 +185,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/register') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/register') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
@@ -200,7 +204,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
@@ -219,7 +223,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/register') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?=  base_url('vote/result/'.$detail['content']['start_voteid'] )?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/register') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
@@ -247,7 +251,23 @@
         </h3>
     </div>
     <div class="modal-body">
+        <?php if ($limit['captcha_need']): ?>
+            <div class="control-group">
+                <label class="control-label">请输入验证码：</label>
+                <div class="controls">
+                    <div>
+                        <img id="captcha-img" src="<?= base_url('home/captcha?rand='.rand()) ?>" width="140" height="50" onclick="changeCaptcha()"/>
+                    </div>
+                    <input id="captcha-input" type="text" placeholder="请输入验证码" class="input-xlarge">
+                    
+                    <p class="help-block"><a href="javascript: changeCaptcha();">看不清？</a></p>
+                    <p class="text-error" id="cphint" style="display:none">验证中...</p>
+                </div>
+            </div>
+        <?php else:?>
         <p>确认要提交您的选择吗？</p>
+        <?php endif; ?>
+        
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> <button class="btn btn-primary" id="confirm-button">提交</button>

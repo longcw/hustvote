@@ -147,7 +147,9 @@ class Vote extends MY_Controller {
     public function join($id) {
         $code = $this->input->get('code');
         $callback = array('type' => 'none');
-        $this->_hasRightToVote($callback, $id, array(), $code);
+        //$this->_hasRightToVote($callback, $id, array(), $code);
+        $ident = $this->_getUserIdentification();
+        $this->vote_model->hasRightToVote($callback, $id, $ident, $code);
         $data['error'] = $callback;
         if ($callback['type'] == 'errorvote' && empty($callback['vtime'])) {
             //不存在的投票
@@ -180,19 +182,21 @@ class Vote extends MY_Controller {
             echo $this->errorhandler->getErrorDes('ErrorVote');
             return;
         }
-
+        $id['captcha'] = $pdata['captcha'];
         $id['fingerprint'] = $pdata['fingerprint'];
         $id['code'] = $code;
+        $id = array_merge($this->_getUserIdentification(), $id);
         $callback = null;
-        if (!$this->_hasRightToVote($callback, $pdata['start_voteid'], $id, $code)) {
-            $tip = "投票失败，错误代码:$callback[type]";
+        if (!$this->vote_model->hasRightToVote($callback, $pdata['start_voteid'], $id, $code)) {
+            $url = base_url('vote/join/'.$pdata['start_voteid']);
+            $tip = "投票失败，错误代码:$callback[type] <a href='$url'>返回</a>";
         } else {
-            $id = array_merge($id, $this->_getUserIdentification());
             $id['via'] = 'web';
             $logid = $this->vote_model->addVoteLog($pdata['start_voteid'], $id);
             $this->vote_model->setCodeUsed($pdata['start_voteid'], $code, $logid);
             $this->vote_model->addaVote($pdata['start_voteid'], $pdata['choice'], $logid);
-            $tip = "投票成功";
+            $url = base_url('vote/result/'.$pdata['start_voteid']);
+            $tip = "投票成功 <a href='$url'>查看投票结果</a>";
         }
 
         $header['userinfo'] = $this->userinfo;
@@ -200,65 +204,6 @@ class Vote extends MY_Controller {
         $this->load->view('header', $header);
         $this->load->view('tip', array('tip' => $tip));
         $this->load->view('footer');
-    }
-
-    private function _hasRightToVote(&$callback, $start_voteid, $otherid, $code = null) {
-        $callback = array('type' => 'none');
-        $vtime = $this->vote_model->getVoteTime($start_voteid);
-        $ctime = time();
-        if (empty($vtime) || $vtime['start_time'] > $ctime || ( $vtime['end_time'] > 0 && $vtime['end_time'] < $ctime)) {
-            $callback['type'] = 'errorvote';
-            $callback['vtime'] = $vtime;
-            return false;
-        }
-
-        $is_verified = empty($this->userinfo['is_verified']) ? null : $this->userinfo['is_verified'];
-        $identify = $this->_getUserIdentification();
-        $identify = array_merge($identify, $otherid);
-
-        $limit = $this->vote_model->getVoteLimit($start_voteid);
-
-        if (!empty($limit['code_need'])) {
-            //需要邀请码
-            $codeInfo = $this->vote_model->getCodeInfo($code);
-            if (!empty($codeInfo) && !$codeInfo['is_voted'] && $codeInfo['start_voteid'] == $start_voteid) {
-                return true;
-            } else {
-                $callback['type'] = 'code_need';
-                return false;
-            }
-        }
-        //需要验证邮箱
-        if (!empty($limit['email_need'])) {
-
-            if (empty($identify['email']) || empty($is_verified)) {
-                $callback['type'] = 'email_need';
-                return false;
-            }
-            if (!empty($limit['email_limit'])) {
-                $apos = strpos($identify['email'], '@');
-                $area = substr($identify['email'], $apos + 1);
-                $email_area = explode(';', $limit['email_area']);
-                $email_area = array_filter(array_map('trim', $email_area));
-                if (!in_array($area, $email_area)) {
-                    $callback['type'] = 'email_limit';
-                    $callback['email_area'] = $limit['email_area'];
-                    return false;
-                }
-            }
-        }
-        //时间验证
-        //是否验证ip
-        if (!$limit['ip_address']) {
-            unset($identify['ip_address']);
-        }
-        $votelog = $this->vote_model->getLastVoteLog($start_voteid, $identify);
-        if (!empty($votelog) && ( empty($limit['cycle_time']) || (time() - $votelog['vote_time'] < $limit['cycle_time'] * 60 * 60))) {
-            $callback['type'] = 'cycle_time';
-            $callback['votetime'] = $votelog['vote_time'];
-            return false;
-        }
-        return true;
     }
 
     public function result($vid) {
@@ -298,14 +243,14 @@ class Vote extends MY_Controller {
         $this->load->view('started', $data);
         $this->load->view('footer', $footer);
     }
-    
+
     public function mycode($vid) {
         $uid = $this->userinfo['uid'];
-        if(empty($uid)) {
+        if (empty($uid)) {
             redirect('user/login');
             return;
         }
-        if($this->right_model->hasRight('EditVote', $uid, $vid)) {
+        if ($this->right_model->hasRight('EditVote', $uid, $vid)) {
             //TODO 生成验证码
             $code = $this->vote_model->addCode($vid, $uid, 3);
             var_dump($code);
