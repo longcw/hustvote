@@ -35,7 +35,7 @@ class Mailer {
     public function sendmail($to, $subject, $body){
         try{
             $this->mail->From = 'guesstest@163.com';
-            $this->mail->FromName = 'Canmou';
+            $this->mail->FromName = 'HustVote';
             foreach ($to as $name => $address) {
                 $this->mail->AddAddress($address, $name);
             }

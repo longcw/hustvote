@@ -1,16 +1,12 @@
 
 <div id="home-page-marketing" class="row">
 	<div id="bricks-hero-unit" class="span6">
-		<h1>A responsive business theme based on bootstrap</h1>
+		<h1>全心全意为同学们搭建最好的投票平台</h1>
 		<img src="img/responsive-layout.png"
 			class="visible-phone hero-unit-image" />
-		<p class="explanation">Donec non ultricies est. Vestibulum porta odio
-			justo, et tincidunt metus. Cras dictum laoreet nibh, nec tempus
-			tortor porta vel. Cras risus purus, porttitor sed condimentum ac,
-			scelerisque quis ipsum. Donec posuere tincidunt nisl vitae facilisis.
-			Nam pharetra elit ut lacus feugiat eget cursus leo blandit.</p>
+		<p class="explanation">简单易用的投票系统，集中稳定的投票平台，公正准确的投票统计，安卓、微信、浏览器，只要有网络，就可以发起和参与投票。上手快，简单操作，永久免费。</p>
 		<p class="action-buttons-container">
-			<a class="btn btn-primary btn-large">Get in touch with us</a>
+                    <a class="btn btn-primary btn-large" href="<?=  base_url('about')?>">下载安卓客户端</a>
 		</p>
 	</div>
 	<div class="span6 hidden-phone">
@@ -22,63 +18,28 @@
 
 <div id="content" class="container">
 	<div class="marketing">
-		<h2>Our Services</h2>
+		<h2>功能介绍</h2>
 		<p class="marketing-byline">
-			Quisque a quam non metus fringilla feugiat quis non sem. Phasellus
-			quis felis sapien, id interdum mi. <a href="services.html">Learn more</a>
+			我们提供跨平台的投票服务，基于web和安卓，提供发起投票、参与投票以及结果分析等功能
 		</p>
 
 		<div class="row">
 			<div class="span4">
 				<i class="icon-tint service-icon"></i>
-				<h3>Consulting</h3>
-				<p>In in tellus a ante dignissim aliquet. Phasellus odio nisi,
-					hendrerit vel faucibus ac, iaculis et metus. Nulla ac suscipit
-					quam. Vestibulum ante ipsum primis in faucibus orci luctus et
-					ultrices posuere cubilia Curae; Curabitur porta pharetra laoreet.</p>
+				<h3>发起投票</h3>
+				<p>注册用户登录安卓客户端可以进行投票发布，发布信息包括投票标题、介绍、具体选项以及投票的开始日期和结束日期。发布后自动生成投票地址，可以直接分享到社交网络以供他人进行投票</p>
 			</div>
 			<div class="span4">
 				<i class="icon-leaf service-icon"></i>
-				<h3>Technology</h3>
-				<p>Nam lacus nisl, facilisis ac tempor ac, faucibus et eros. Cras
-					sed erat libero, sit amet imperdiet urna. In tempor commodo dui,
-					fringilla pharetra massa hendrerit blandit. Phasellus condimentum
-					hendrerit condimentum.</p>
+				<h3>参与投票</h3>
+				<p>用户可以在应用内的投票大厅中进行投票，或者在微信朋友圈、微信公众号、新浪微博、QQ空间以及浏览器上打开web版投票界面参与投票</p>
 			</div>
 			<div class="span4">
 				<i class="icon-globe service-icon"></i>
-				<h3>Outsourcing</h3>
-				<p>Donec eu enim metus. Nulla sed elit augue. Mauris purus turpis,
-					placerat sed tincidunt at, rutrum ac sem. Integer eget mi mi, eget
-					accumsan elit. Class aptent taciti sociosqu ad litora torquent per
-					conubia nostra, per inceptos himenaeos.</p>
+				<h3>投票结果分析</h3>
+				<p>我们抵制刷票行为，通过专业的算法反刷票。对投票来源、投票渠道以及投票结果进行详尽的分析，帮助发布者对自己的投票信息有更深的了解</p>
 			</div>
 		</div>
 
-		<hr class="soften" />
-
-		<h2>Our Latest Projects</h2>
-		<p class="marketing-byline">
-			Quisque a quam non metus fringilla feugiat quisen, id interdum mi. <a
-				href="portfolio.html">Click here</a> to see our portfolio.
-		</p>
-		<ul id="latest-projects" class="thumbnails portfolio">
-			<li class="span3"><a href="portfolio.html"> <img
-					class="sengal-thumbnail thumbnail" alt="Portfolio Item"
-					src="http://placehold.it/300x250" />
-			</a></li>
-			<li class="span3"><a href="portfolio.html"> <img
-					class="sengal-thumbnail thumbnail" alt="Portfolio Item"
-					src="http://placehold.it/300x250" />
-			</a></li>
-			<li class="span3"><a href="portfolio.html"> <img
-					class="sengal-thumbnail thumbnail" alt="Portfolio Item"
-					src="http://placehold.it/300x250" />
-			</a></li>
-			<li class="span3"><a href="portfolio.html"> <img
-					class="sengal-thumbnail thumbnail" alt="Portfolio Item"
-					src="http://placehold.it/300x250" />
-			</a></li>
-		</ul>
 	</div>
 </div>

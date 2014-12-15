@@ -35,7 +35,7 @@ class User extends MY_Controller {
             $data = array_map('trim', $data);
             $callback = null;
             if ($this->user_model->doLogin($data, $callback)) {
-                $this->_setLogin($callback);
+                $this->user_model->setLogin($callback);
                 redirect();
             } else {
                 $this->_showLogin($this->errorhandler->getErrorDes($callback));
@@ -85,9 +85,11 @@ class User extends MY_Controller {
             unset($data['password2']);
             $callback = null;
             if ($this->user_model->doReg($data, $callback)) {
+                $this->user_model->setLogin($callback);
+                
                 //发送邮件
-                $this->_setLogin($callback);
-
+                $userinfo = $this->user_model->getUserInfo($callback);
+                $state = $this->user_model->sendVerifyEmail($userinfo);
                 //var_dump($callback);
                 redirect();
                 //TODO 注册成功页面
@@ -97,12 +99,9 @@ class User extends MY_Controller {
         }
     }
 
-    private function _setLogin($uid) {
-        $this->session->set_userdata('uid', $uid);
-    }
 
     public function logout() {
-        $this->session->unset_userdata('uid');
+        $this->user_model->setLogout();
         redirect();
     }
 
@@ -115,7 +114,7 @@ class User extends MY_Controller {
             if ($this->userinfo['is_verified']) {
                 $tip = "邮箱已经验证";
             } else {
-                $state = $this->_sendVerifyEmail();
+                $state = $this->user_model->sendVerifyEmail($this->userinfo);
                 $tip = $state ? "验证邮件已发送，请注意查收" : "邮件发送失败，请重试";
             }
         } else {
@@ -127,27 +126,6 @@ class User extends MY_Controller {
         $this->load->view('header', $header);
         $this->load->view('tip', array('tip' => $tip));
         $this->load->view('footer');
-    }
-
-    private function _sendVerifyEmail() {
-        $userinfo = $this->userinfo;
-        if (empty($userinfo)) {
-            return false;
-        }
-        $token = $this->user_model->setVerifyToken($userinfo['uid']);
-        if (empty($token)) {
-            return false;
-        }
-        $to[$userinfo['nickname']] = $userinfo['email'];
-        $subject = 'HustVote用户邮箱验证';
-        $body = "亲爱的 $userinfo[nickname]:\n" .
-                " 请点击下面的链接验证您的邮箱：\n" . base_url("user/verify/$userinfo[uid]/" . $token['verify_token']) .
-                "\n链接有效期为24小时，请于 " . date('Y年m月d H时i分', $token['exp_time']) . ' 前验证。';
-        $body = nl2br($body);
-        $this->load->library('mailer');
-        $state = $this->mailer->sendmail($to, $subject, $body);
-        var_dump($state);
-        return $state;
     }
 
 }

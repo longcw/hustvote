@@ -84,38 +84,76 @@ class User_model extends CI_Model {
             return $result;
         }
     }
-    
+
     /**
      * 设置验证信息
      * @param int $uid
      * @return array
      */
     public function setVerifyToken($uid) {
-        if(!is_numeric($uid)) {
+        if (!is_numeric($uid)) {
             return null;
         }
         $data['verify_token'] = md5(uniqid(rand(), true) . $uid);
-        $data['exp_time'] = time() + 24*60*60;
-        $this->db->update('User', $data, array('uid'=>$uid));
+        $data['exp_time'] = time() + 24 * 60 * 60;
+        $this->db->update('User', $data, array('uid' => $uid));
         return $data;
     }
-    
+
+    /**
+     * 验证邮箱
+     * @param int $uid
+     * @param string $token
+     * @return boolean
+     */
     public function verifyToken($uid, $token) {
         $where = array(
             'uid' => $uid,
             'verify_token' => $token,
-            'exp_time >' =>time(),
+            'exp_time >' => time(),
         );
         $this->db->select('uid')->limit(1);
         $query = $this->db->get_where('User', $where);
         $row = $query->row_array();
-        if(!empty($row)) {
-            $this->db->update('User', array('exp_time'=> 0, 'is_verified'=>1), array('uid'=>$row['uid']));
+        if (!empty($row)) {
+            $this->db->update('User', array('exp_time' => 0, 'is_verified' => 1), array('uid' => $row['uid']));
             return true;
         } else {
             return false;
         }
-        
+    }
+
+    public function setLogin($uid) {
+        $this->session->set_userdata('uid', $uid);
+    }
+
+    public function setLogout() {
+        $this->session->unset_userdata('uid');
+    }
+
+    /**
+     * 发送验证邮件
+     * @param array $userinfo 用户信息
+     * @return boolean
+     */
+    public function sendVerifyEmail($userinfo) {
+        if (empty($userinfo)) {
+            return false;
+        }
+        $token = $this->setVerifyToken($userinfo['uid']);
+        if (empty($token)) {
+            return false;
+        }
+        $to[$userinfo['nickname']] = $userinfo['email'];
+        $subject = 'HustVote用户邮箱验证';
+        $body = "亲爱的 $userinfo[nickname]:\n" .
+                " 请点击下面的链接验证您的邮箱：\n" . base_url("user/verify/$userinfo[uid]/" . $token['verify_token']) .
+                "\n链接有效期为24小时，请于 " . date('Y年m月d H时i分', $token['exp_time']) . ' 前验证。';
+        $body = nl2br($body);
+        $this->load->library('mailer');
+        $state = $this->mailer->sendmail($to, $subject, $body);
+        //var_dump($state);
+        return $state;
     }
 
 }
