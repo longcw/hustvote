@@ -1,5 +1,6 @@
 <div id="footer">
     <div class="container">
+        <!--
         <div class="row">
             <div class="span4">
                 <h4>From the Blog</h4>
@@ -47,17 +48,16 @@
                 </address>
             </div>
         </div>
+        -->
         <div class="row">
             <div id="copyright">
-                <div class="span6 pull-left"><p>&copy; The Bricks All Rights Reserved. 2013.</p></div>
+                <div class="span6 pull-left"><p>&copy; All Rights Reserved. 2014.</p></div>
                 <div class="span6">
                     <ul class="unstyled nav-pills pull-right">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="services.html">Services</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="portfolio.html">Portfolio</a></li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="<?php echo base_url('home') ?>">首页</a></li>
+                        <li><a href="<?= base_url('about') ?>">下载</a></li>
+                        <li><a href="<?php echo base_url('home/hall') ?>">投票大厅</a></li>
+                        <li><a href="<?= base_url('about') ?>">关于</a></li>
                     </ul>
                 </div>
             </div>
@@ -65,13 +65,13 @@
 
     </div>
 </div>
-<script src="<?php echo base_url('js/jquery.min.js')?>" type="text/javascript"></script>
-<script src="<?php echo base_url('js/bootstrap.min.js')?>"></script>
+<script src="<?php echo base_url('js/jquery.min.js') ?>" type="text/javascript"></script>
+<script src="<?php echo base_url('js/bootstrap.min.js') ?>"></script>
 
-<?php if(isset($js)):?>
-<?php foreach ($js as $value):?>
-<script src="<?php echo base_url('js/' . $value . '.js')?>" type="text/javascript"></script>
-<?php endforeach;?>
-<?php endif;?>
+<?php if (isset($js)): ?>
+    <?php foreach ($js as $value): ?>
+        <script src="<?php echo base_url('js/' . $value . '.js') ?>" type="text/javascript"></script>
+    <?php endforeach; ?>
+<?php endif; ?>
 </body>
 </html>

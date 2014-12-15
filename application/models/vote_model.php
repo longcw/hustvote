@@ -131,7 +131,7 @@ class Vote_model extends CI_Model {
      * @param string $content
      * @return array
      */
-    private function getSummary($content, $long = 200, $short = 50) {
+    private function getSummary($content, $long = 50, $short = 50) {
         if (empty($content)) {
             return array();
         }

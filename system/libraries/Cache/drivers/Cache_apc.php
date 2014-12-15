@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2006 - 2014 EllisLab, Inc.
+ * @copyright	Copyright (c) 2006 - 2011 EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 2.0
@@ -30,7 +30,7 @@ class CI_Cache_apc extends CI_Driver {
 	/**
 	 * Get
 	 *
-	 * Look for a value in the cache.  If it exists, return the data
+	 * Look for a value in the cache.	If it exists, return the data
 	 * if not, return FALSE
 	 *
 	 * @param 	string
@@ -75,6 +75,22 @@ class CI_Cache_apc extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
+	 * Replace the cache
+	 *
+	 * @param 	string		unique key
+	 * @param 	mixed		data to store
+	 * @param 	int			length of time (in seconds) the cache is valid
+	 *						- Default is 60 seconds
+	 * @return 	boolean		true on success/false on failure
+	 */
+	public function replace($id, $data, $ttl = 60)
+	{
+		return $this->save($id, $data, $ttl);
+	}
+
+	// ------------------------------------------------------------------------
+
+	/**
 	 * Clean the cache
 	 *
 	 * @return 	boolean		false on failure/true on success
@@ -92,10 +108,10 @@ class CI_Cache_apc extends CI_Driver {
 	 * @param 	string		user/filehits
 	 * @return 	mixed		array on success, false on failure
 	 */
-	public function cache_info($type = NULL)
-	{
-		return apc_cache_info($type);
-	}
+	 public function cache_info($type = NULL)
+	 {
+		 return apc_cache_info($type);
+	 }
 
 	// ------------------------------------------------------------------------
 
@@ -141,7 +157,9 @@ class CI_Cache_apc extends CI_Driver {
 		return TRUE;
 	}
 
+	// ------------------------------------------------------------------------
 }
+// End Class
 
 /* End of file Cache_apc.php */
 /* Location: ./system/libraries/Cache/drivers/Cache_apc.php */

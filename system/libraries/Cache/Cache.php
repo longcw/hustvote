@@ -2,38 +2,38 @@
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 5.1.6 or newer
+ * An open source application development framework for PHP 4.3.2 or newer
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2006 - 2014 EllisLab, Inc.
+ * @copyright	Copyright (c) 2006 - 2011 EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 2.0
- * @filesource
+ * @filesource	
  */
 
 // ------------------------------------------------------------------------
 
 /**
- * CodeIgniter Caching Class
+ * CodeIgniter Caching Class 
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
  * @category	Core
  * @author		ExpressionEngine Dev Team
- * @link
+ * @link		
  */
 class CI_Cache extends CI_Driver_Library {
-
+	
 	protected $valid_drivers 	= array(
-		'cache_apc', 'cache_file', 'cache_memcached', 'cache_dummy'
+		'cache_apc', 'cache_file', 'cache_memcached', 'cache_memcache', 'cache_dummy'
 	);
 
 	protected $_cache_path		= NULL;		// Path of cache files (if file-based cache)
 	protected $_adapter			= 'dummy';
 	protected $_backup_driver;
-
+	
 	// ------------------------------------------------------------------------
 
 	/**
@@ -52,16 +52,16 @@ class CI_Cache extends CI_Driver_Library {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Get
+	 * Get 
 	 *
-	 * Look for a value in the cache.  If it exists, return the data
+	 * Look for a value in the cache.  If it exists, return the data 
 	 * if not, return FALSE
 	 *
-	 * @param 	string
+	 * @param 	string	
 	 * @return 	mixed		value that is stored/FALSE on failure
 	 */
 	public function get($id)
-	{
+	{	
 		return $this->{$this->_adapter}->get($id);
 	}
 
@@ -79,6 +79,22 @@ class CI_Cache extends CI_Driver_Library {
 	public function save($id, $data, $ttl = 60)
 	{
 		return $this->{$this->_adapter}->save($id, $data, $ttl);
+	}
+
+	// ------------------------------------------------------------------------
+
+	/**
+	 * Cache Replace
+	 *
+	 * @param 	string		Unique Key
+	 * @param 	mixed		Data to store
+	 * @param 	int			Length of time (in seconds) to cache the data
+	 *
+	 * @return 	boolean		true on success/false on failure
+	 */
+	public function replace($id, $data, $ttl = 60)
+	{
+		return $this->{$this->_adapter}->replace($id, $data, $ttl);
 	}
 
 	// ------------------------------------------------------------------------
@@ -112,7 +128,7 @@ class CI_Cache extends CI_Driver_Library {
 	 * Cache Info
 	 *
 	 * @param 	string		user/filehits
-	 * @return 	mixed		array on success, false on failure
+	 * @return 	mixed		array on success, false on failure	
 	 */
 	public function cache_info($type = 'user')
 	{
@@ -120,7 +136,7 @@ class CI_Cache extends CI_Driver_Library {
 	}
 
 	// ------------------------------------------------------------------------
-
+	
 	/**
 	 * Get Cache Metadata
 	 *
@@ -131,7 +147,7 @@ class CI_Cache extends CI_Driver_Library {
 	{
 		return $this->{$this->_adapter}->get_metadata($id);
 	}
-
+	
 	// ------------------------------------------------------------------------
 
 	/**
@@ -139,11 +155,11 @@ class CI_Cache extends CI_Driver_Library {
 	 *
 	 * Initialize class properties based on the configuration array.
 	 *
-	 * @param	array
+	 * @param	array 	
 	 * @return 	void
 	 */
 	private function _initialize($config)
-	{
+	{        
 		$default_config = array(
 				'adapter',
 				'memcached'
@@ -165,6 +181,11 @@ class CI_Cache extends CI_Driver_Library {
 			{
 				$this->_backup_driver = $config['backup'];
 			}
+		}
+		
+		if( ! $this->{$this->_adapter}->is_supported())
+		{
+			$this->_adapter = $this->_backup_driver;
 		}
 	}
 
@@ -207,8 +228,10 @@ class CI_Cache extends CI_Driver_Library {
 
 		return $obj;
 	}
-
+	
+	// ------------------------------------------------------------------------
 }
+// End Class
 
 /* End of file Cache.php */
 /* Location: ./system/libraries/Cache/Cache.php */
