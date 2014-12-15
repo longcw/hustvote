@@ -32,7 +32,7 @@
                 </form>
             </div> 
 
-
+<!--
             <div class="entry-comments">
                 <h3>3 Comments</h3>
                 <ul id="comments-list">
@@ -67,7 +67,7 @@
                 </div>
 
             </div>
-
+            -->
         </div>
         <div class="span1"></div>
         <div class="span4 pinned well">
