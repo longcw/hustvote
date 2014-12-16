@@ -62,5 +62,8 @@ class MY_Controller extends CI_Controller {
         }
         $this->output->set_output(json_encode($this->response));
     }
-
+    
+    public function isLogin() {
+        return !empty($this->userinfo['uid']);
+    }
 }

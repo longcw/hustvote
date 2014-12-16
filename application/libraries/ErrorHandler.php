@@ -17,6 +17,8 @@ class ErrorHandler {
     );
     private $codeMap = array(
         1000 => 'ok',
+        1001 => '用户名或密码错误',
+        1002 => '未登录',
         4000 => 'init',
     );
 
