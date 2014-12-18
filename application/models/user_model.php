@@ -51,7 +51,7 @@ class User_model extends CI_Model {
      * @return boolean
      */
     public function doLogin($data, &$callback) {
-        if(empty($data)) {
+        if(count($data) != 2) {
             $callback = 'ArrayCountWrong';
             return false;
         }
