@@ -11,16 +11,16 @@ class MY_Controller extends CI_Controller {
         'sid' => '',
         'code' => 4000,
         'message' => '',
-        'result' => ''
+        'result' => array()
     );
             
     function __construct() {
         parent::__construct();
         //用于客户端传递sid
-        $sid = $this->input->get('sid');
-        if (!empty($sid)) {
-            session_id($sid);
-        }
+//        $sid = $this->input->get('sid');
+//        if (!empty($sid)) {
+//            session_id($sid);
+//        }
         $this->load->library('session');
 
         $this->load->model('user_model');
@@ -54,7 +54,11 @@ class MY_Controller extends CI_Controller {
         $this->response['result'] = $result;
     }
     
-    public function reply() {
+    public function addResult($key, $value) {
+        $this->response['result'][$key] = $value;
+    }
+
+        public function reply() {
         $this->response['sid'] = $this->session->userdata('session_id');
         if(empty($this->response['message'])) {
             $code = $this->response['code'];
