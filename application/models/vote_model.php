@@ -212,7 +212,7 @@ class Vote_model extends CI_Model {
             return $query->num_rows();
         }
 
-
+        $this->db->select("start_voteid, title, summary, image, start_time, end_time, create_time, uid, choice_max");
         $this->db->order_by('create_time desc');
 
         $offset = $page * $count;

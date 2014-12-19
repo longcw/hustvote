@@ -11,7 +11,7 @@ class MY_Controller extends CI_Controller {
         'sid' => '',
         'code' => 4000,
         'message' => '',
-        'result' => array()
+        'result' => array("")
     );
             
     function __construct() {
@@ -63,6 +63,9 @@ class MY_Controller extends CI_Controller {
         if(empty($this->response['message'])) {
             $code = $this->response['code'];
             $this->response['message'] = $this->errorhandler->getCodeMsg($code);
+        }
+        if(empty($this->response['result'])) {
+            $this->addResult("empty", true);
         }
         $this->output->set_content_type('application/json')
                 ->set_output(json_encode($this->response));
