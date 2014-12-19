@@ -2,7 +2,7 @@
 <div id="home-page-marketing" class="row">
 	<div id="bricks-hero-unit" class="span6">
 		<h1>全心全意为同学们搭建最好的投票平台</h1>
-		<img src="img/responsive-layout.png"
+		<img src="img/hall.jpg"
 			class="visible-phone hero-unit-image" />
 		<p class="explanation">简单易用的投票系统，集中稳定的投票平台，公正准确的投票统计，安卓、微信、浏览器，只要有网络，就可以发起和参与投票。上手快，简单操作，永久免费。</p>
 		<p class="action-buttons-container">
@@ -10,7 +10,7 @@
 		</p>
 	</div>
 	<div class="span6 hidden-phone">
-		<img src="img/responsive-layout.png" />
+		<img src="img/hall.jpg" />
 	</div>
 </div>
 </div>

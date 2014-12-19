@@ -23,6 +23,7 @@ class User extends MY_Controller {
 
     public function login() {
         if (!empty($this->userinfo['uid'])) {
+            //var_dump($this->userinfo);
             redirect();
             return;
         }
