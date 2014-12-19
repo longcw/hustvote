@@ -201,7 +201,8 @@ class Vote_model extends CI_Model {
             $op = $limit['is_start'] ? '<' : '>=';
             $this->db->where('end_time' . $op, $ctime);
         }
-        if (isset($limit['is_completed'])) {
+        //默认要求is_completed
+        if (!isset($limit['is_completed']) || $limit['is_completed']) {
             $this->db->where('is_completed', 1);
         }
 
@@ -226,7 +227,7 @@ class Vote_model extends CI_Model {
 
     public function getVoteDetailById($id) {
         if (empty($id) || !is_numeric($id)) {
-            return array();
+            return NULL;
         }
         $data = array();
 

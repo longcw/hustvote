@@ -64,7 +64,8 @@ class MY_Controller extends CI_Controller {
             $code = $this->response['code'];
             $this->response['message'] = $this->errorhandler->getCodeMsg($code);
         }
-        $this->output->set_output(json_encode($this->response));
+        $this->output->set_content_type('application/json')
+                ->set_output(json_encode($this->response));
     }
     
     public function isLogin() {

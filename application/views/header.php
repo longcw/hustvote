@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <head>
+    <head><?php //var_dump($userinfo)?>
         <title><?php echo $title ?></title>
         <!-- Bootstrap -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
