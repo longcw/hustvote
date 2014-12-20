@@ -190,7 +190,7 @@ class Vote_model extends CI_Model {
      * @param int $count
      * @return array
      */
-    public function getVotesByPage($page = 0, $limit = array(), $count = 8, $getcount = false) {
+    public function getVotesByPage($page = 0, $limit = array(), $count = 8, $ltime = 0, $getcount = false) {
         $ctime = time();
         if (isset($limit['is_end'])) {
             $op = $limit['is_end'] ? '<' : '>=';
@@ -215,13 +215,19 @@ class Vote_model extends CI_Model {
         $this->db->select("start_voteid, title, summary, image, start_time, end_time, create_time, uid, choice_max");
         $this->db->order_by('create_time desc');
 
-        $offset = $page * $count;
-        $query = $this->db->get('StartVote', $count, $offset);
+        if ($ltime <= 0) {
+            $offset = $page * $count;
+            $this->db->limit($count, $offset);
+        } else {
+            $this->db->where('create_time >', $ltime);
+        }
+
+        $query = $this->db->get('StartVote');
         return $query->result_array();
     }
 
     public function getVotePage($limit = array(), $count = 8) {
-        $total = $this->getVotesByPage(0, $limit, $count, true);
+        $total = $this->getVotesByPage(0, $limit, $count, 0, true);
         return ceil($total / 8);
     }
 
@@ -463,7 +469,6 @@ class Vote_model extends CI_Model {
         return $query->row_array();
     }
 
-    
     /**
      * 验证是否可以投票
      * @param array $callback 返回的错误信息
@@ -495,7 +500,7 @@ class Vote_model extends CI_Model {
                 return false;
             }
         }
-        
+
         //需要验证邮箱
         if (!empty($limit['email_need'])) {
 
@@ -526,12 +531,12 @@ class Vote_model extends CI_Model {
             $callback['votetime'] = $votelog['vote_time'];
             return false;
         }
-        
+
         //验证码
-        if(!empty($limit['captcha_need'])) {
+        if (!empty($limit['captcha_need'])) {
             $captcha = $this->session->userdata('captcha_code');
             $this->session->unset_userdata('captcha_code');
-            if(empty($identify['captcha']) || $captcha != $identify['captcha']) {
+            if (empty($identify['captcha']) || $captcha != $identify['captcha']) {
                 $callback['type'] = 'captcha_need';
                 return false;
             }
