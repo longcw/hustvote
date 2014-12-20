@@ -23,8 +23,8 @@ class User extends MY_Controller {
 
     public function login() {
         if (!empty($this->userinfo['uid'])) {
-            //var_dump($this->userinfo);
-            redirect();
+            var_dump($this->userinfo);
+            //redirect();
             return;
         }
         $this->form_validation->set_rules('email', '邮箱', 'trim|required');
