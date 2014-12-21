@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lifetime = 60*60*24*100;
 session_start();
-setcookie(session_name(), session_id(), time() + $lifetime);
+setcookie(session_name(), session_id(), time() + $lifetime, '/');
 
 Class MY_Session Extends CI_Session {
 
