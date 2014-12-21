@@ -65,7 +65,9 @@ public class ChoiceContentBean {
     }
 
     public void setIntro(String intro) {
-        this.intro = intro;
+        //TODO 删除replace
+        //本地调试
+        this.intro = intro.replace("localhost", "10.42.0.1");
     }
 
     public String getSummary() {

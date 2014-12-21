@@ -39,7 +39,7 @@ public class VolleyImageGetter implements Html.ImageGetter {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity)mCtx).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         //图片的最大宽度和高度
-        height = displayMetrics.heightPixels;
+        height = (int)(displayMetrics.heightPixels * 0.3);
         width = (int)(displayMetrics.widthPixels * 0.8);
 
         requestQueue = NetworkUtils.getInstance(context).getRequestQueue();
@@ -68,7 +68,7 @@ public class VolleyImageGetter implements Html.ImageGetter {
     }
 
     private void doGetImage(String source, final URLDrawable d) {
-        ImageRequest imageRequest = new ImageRequest(source, new Response.Listener<Bitmap>() {
+      ImageRequest imageRequest = new ImageRequest(source, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
                 BitmapDrawable bitmapDrawable = new BitmapDrawable(mCtx.getResources(), response);

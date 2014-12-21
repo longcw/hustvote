@@ -23,10 +23,11 @@
             android:name=".ui.HallActivity"
             android:label="@string/title_activity_hall" >
         </activity>
-        <activity
-            android:name=".ui.VoteActivity"
-            android:label="@string/title_vote_activity" >
-        </activity>
+        <activity android:name=".ui.VoteActivity"
+            android:label="VoteActivity_WebView" />
+
+        <activity android:name=".ui.ChoiceIntroActivity"
+            android:label="ChoiceIntro" />
     </application>
 
 </manifest>

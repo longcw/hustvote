@@ -5,7 +5,7 @@ package com.hustvote.hustvote.utils;
  */
 public class C {
     public class Net {
-        public final static String BaseUrl = "http://10.42.0.1:8088/server/";
+        public final static String BaseUrl = "http://hustvote.sinaapp.com/server/";
         public final static String SUCC_CODE = "1000";
         public class API {
             public final static String Login = "s_user/login";
@@ -15,6 +15,8 @@ public class C {
             public final static String getVoteList = "s_vote/getVoteList";
             public final static String getNewVote = "s_vote/getNewVote";
             public final static String getVoteDetail = "s_vote/getVoteDetail";
+            public final static String getChoiceDetail = "s_vote/getChoiceDetail";
+            public final static String getVoteLog = "s_vote/getVoteLog";
         }
     }
 }

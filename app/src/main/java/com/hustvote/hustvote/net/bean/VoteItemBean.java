@@ -81,7 +81,9 @@ public class VoteItemBean {
     }
 
     public void setImage(String image) {
-        this.image = image;
+        //TODO 删除replace
+        //本地调试用
+        this.image = image.replace("localhost", "10.42.0.1");
     }
 
     public int getChoice_max() {

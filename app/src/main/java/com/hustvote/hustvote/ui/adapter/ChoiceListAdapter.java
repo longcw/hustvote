@@ -1,15 +1,20 @@
 package com.hustvote.hustvote.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.net.bean.ChoiceItemBean;
+import com.hustvote.hustvote.ui.ChoiceIntroActivity;
 
 import java.util.List;
 
@@ -17,15 +22,45 @@ import java.util.List;
  * Created by chenlong on 14-12-21.
  */
 public class ChoiceListAdapter extends BaseAdapter {
-    Context context;
-    List<ChoiceItemBean> data;
-    LayoutInflater layoutInflater;
+    private Context context;
+    private List<ChoiceItemBean> data;
+    private LayoutInflater layoutInflater;
 
+    private List<Integer> selected;
+    private ListView listView;
+    private int maxChoice;
 
-    public ChoiceListAdapter(Context context, List<ChoiceItemBean> data) {
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
+
+    public ChoiceListAdapter(Context context, List<ChoiceItemBean> data,
+                             List<Integer> selected) {
         this.context = context;
         this.data = data;
         layoutInflater = LayoutInflater.from(context);
+
+        this.selected = selected;
+
+        //选择事件的监听器
+        onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton button, boolean b) {
+                if(b) {
+                    ChoiceListAdapter.this.selected.add((Integer) button.getTag());
+
+                    if(ChoiceListAdapter.this.selected.size() >= maxChoice) {
+                        setUnCheckable();
+                    }
+                } else {
+                    ChoiceListAdapter.this.selected.remove(button.getTag());
+                    if(ChoiceListAdapter.this.selected.size() == maxChoice-1) {
+                        setCheckable();
+                    }
+                }
+                Log.i("selected", ChoiceListAdapter.this.selected.toString());
+            }
+        };
+
+
     }
 
     @Override
@@ -44,20 +79,64 @@ public class ChoiceListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int pos, View convertView, ViewGroup arg2) {
+    public View getView(final int pos, View convertView, ViewGroup arg2) {
         View itemView = null;
-        CheckBox checkBox = null;
-        if(convertView != null) {
-            itemView = convertView;
-            checkBox = (CheckBox) convertView.findViewById(R.id.choice_item_name);
-        }
-        if(checkBox == null) {
+        if (convertView == null) {
             itemView = layoutInflater.inflate(R.layout.choiceitem_layout, null);
-            checkBox = (CheckBox) itemView.findViewById(R.id.choice_item_name);
+        } else {
+            itemView = convertView;
         }
-        checkBox.setText(data.get(pos).getChoice_name());
-        checkBox.setId(data.get(pos).getChoiceid());
+        CheckBox checkBox = (CheckBox)itemView.findViewById(R.id.choice_item_checkbox);
+        TextView name = (TextView) itemView.findViewById(R.id.choice_item_name);
+        checkBox.setFocusableInTouchMode(false);
+        checkBox.setTag(data.get(pos).getChoiceid());
+
+        name.setText(data.get(pos).getChoice_name());
+        name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ChoiceIntroActivity.class);
+                intent.putExtra("cid", data.get(pos).getChoiceid());
+                context.startActivity(intent);
+            }
+        });
+
+        checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
+
         return itemView;
     }
 
+
+    //未选中的全部禁止
+    private void setUnCheckable() {
+        int count = getCount();
+        for (int i = 1; i <= count; i++) {
+            View view = listView.getChildAt(i);
+            CheckBox checkBox = (CheckBox) view.findViewById(R.id.choice_item_checkbox);
+            if (!checkBox.isChecked()) {
+                checkBox.setEnabled(false);
+            }
+        }
+    }
+
+    //允许未选中的选择
+    private void setCheckable() {
+        int count = getCount();
+        for (int i = 1; i <= count; i++) {
+            View view = listView.getChildAt(i);
+            CheckBox checkBox = (CheckBox) view.findViewById(R.id.choice_item_checkbox);
+            if (!checkBox.isChecked()) {
+                checkBox.setEnabled(true);
+            }
+        }
+    }
+
+
+    public void setMaxChoice(int maxChoice) {
+        this.maxChoice = maxChoice;
+    }
+
+    public void setListView(ListView listView) {
+        this.listView = listView;
+    }
 }
