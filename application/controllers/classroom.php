@@ -67,9 +67,10 @@ class Classroom extends MY_Controller {
             return;
         }
         $f = "jwc$building";
-        $data['classdata'] = $this->$f();
+        $classdata = $this->$f();
+        $classdata = str_replace(array('<td>&nbsp;</td>', '学院'), array('<td bgcolor="#66CCCC">自习</td>', ''), $classdata);
         $logid = $this->class_model->setClassLog(time(), $building);
-        $this->class_model->setClassData_JWC($building, $data['classdata'], $logid);
+        $this->class_model->setClassData_JWC($building, $classdata, $logid);
         redirect('classroom/jwc/' . $building);
     }
 
