@@ -55,6 +55,7 @@ class Class_Model extends CI_Model {
     }
     
     public function getClassData_JWC($logid) {
+        $this->db->select('classdata');
         $this->db->where('classlogid', $logid)->order_by('classdataid asc');
         $query = $this->db->get('ClassData_JWC');
         $result = $query->result_array();

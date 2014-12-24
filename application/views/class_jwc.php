@@ -1,6 +1,6 @@
 <div class="container">
     这里是<?=$classlog['building']?>教室
-    <a href="<?= base_url('classroom/update_jwc/d9') ?>" class="btn btn-info " >东九</a><a href="<?= base_url('classroom/jwc/d12') ?>" class="btn btn-info" >东十二</a>
+    <a href="<?= base_url('classroom/jwc/d9') ?>" class="btn btn-info " >东九</a><a href="<?= base_url('classroom/jwc/d12') ?>" class="btn btn-info" >东十二</a>
     <a href="<?= base_url('classroom/update_jwc/' . $classlog['building']) ?>" class="btn btn-block btn-primary" >更新数据(<?= date('Y-m-d h:i:s', $classlog['update_time']) ?>)</a>
     <table class="table table-bordered"> 
 
@@ -18,9 +18,7 @@
             <?php foreach ($classdata as $item) : ?>
                 <tr> 
                     <?php
-                    $str = str_replace('<td>&nbsp;</td>', '<td bgcolor="#66CCCC">自习</td>', $item['classdata']);
-
-                    echo $str;
+                    echo $item['classdata']
                     ?>                                 
                 </tr>
             <?php endforeach; ?>
