@@ -105,7 +105,7 @@
                     ?>
                 </dl>
                 <p>
-                    <?php if ($error['type'] != 'none') : ?>
+                    <?php if ($error['type'] != 'none' && $error['type'] != 'captcha_need') : ?>
                         <a href="#modal-<?= $error['type'] ?>" class="btn btn-primary" role="button" data-toggle="modal">提示</a>
                     <?php endif; ?>
                     <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
@@ -185,7 +185,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/register') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/verify') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>
@@ -223,7 +223,7 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/register') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <a href="<?= base_url('user/verify') ?>"  class="btn btn-primary" role="button">去验证</a> <a href="<?= base_url('vote/result/' . $detail['content']['start_voteid']) ?>" class="btn btn-success" role="button">投票结果</a>
         </div>
     </div>
 <?php endif; ?>

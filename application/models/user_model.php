@@ -51,10 +51,6 @@ class User_model extends CI_Model {
      * @return boolean
      */
     public function doLogin($data, &$callback) {
-        if(count($data) != 2) {
-            $callback = 'ArrayCountWrong';
-            return false;
-        }
         $query = $this->db->get_where('User', array('email' => $data['email']), 1);
         if ($query->num_rows < 1) {
             $callback = 'EmailNotExist';

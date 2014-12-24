@@ -31,7 +31,7 @@ class MY_Controller extends CI_Controller {
         }
     }
 
-    public function _getUserIdentification() {
+    public function getUserIdentification() {
         $identify['uid'] = empty($this->userinfo['uid']) ? null : $this->userinfo['uid'];
         $identify['email'] = empty($this->userinfo['uid']) ? null : $this->userinfo['email'];
         $identify['session_id'] = $this->session->userdata('session_id');
