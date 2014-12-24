@@ -198,5 +198,20 @@ class S_vote extends MY_Controller {
         }
         return 1000;
     }
+    
+    
+    public function getVoteResult() {
+        $vid = $this->input->post('vid');
+        $result = $this->vote_model->getVoteResult($vid);
+        if(empty($result)) {
+            $this->setCode(1004);
+        } else {
+            $this->setCode(1000);
+            $title = $this->vote_model->getVoteTitle($vid);
+            $this->addResult("resultdata", $result);
+            $this->addResult("title", $title['title']);
+        }
+        $this->reply();
+    }
 
 }

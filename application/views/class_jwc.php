@@ -1,7 +1,9 @@
 <div class="container">
     这里是<?=$classlog['building']?>教室
     <a href="<?= base_url('classroom/jwc/d9') ?>" class="btn btn-info " >东九</a><a href="<?= base_url('classroom/jwc/d12') ?>" class="btn btn-info" >东十二</a>
+    <?php if($userinfo['uid']):?>
     <a href="<?= base_url('classroom/update_jwc/' . $classlog['building']) ?>" class="btn btn-block btn-primary" >更新数据(<?= date('Y-m-d h:i:s', $classlog['update_time']) ?>)</a>
+    <?php endif;?>
     <table class="table table-bordered"> 
 
         <thead> 

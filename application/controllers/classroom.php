@@ -62,6 +62,10 @@ class Classroom extends MY_Controller {
     }
 
     public function update_jwc($building = null) {
+        if(!$this->isLogin()) {
+            echo "请先登录";
+            return;
+        }
         if ($building != 'd9' && $building != 'd12') {
             echo "error building";
             return;
