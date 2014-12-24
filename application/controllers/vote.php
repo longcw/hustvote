@@ -148,7 +148,7 @@ class Vote extends MY_Controller {
         $code = $this->input->get('code');
         $callback = array('type' => 'none');
         //$this->_hasRightToVote($callback, $id, array(), $code);
-        $ident = $this->_getUserIdentification();
+        $ident = $this->getUserIdentification();
         $this->vote_model->hasRightToVote($callback, $id, $ident, $code);
         $data['error'] = $callback;
         if ($callback['type'] == 'errorvote' && empty($callback['vtime'])) {
@@ -185,7 +185,7 @@ class Vote extends MY_Controller {
         $id['captcha'] = $pdata['captcha'];
         $id['fingerprint'] = $pdata['fingerprint'];
         $id['code'] = $code;
-        $id = array_merge($this->_getUserIdentification(), $id);
+        $id = array_merge($this->getUserIdentification(), $id);
         $callback = null;
         if (!$this->vote_model->hasRightToVote($callback, $pdata['start_voteid'], $id, $code)) {
             $url = base_url('vote/join/'.$pdata['start_voteid']);
@@ -264,7 +264,7 @@ class Vote extends MY_Controller {
      * 参与的投票
      */
     public function joined() {
-        $identification = $this->_getUserIdentification();
+        $identification = $this->getUserIdentification();
         $data['votelog'] = $this->vote_model->getUserVoteLog($identification);
 
         $header ['userinfo'] = $this->userinfo;
