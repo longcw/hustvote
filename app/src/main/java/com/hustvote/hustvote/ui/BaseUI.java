@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -22,7 +23,7 @@ import com.hustvote.hustvote.utils.UserInfo;
 /**
  * Created by chenlong on 14-12-18.
  */
-public class BaseUI extends Activity {
+public class BaseUI extends ActionBarActivity {
 
     protected RequestQueue requestQueue;
     protected UserInfo userInfo;

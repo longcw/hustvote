@@ -85,6 +85,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="support-v4-21.0.0" level="project" />
     <orderEntry type="library" exported="" name="fastjson-1.1.43.android" level="project" />
+    <orderEntry type="library" exported="" name="mpandroidchartlibrary-1-7-4" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.0" level="project" />
     <orderEntry type="library" exported="" name="fastjson-1.1.43.android-javadoc" level="project" />

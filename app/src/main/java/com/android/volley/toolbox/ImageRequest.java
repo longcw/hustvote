@@ -16,16 +16,23 @@
 
 package com.android.volley.toolbox;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyLog;
+import com.hustvote.hustvote.net.utils.NetworkUtils;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.util.Log;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A canned request for getting an image at a given URL and calling
@@ -207,5 +214,16 @@ public class ImageRequest extends Request<Bitmap> {
         }
 
         return (int) n;
+    }
+
+    //添加cookie
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        Map<String, String> headers = super.getHeaders();
+        if(headers == null || headers.equals(Collections.emptyMap())) {
+            headers = new HashMap<String, String>();
+        }
+        NetworkUtils.addSessionCookie(headers);
+        return headers;
     }
 }

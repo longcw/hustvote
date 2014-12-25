@@ -109,7 +109,7 @@ public class HallActivity extends BaseVoteUI implements XListView.IXListViewList
     private void onItemClickVoteListView(ListView parent, View view, int pos, long id) {
         if(pos > 0 && pos <= voteItemList.size()) {
             Intent intent = new Intent(HallActivity.this, VoteActivity.class);
-            intent.putExtra("start_voteid", id);
+            intent.putExtra("start_voteid", Long.toString(id));
             startActivity(intent);
         }
     }

@@ -7,25 +7,26 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/captchaLayout">
 
-        <Button
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="提交"
-            android:id="@+id/vote_submit_button" />
+            android:id="@+id/captchaImage" />
 
-        <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="提示"
-            android:id="@+id/vote_info_button" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="投票结果"
-            android:id="@+id/vote_result_button" />
+            android:text="点击更换"
+            android:id="@+id/captchaHint"
+            android:layout_gravity="right" />
     </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/captchaText"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

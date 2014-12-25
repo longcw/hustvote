@@ -23,4 +23,5 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.0'
     compile files('libs/fastjson-1.1.43.android.jar')
+    compile files('libs/mpandroidchartlibrary-1-7-4.jar')
 }

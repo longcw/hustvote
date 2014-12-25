@@ -1,5 +1,7 @@
 package com.hustvote.hustvote.net.utils;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.AuthFailureError;
@@ -58,9 +60,11 @@ public class HustVoteRequest<T> extends Request<T> {
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
+            NetworkUtils.checkSessionCookie(response.headers);
             String body = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            Log.i("body", body);
             JSONObject json = JSON.parseObject(body);
-            NetworkUtils.setSessionID(json.getString("sid"));
+            Log.i("hustvote_session", json.getString("sid"));
             if(!json.getString("code").equals(SUCC_CODE)) {
                 String msg = json.getString("code") + ":" + json.getString("message");
                 return Response.error(new HustVoteError(msg));

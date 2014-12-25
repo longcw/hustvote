@@ -7,9 +7,12 @@ import java.util.List;
  */
 public class VoteDetailBean {
 
-    List<ChoiceItemBean> choices;
-    ChoiceContentBean content;
-    ChoiceLimitBean limit;
+    private List<ChoiceItemBean> choices;
+    private ChoiceContentBean content;
+    private ChoiceLimitBean limit;
+
+    private String logtype;
+    private String logmsg;
 
     public VoteDetailBean() {
 
@@ -21,6 +24,8 @@ public class VoteDetailBean {
                 "choices=" + choices +
                 ", content=" + content +
                 ", limit=" + limit +
+                ", logtype='" + logtype + '\'' +
+                ", logmsg='" + logmsg + '\'' +
                 '}';
     }
 
@@ -46,5 +51,21 @@ public class VoteDetailBean {
 
     public void setLimit(ChoiceLimitBean limit) {
         this.limit = limit;
+    }
+
+    public String getLogtype() {
+        return logtype;
+    }
+
+    public void setLogtype(String logtype) {
+        this.logtype = logtype;
+    }
+
+    public String getLogmsg() {
+        return logmsg;
+    }
+
+    public void setLogmsg(String logmsg) {
+        this.logmsg = logmsg;
     }
 }
