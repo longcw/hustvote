@@ -323,6 +323,16 @@ class Vote_model extends CI_Model {
         $this->db->insert_batch('Code', $data);
         return $data;
     }
+    
+    public function getCodeByVote($vid) {
+        if(!is_numeric($vid)) {
+            return null;
+        }
+        $this->db->select('code, is_voted, vote_time, logid');
+        $this->db->where('start_voteid', $vid);
+        $query = $this->db->get('Code');
+        return $query->result_array();
+    }
 
     /**
      * 获取最近的一条投票记录
@@ -356,6 +366,28 @@ class Vote_model extends CI_Model {
         $qstr .= " ORDER BY vote_time DESC LIMIT 1";
         $query = $this->db->query($qstr, $data);
         return $query->row_array();
+    }
+    
+    /**
+     * 通过code获取投票记录
+     * @param type $vid
+     * @param type $code
+     * @return type
+     */
+    public function getVoteLogByCode($vid, $code) {
+        $votelog = $this->getLastVoteLog($vid, array('code'=>$code));
+        if(empty($votelog)) {
+            return null;
+        }
+        $select = $this->getJoinVoteByLog($votelog['logid']);
+        return array('votelog'=>$votelog, 'select'=>$select);
+    }
+    
+    public function getJoinVoteByLog($logid) {
+        $this->db->select('choice_name, Choice.choiceid');
+        $this->db->join('Choice', 'Choice.choiceid=JoinVote.choiceid');
+        $query = $this->db->get_where('JoinVote', array('logid' => $logid));
+        return $query->result_array();
     }
 
     /**
