@@ -272,6 +272,16 @@ class Vote extends MY_Controller {
     }
 
     public function getCodeLog($vid, $code) {
+        $uid = $this->userinfo['uid'];
+        if (empty($uid)) {
+            redirect('user/login');
+            return;
+        }
+        if (!$this->right_model->hasRight('EditVote', $uid, $vid)) {
+            echo "no right";
+            return;
+        }
+        
         $data = $this->vote_model->getVoteLogByCode($vid, $code);
         $out = array('status' => false);
         if (!empty($data)) {
@@ -293,6 +303,22 @@ class Vote extends MY_Controller {
         }
         
         $this->output->set_content_type('application/json')->set_output(json_encode($out));
+    }
+    
+    public function addCode($vid) {
+        $uid = $this->userinfo['uid'];
+        if (empty($uid)) {
+            redirect('user/login');
+            return;
+        }
+        if (!$this->right_model->hasRight('EditVote', $uid, $vid)) {
+            echo "no right";
+            return;
+        }
+        
+        $count = $this->input->post('count');
+        $this->vote_model->addCode($vid, $uid, $count);
+        redirect("vote/mycode/$vid");
     }
 
     /**

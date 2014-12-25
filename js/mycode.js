@@ -3,9 +3,12 @@ $(document).ready(function () {
     $('.get-qrcode').on('click', function () {
         var code = $(this).parent().parent().find('.code').html();
         var vote_url = $('#vote-url').html();
-        var url = '../../qrcode.php?data=' + vote_url + '?code=' + code;
-        $('#qrcode-img').attr('src', url);
-        $('#qrcode-content').html(vote_url);
+        var qrcode_url = $('#qrcode-url').html();
+        var to_url = vote_url + '?code=' + code;
+        
+        var img_url = qrcode_url + '?data=' + to_url;
+        $('#qrcode-img').attr('src', img_url);
+        $('#qrcode-content').html(to_url);
         $('#modal-qrcode').modal();
     });
 

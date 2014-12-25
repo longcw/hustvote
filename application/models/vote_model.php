@@ -311,6 +311,9 @@ class Vote_model extends CI_Model {
     }
 
     public function addCode($start_voteid, $uid, $count = 1) {
+        if(!is_numeric($count) || !is_numeric($start_voteid)) {
+            return;
+        }
         $data = array();
         while ($count--) {
             $row = array(

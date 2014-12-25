@@ -1,6 +1,6 @@
 <?php
 
-include "/var/www/vote/application/libraries/phpqrcode/phpqrcode.php";    // QRcode lib    
+include "application/libraries/phpqrcode/phpqrcode.php";    // QRcode lib    
 
 $data = $_GET['data']; // data    
 $errorCorrectionLevel = "L";
