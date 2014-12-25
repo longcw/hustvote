@@ -36,7 +36,7 @@ class MY_Controller extends CI_Controller {
         $identify['email'] = empty($this->userinfo['uid']) ? null : $this->userinfo['email'];
         $identify['session_id'] = $this->session->userdata('session_id');
         $identify['ip_address'] = $this->session->userdata('ip_address');
-        $identify['is_verified'] = empty($this->userinfo['uid']) ? null : $this->userinfo['is_verified'];
+        $identify['is_verified'] = empty($this->userinfo['uid']) ? 0 : $this->userinfo['is_verified'];
         return $identify;
     }
 

@@ -73,6 +73,9 @@
         <div class="span4 pinned well">
 
             <div class="sidebar-widget">
+                <h3>分享</h3>
+                <img src="http://localhost:8088/home/qrcode/aaaaa" />
+                
                 <h3>投票说明</h3>
                 <dl>
                     <dt>最多可选</dt>
