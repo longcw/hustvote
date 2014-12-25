@@ -11,6 +11,7 @@
                             <th>投票名称</th> 
                             <th>创建时间</th>
                             <th>状态</th>
+                            <th>编辑</th>
                             <th>邀请码</th>
                         </tr> 
                     </thead>    
@@ -25,7 +26,8 @@
                                         <span class="label">结束</span>
                                     <?php endif; ?>
                                 </td>
-                                <td><a href="<?=  base_url('vote/mycode/'.$row['start_voteid'])?>"><i class="icon-pencil"></i></a></td>
+                                <td><a href="<?=  base_url('vote/start_step_2/'.$row['start_voteid'])?>"><i class="icon-pencil"></i>编辑</a></td>
+                                <td><a href="<?=  base_url('vote/mycode/'.$row['start_voteid'])?>"><i class="icon-pencil"></i>生成</a></td>
                             </tr> 
                         <?php endforeach; ?>                                  
                     </tbody> 

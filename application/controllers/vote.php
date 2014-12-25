@@ -133,15 +133,20 @@ class Vote extends MY_Controller {
         $data = elements(array(
             'code_need', 'ip_address', 'captcha_need', 'email_need', 'email_limit', 'email_area', 'cycle_time'
                 ), $pdata);
+        if ($data['code_need']) {
+            $data['ip_address'] = 0;
+            $data['captcha_need'] = 0;
+            $data['email_need'] = 0;
+        }
         if (empty($data['email_area'])) {
             $data['email_limit'] = false;
         }
-        $data = array_filter($data);
+
         $data['start_voteid'] = $start_voteid;
         $this->vote_model->setVoteLimit($data);
         $this->vote_model->setVoteCompleted($start_voteid);
         // TODO 发起投票成功
-        redirect('home/hall');
+        redirect('vote/join/' . $start_voteid);
     }
 
     public function join($id) {
@@ -188,14 +193,14 @@ class Vote extends MY_Controller {
         $id = array_merge($this->getUserIdentification(), $id);
         $callback = null;
         if (!$this->vote_model->hasRightToVote($callback, $pdata['start_voteid'], $id, $code)) {
-            $url = base_url('vote/join/'.$pdata['start_voteid']);
+            $url = base_url('vote/join/' . $pdata['start_voteid']);
             $tip = "投票失败，错误代码:$callback[type] <a href='$url'>返回</a>";
         } else {
             $id['via'] = 'web';
             $logid = $this->vote_model->addVoteLog($pdata['start_voteid'], $id);
             $this->vote_model->setCodeUsed($pdata['start_voteid'], $code, $logid);
             $this->vote_model->addaVote($pdata['start_voteid'], $pdata['choice'], $logid);
-            $url = base_url('vote/result/'.$pdata['start_voteid']);
+            $url = base_url('vote/result/' . $pdata['start_voteid']);
             $tip = "投票成功 <a href='$url'>查看投票结果</a>";
         }
 
@@ -236,12 +241,12 @@ class Vote extends MY_Controller {
 
         $header ['userinfo'] = $this->userinfo;
         $header ['title'] = '我发起的投票 --HustVote 在线投票';
-        $header['css'] = array('icheck-skins/flat/blue');
-        $footer['js'] = array('ChartNew', 'icheck', 'result');
+//        $header['css'] = array();
+//        $footer['js'] = array();
 
         $this->load->view('header', $header);
         $this->load->view('started', $data);
-        $this->load->view('footer', $footer);
+        $this->load->view('footer');
     }
 
     public function mycode($vid) {
@@ -250,14 +255,44 @@ class Vote extends MY_Controller {
             redirect('user/login');
             return;
         }
-        if ($this->right_model->hasRight('EditVote', $uid, $vid)) {
-            //TODO 生成验证码
-            $code = $this->vote_model->addCode($vid, $uid, 3);
-            var_dump($code);
-        } else {
-            echo $this->errorhandler->getErrorDes('NoRight');
+        if (!$this->right_model->hasRight('EditVote', $uid, $vid)) {
+            echo "no right";
             return;
         }
+        $data['codelog'] = $this->vote_model->getCodeByVote($vid);
+        $data['votetitle'] = $this->vote_model->getVoteTitle($vid);
+        $header ['userinfo'] = $this->userinfo;
+        $header ['title'] = '邀请码管理 ' . $data['votetitle']['title'] . ' --HustVote 在线投票';
+//        $header['css'] = array('icheck-skins/flat/blue');
+        $footer['js'] = array('mycode');
+
+        $this->load->view('header', $header);
+        $this->load->view('mycode', $data);
+        $this->load->view('footer', $footer);
+    }
+
+    public function getCodeLog($vid, $code) {
+        $data = $this->vote_model->getVoteLogByCode($vid, $code);
+        $out = array('status' => false);
+        if (!empty($data)) {
+            $out['status'] = true;
+            $votelog = $data['votelog'];
+            
+            $logstr = "<b>【 $code 】投票者信息</b>\n"
+                    . "邮箱：$votelog[email]\n"
+                    . "邮箱验证：" . ($votelog['is_verified'] ? '已通过' : '未通过')
+                    . "\n投票方式：$votelog[via]\n"
+                    . "投票时间：" . date('Y-m-d h:i:s', $votelog['vote_time']);
+            $out['log'] = nl2br($logstr);
+            
+            $selectstr = "<b>选择</b>\n";
+            foreach ($data['select'] as $row) {
+                $selectstr .= $row['choice_name'] . "\n";
+            }
+            $out['select'] = nl2br($selectstr);
+        }
+        
+        $this->output->set_content_type('application/json')->set_output(json_encode($out));
     }
 
     /**
@@ -269,12 +304,12 @@ class Vote extends MY_Controller {
 
         $header ['userinfo'] = $this->userinfo;
         $header ['title'] = '我参与的投票 --HustVote 在线投票';
-        $header['css'] = array();
-        $footer['js'] = array('ChartNew',);
+//        $header['css'] = array();
+//        $footer['js'] = array();
 
         $this->load->view('header', $header);
         $this->load->view('joined', $data);
-        $this->load->view('footer', $footer);
+        $this->load->view('footer');
     }
 
 }

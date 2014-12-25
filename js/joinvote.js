@@ -14,9 +14,9 @@ $(document).ready(function () {
         increaseArea: '20%' // optional
     });
 
-    $('.pinned').pin({
-        minWidth: 800
-    });
+//    $('.pinned').pin({
+//        minWidth: 800
+//    });
 
     var choice_max = parseInt($('#choice-max').html());
     var choice_count = $('.choice:checked').size();

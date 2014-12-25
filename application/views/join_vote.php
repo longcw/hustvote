@@ -30,6 +30,15 @@
                     <input type="text" value="0" style="display:none" id="fingerprint" name="fingerprint" />
                     <input id="captcha" value="" name="captcha" style="display: none" />
                 </form>
+                
+                <div class="sidebar-widget" id="selected" style="display: none">
+                <h3>选中</h3>
+                <ul class="sidebar-list">
+                    <span id="select-end" style="display: none"></span>
+                    <li>&nbsp;</li>
+                </ul>
+                <button class="btn btn-primary" id="submit-btn">确认</button>
+            </div>
             </div> 
 
 <!--
@@ -74,7 +83,7 @@
 
             <div class="sidebar-widget">
                 <h3>分享</h3>
-                <img src="http://localhost:8088/home/qrcode/aaaaa" />
+                <img src="<?=  base_url('qrcode.php?data=' . base_url('vote/join/' . $detail['content']['start_voteid']))?>" />
                 
                 <h3>投票说明</h3>
                 <dl>
@@ -115,14 +124,7 @@
                 </p>
             </div>
 
-            <div class="sidebar-widget" id="selected" style="display: none">
-                <h3>选中</h3>
-                <ul class="sidebar-list">
-                    <span id="select-end" style="display: none"></span>
-                    <li>&nbsp;</li>
-                </ul>
-                <button class="btn btn-primary" id="submit-btn">确认</button>
-            </div>
+            
 
         </div>
     </div>

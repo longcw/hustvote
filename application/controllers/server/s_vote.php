@@ -225,5 +225,5 @@ class S_vote extends MY_Controller {
         $this->output->set_content_type('jpeg');
         $this->phptextclass->phpcaptcha($code, '#0000CC', '#fff', 140, 50, 10, 25);
     }
-
+    
 }
