@@ -148,6 +148,9 @@ class S_vote extends MY_Controller {
 
     public function doJoinVote() {
         $pdata = $this->input->post();
+//        var_dump($pdata);
+//        var_dump($this->session->all_userdata());
+//        return;
         $code = $this->input->post('code');
         //验证登录
         $state = $this->_isValid($pdata);
@@ -212,6 +215,15 @@ class S_vote extends MY_Controller {
             $this->addResult("title", $title['title']);
         }
         $this->reply();
+    }
+    
+    public function captcha() {
+        $this->load->library('PhptextClass');
+        $code = rand(10000, 99999);
+        $this->session->set_userdata('captcha_code', $code);
+        
+        $this->output->set_content_type('jpeg');
+        $this->phptextclass->phpcaptcha($code, '#0000CC', '#fff', 140, 50, 10, 25);
     }
 
 }

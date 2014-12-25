@@ -16,6 +16,13 @@ class Home extends MY_Controller {
         $this->output->set_content_type('jpeg');
         $this->phptextclass->phpcaptcha($code, '#0000CC', '#fff', 140, 50, 10, 25);
     }
+    
+    public function qrcode($content) {
+        $this->load->library('PhpQrcode');
+        $this->output->set_content_type('png');
+        $content = urldecode($content);
+        $this->phpqrcode->png($content);
+    }
 
     public function captcha_test() {
         $captcha = $this->input->get('captcha');
