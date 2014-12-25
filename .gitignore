@@ -4,3 +4,7 @@
 /.idea/libraries
 .DS_Store
 /build
+app/app.iml
+.idea/modules.xml
+hustvote.iml
+
