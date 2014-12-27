@@ -5,7 +5,7 @@ package com.hustvote.hustvote.utils;
  */
 public class C {
     public class Net {
-        public final static String SiteUrl = "http://hustvote.sinaapp.com/";
+        public final static String SiteUrl = "http://10.42.0.1:8088/";
         public final static String BaseUrl = SiteUrl + "server/";
         public final static String SUCC_CODE = "1000";
         public class API {

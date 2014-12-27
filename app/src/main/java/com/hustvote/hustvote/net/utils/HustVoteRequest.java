@@ -34,6 +34,7 @@ public class HustVoteRequest<T> extends Request<T> {
     public HustVoteRequest(int method, String url, Class<T> clazz, Map<String, String> params,
                            Response.Listener<T> listener, Response.ErrorListener errorListener) {
         super(method, SERVER_URL+url, errorListener);
+        Log.i("request_params", params.toString());
         init(url, clazz, params, listener);
     }
 

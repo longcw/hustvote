@@ -11,9 +11,7 @@ import com.android.volley.VolleyError;
 import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.net.bean.EmptyBean;
 import com.hustvote.hustvote.net.utils.HustVoteRequest;
-import com.hustvote.hustvote.net.utils.NetworkUtils;
 import com.hustvote.hustvote.utils.C;
-import com.hustvote.hustvote.utils.UserInfo;
 
 /**
  * Created by chenlong on 14-12-19.
@@ -41,26 +39,28 @@ public class BaseVoteUI extends BaseUI {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
+        switch (id) {
+            case R.id.action_logout:
+                HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
+                        EmptyBean.class, new Response.Listener<EmptyBean>() {
+                    @Override
+                    public void onResponse(EmptyBean response) {
+                        toast(getString(R.string.logout_ok));
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        toast(error.getMessage());
+                    }
+                });
+                addToRequsetQueue(request);
+                userInfo.setUserInfoBean(null);
+                startActivityAndFinish(new Intent(BaseVoteUI.this, LoginActivity.class));
 
-            HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
-                    EmptyBean.class, new Response.Listener<EmptyBean>() {
-                @Override
-                public void onResponse(EmptyBean response) {
-                    toast(getString(R.string.logout_ok));
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    toast(error.getMessage());
-                }
-            });
-            addToRequsetQueue(request);
-            userInfo.setUserInfoBean(null);
-            startActivityAndFinish(new Intent(BaseVoteUI.this, LoginActivity.class));
-
-            return true;
+                return true;
+            case R.id.action_scanner:
+                Intent scannerIntent = new Intent(BaseVoteUI.this, QRCodeScannerActivtiy.class);
+                startActivity(scannerIntent);
         }
 
         return super.onOptionsItemSelected(item);

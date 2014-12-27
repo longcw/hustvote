@@ -133,7 +133,7 @@ public class NetworkUtils {
             }
             headers.put(NetworkUtils.COOKIE_KEY, builder.toString());
         }
-        Log.i("session", headers.toString());
+        //Log.i("session", headers.toString());
     }
 }
 
