@@ -2,7 +2,7 @@
 <div class="container" style="padding-top: 60px; padding-bottom: 40px;">
     <div class="row">
         <div class="span8 offset2 well">
-            <legend>【<a href="<?=  base_url('vote/join/'.$votetitle['start_voteid'])?>"><?= $votetitle['title'] ?></a>】的邀请码</legend> 
+            <legend>【<a href="<?= base_url('vote/join/' . $votetitle['start_voteid']) ?>"><?= $votetitle['title'] ?></a>】的邀请码</legend> 
             <div class="row span7">
 
                 <table class="table table-striped table-condensed"> 
@@ -26,14 +26,22 @@
                                 </td>
                                 <td><a class="get-log"><i class="icon-time"></i> 查看</a></td>
                                 <td>
-                                    <?php $code_to = base_url('vote/join/'.$votetitle['start_voteid'].'?code='.$row['code']);?>
+                                    <?php $code_to = base_url('vote/join/' . $votetitle['start_voteid'] . '?code=' . $row['code']); ?>
                                     <a class="get-qrcode"><i class="icon-qrcode"></i> 生成</a>
                                 </td>
                             </tr> 
                         <?php endforeach; ?>                                  
-                    </tbody> 
+                    </tbody>
                 </table> 
-
+                <form action="<?= base_url('vote/addCode/' . $votetitle['start_voteid']) ?>" method="post">
+                    <div class="control-group">
+                        <label class="control-label" for="s">生成邀请码</label>
+                        <div class="controls">
+                            <input type="text" placeholder="数量" class="input-xlarge" name="count" id="title" >
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">生成</button>
+                </form>
             </div>
         </div>
     </div>
@@ -71,5 +79,6 @@
     </div>
 </div>
 
-<div id="vote-url" style="display: none"><?= base_url('vote/join' . $votetitle['start_voteid']) ?></div>
-<div id="vote-id" style="display: none"><?=$votetitle['start_voteid']?></div>
+<div id="qrcode-url" style="display: none"><?= base_url('qrcode.php') ?></div>
+<div id="vote-url" style="display: none"><?= base_url('vote/join/' . $votetitle['start_voteid']) ?></div>
+<div id="vote-id" style="display: none"><?= $votetitle['start_voteid'] ?></div>

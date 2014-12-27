@@ -13,9 +13,11 @@
                 <link rel="stylesheet" href="<?= base_url('css/' . $value . '.css') ?>" />
             <?php endforeach; ?>
         <?php endif; ?>
-
+        
+        <!--
         <link href='http://fonts.useso.com/css?family=Source+Sans+Pro:600'
               rel='stylesheet' type='text/css' />
+        -->
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
