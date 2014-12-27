@@ -292,7 +292,7 @@ class Vote extends MY_Controller {
                     . "邮箱：$votelog[email]\n"
                     . "邮箱验证：" . ($votelog['is_verified'] ? '已通过' : '未通过')
                     . "\n投票方式：$votelog[via]\n"
-                    . "投票时间：" . date('Y-m-d h:i:s', $votelog['vote_time']);
+                    . "投票时间：" . date('Y-m-d H:i:s', $votelog['vote_time']);
             $out['log'] = nl2br($logstr);
             
             $selectstr = "<b>选择</b>\n";

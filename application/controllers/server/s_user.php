@@ -29,6 +29,10 @@ class S_user extends MY_Controller {
         }
         $this->reply();
     }
+    
+    public function register() {
+        
+    }
 
     public function getUserInfo() {
         if ($this->isLogin()) {

@@ -159,6 +159,7 @@ class S_vote extends MY_Controller {
         } else {
             $vid = $pdata['vid'];
             $id = $this->getUserIdentification();
+            $id['code'] = $code;
             $id['IMEI'] = $pdata['IMEI'];
             $id['captcha'] = empty($pdata['captcha']) ? "" : $pdata['captcha'];
             $callback = null;
