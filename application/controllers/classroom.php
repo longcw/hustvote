@@ -62,14 +62,23 @@ class Classroom extends MY_Controller {
     }
 
     public function update_jwc($building = null) {
-        if(!$this->isLogin()) {
-            echo "请先登录";
-            return;
+        $error = "";
+        if (!$this->isLogin()) {
+            $error = "请先登录";
         }
         if ($building != 'd9' && $building != 'd12') {
-            echo "error building";
+            $error = "error building";
             return;
         }
+        if (!empty($error)) {
+            $header ['userinfo'] = $this->userinfo;
+            $header ['title'] = '更新教室 --HustVote 在线投票';
+
+            $this->load->view('header', $header);
+            $this->load->view('tip', array('tip'=>$error));
+            $this->load->view('footer');
+        }
+
         $f = "jwc$building";
         $classdata = $this->$f();
         $classdata = str_replace(array('<td>&nbsp;</td>', '学院'), array('<td bgcolor="#66CCCC">自习</td>', ''), $classdata);
@@ -85,7 +94,7 @@ class Classroom extends MY_Controller {
             return;
         }
         $data['classdata'] = $this->class_model->getClassData_JWC($data['classlog']['classlogid']);
-        
+
         $header ['userinfo'] = $this->userinfo;
         $header ['title'] = $building . '教室';
         $header ['act'] = 'hall';

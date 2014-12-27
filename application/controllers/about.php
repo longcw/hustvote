@@ -13,13 +13,11 @@ class About extends MY_Controller {
         $data['tip'] = "攒劲建设中...";
         
         $header ['userinfo'] = $this->userinfo;
-        $header ['title'] = '我参与的投票 --HustVote 在线投票';
-        $header['css'] = array();
-        $footer['js'] = array('ChartNew',);
+        $header ['title'] = '建设中 --HustVote 在线投票';
 
         $this->load->view('header', $header);
         $this->load->view('tip', $data);
-        $this->load->view('footer', $footer);
+        $this->load->view('footer');
     }
 
 }
