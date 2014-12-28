@@ -29,9 +29,23 @@ class S_user extends MY_Controller {
         }
         $this->reply();
     }
-    
+
     public function register() {
-        
+        $pdata = $this->input->post();
+        $this->load->helper('array');
+        $data = elements(array('email', 'password', 'nickname'), $pdata, false);
+        $data = array_filter($data);
+        $callback = null;
+        if ($this->user_model->doReg($data)) {
+            $userinfo = $this->user_model->getUserInfo($callback);
+            $this->setCode(1000);
+            $this->setResult($userinfo);
+        } else if($callback == 'EmailExisted') {
+            $this->setCode(1008);
+        } else {
+            $this->setCode(1005);
+        }
+        $this->reply();
     }
 
     public function getUserInfo() {

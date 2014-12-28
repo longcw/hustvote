@@ -499,7 +499,7 @@ class Vote_model extends CI_Model {
     }
 
     public function getVoteTitle($vid) {
-        $this->db->select('title, start_voteid')->where('start_voteid', $vid)->limit(1);
+        $this->db->select('title, start_voteid, uid')->where('start_voteid', $vid)->limit(1);
         $query = $this->db->get('StartVote');
         return $query->row_array();
     }
