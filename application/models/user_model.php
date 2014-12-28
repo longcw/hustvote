@@ -81,8 +81,17 @@ class User_model extends CI_Model {
             return array();
         } else {
             unset($result['password']);
+            $result['msg_count'] = $this->getUnreadCommentCountByUser($uid);
             return $result;
         }
+    }
+    
+    public function getUnreadCommentCountByUser($uid) {
+        $this->db->where('is_read', 0)->select('COUNT(cid) as count');
+        $this->db->where('to_uid', $uid)->order_by('create_time desc');
+        $query = $this->db->get('Comment');
+        $row = $query->row_array();
+        return $row['count'];
     }
 
     /**

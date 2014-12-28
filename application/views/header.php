@@ -39,11 +39,14 @@
                                     <li<?php echo isset($act) && $act == 'download' ? ' class="active"' : ''; ?>><a href="<?=  base_url('about')?>">下载</a></li>
                                     <li<?php echo isset($act) && $act == 'hall' ? ' class="active"' : ''; ?>><a href="<?php echo base_url('home/hall') ?>">投票大厅</a></li>
                                     <li<?php echo isset($act) && $act == 'about' ? ' class="active"' : ''; ?>><a href="<?=  base_url('about')?>">关于</a></li>
-
+                                    
+                                    <div id="is-login" style="display: none"><?=empty($userinfo['uid']) ? 0 : $userinfo['uid']?></div>
                                     <?php if (!empty($userinfo['uid'])) : ?>
                                         <li class="dropdown"><a href="#" class="dropdown-toggle"
-                                                                data-toggle="dropdown"><?php echo $userinfo['nickname'] ?> <b class="caret"></b></a>
+                                                                data-toggle="dropdown"><?php echo $userinfo['nickname'] ?> 
+                                                <span class="badge badge-info"><?=$userinfo['msg_count']?></span> <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
+                                                <li><a href="<?=  base_url('user/message')?>">我的消息<span class="badge badge-info"><?=$userinfo['msg_count']?></span></a></li>
                                                 <li><a href="<?=  base_url('vote/started')?>">我发起的投票</a></li>
                                                 <li><a href="<?=  base_url('vote/joined')?>">我参与的投票</a></li>
                                                 <li><a href="<?=  base_url('user/change')?>">修改密码</a></li>

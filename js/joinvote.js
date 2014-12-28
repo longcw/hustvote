@@ -1,5 +1,9 @@
 $(document).ready(function () {
-    var vid = $('#start_voteid').value;
+    var vid = $('#start_voteid').val();
+    var uid = $('#is-login').html();
+    var vote_uid = $('#vote-uid').html();
+    var to_uid = vote_uid;
+    var to_token;
 
     //检测投票权限
     var vote_error = $('#vote-error').attr('value').toString();
@@ -137,6 +141,47 @@ $(document).ready(function () {
 
         }
 
+    });
+    
+    //发表评论
+    $('#comment-button').on('click', function (e) {
+        e.preventDefault();
+        if (uid === '0') {
+            alert('请先登录');
+            return;
+        }
+        var content = $('#comment-content').val().toString();
+        if(content.indexOf(to_token)) {
+            to_uid = vote_uid;
+        }
+        
+        var str = 'content=' + content + '&vid='+vid + '&to_uid=' + to_uid;
+        $.ajax(
+                {
+                    url: "../doAddComment",
+                    async: true,
+                    type: "post",
+                    data: str,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.status !== true) {
+                            alert(data.msg);
+                        } else {
+                            $('#comment-head').after(data.str);
+                            $('#comment-content').val('');
+                        }
+                    }
+
+                });
+
+    });
+    
+    $('.comment-reply').die().live('click', function(e){
+        e.preventDefault();
+        to_uid = $(this).attr('from-uid')
+        var to_name = $(this).attr('nickname');
+        to_token = '回复 ' + to_name + '：';
+        $('#comment-content').val(to_token);
     });
 
 

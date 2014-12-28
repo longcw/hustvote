@@ -5,11 +5,11 @@
                 <p class="entry-meta">
                     <span class="entry-author"><i class="icon-user"></i> <?= $voteuser['nickname'] ?></span>
                     <span class="entry-date"><i class="icon-calendar"></i> <?= date('Y-m-d', $detail['content']['create_time']) ?></span>
-                    <span class="entry-comments"><i class="icon-comments"></i> 3 Comments</span>
+                    <span class="entry-comments"><i class="icon-comments"></i> <?= count($comment) ?> 条评论</span>
                 </p>
                 <h2><?= $detail['content']['title'] ?></h2>
             </div>
-
+            <div id="vote-uid" style="display: none"><?= $detail['content']['uid'] ?></div>
 
             <div class="entry-content">
                 <div class="well">
@@ -30,61 +30,62 @@
                     <input type="text" value="0" style="display:none" id="fingerprint" name="fingerprint" />
                     <input id="captcha" value="" name="captcha" style="display: none" />
                 </form>
-                
+
                 <div class="sidebar-widget" id="selected" style="display: none">
-                <h3>选中</h3>
-                <ul class="sidebar-list">
-                    <span id="select-end" style="display: none"></span>
-                    <li>&nbsp;</li>
-                </ul>
-                <button class="btn btn-primary" id="submit-btn">确认</button>
-            </div>
+                    <h3>选中</h3>
+                    <ul class="sidebar-list">
+                        <span id="select-end" style="display: none"></span>
+                        <li>&nbsp;</li>
+                    </ul>
+                    <button class="btn btn-primary" id="submit-btn">确认</button>
+                </div>
             </div> 
 
-<!--
+            
             <div class="entry-comments">
-                <h3>3 Comments</h3>
+                <h3><?= count($comment) ?> 条评论</h3>
                 <ul id="comments-list">
-                    <li class="last-comment comment media">
-                        <img src="http://placehold.it/75x75" class="img-polaroid pull-left" />
+                    <div id="comment-head" style="display:none"></div>
+                    <?php foreach ($comment as $row):?>
+                    <li>
                         <div class="media-body">
-                            <h4 class="comment-author">John Smith <small> on December 25, 2012</small></h4>
+                            <h4 class="comment-author"><?=$row['from_nickname']?> <small> on <?=date('Y-m-d H:i:s', $row['create_time'])?> <a href="#" class="comment-reply" from-uid="<?=$row['from_uid']?>" nickname ="<?=$row['from_nickname']?>">回复</a></small></h4>
                             <div class="comment-content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer molestie sollicitudin tortor ut gravida. Etiam eleifend pretium diam, in ullamcorper enim faucibus ac.</p>
-                                <p>Integer eu aliquet massa. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus porttitor facilisis volutpat. Nulla tortor eros, convallis nec commodo ac, egestas in lacus.</p>
+                                <?=$row['content']?>
                             </div>
                         </div>
                     </li>
+                    <?php endforeach;?>
                 </ul>
             </div>
-
-            <div class="add-a-comment-form">
-                <h3>Add Comment</h3>
+            
+            <div class="add-a-comment-form" id='comment-form'>
+                <h3>添加评论</h3>
 
                 <div class="row-fluid">
                     <div class="span8">
-                        <form class="sengal-form">
+                        <form class="sengal-form" action="#">
 
                             <div class="control-group">
-                                <textarea rows="5" cols="5" class="input-block-level"></textarea>
+                                <textarea rows="5" cols="5" class="input-block-level" name="content" id="comment-content"></textarea>
                             </div>
                             <div class="control-group">
-                                <button class="btn btn-primary btn-large"><i class="icon-edit"></i> Add Comment</button>
+                                <button class="btn btn-primary btn-large" id="comment-button"><i class="icon-edit"></i> Add Comment</button>
                             </div>
                         </form>
                     </div>
                 </div>
 
             </div>
-            -->
+
         </div>
         <div class="span1"></div>
         <div class="span4 pinned well">
 
             <div class="sidebar-widget">
                 <h3>分享</h3>
-                <img src="<?=  base_url('qrcode.php?data=' . base_url('vote/join/' . $detail['content']['start_voteid']))?>" />
-                
+                <img src="<?= base_url('qrcode.php?data=' . base_url('vote/join/' . $detail['content']['start_voteid'])) ?>" />
+
                 <h3>投票说明</h3>
                 <dl>
                     <dt>最多可选</dt>
@@ -124,13 +125,13 @@
                 </p>
             </div>
 
-            
+
 
         </div>
     </div>
 </div>
 
-<div id="vote-error" value="modal-<?= $error['type']=='captcha_need'?'none':$error['type'] ?>"></div>
+<div id="vote-error" value="modal-<?= $error['type'] == 'captcha_need' ? 'none' : $error['type'] ?>"></div>
 
 <?php if ($error['type'] == 'code_need') : ?>
     <div id="modal-<?= $error['type'] ?>" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -261,18 +262,18 @@
                 <label class="control-label">请输入验证码：</label>
                 <div class="controls">
                     <div>
-                        <img id="captcha-img" src="<?= base_url('home/captcha?rand='.rand()) ?>" width="140" height="50" onclick="changeCaptcha()"/>
+                        <img id="captcha-img" src="<?= base_url('home/captcha?rand=' . rand()) ?>" width="140" height="50" onclick="changeCaptcha()"/>
                     </div>
                     <input id="captcha-input" type="text" placeholder="请输入验证码" class="input-xlarge">
-                    
+
                     <p class="help-block"><a href="javascript: changeCaptcha();">看不清？</a></p>
                     <p class="text-error" id="cphint" style="display:none">验证中...</p>
                 </div>
             </div>
-        <?php else:?>
-        <p>确认要提交您的选择吗？</p>
+        <?php else: ?>
+            <p>确认要提交您的选择吗？</p>
         <?php endif; ?>
-        
+
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> <button class="btn btn-primary" id="confirm-button">提交</button>

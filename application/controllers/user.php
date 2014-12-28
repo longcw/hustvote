@@ -128,5 +128,21 @@ class User extends MY_Controller {
         $this->load->view('tip', array('tip' => $tip));
         $this->load->view('footer');
     }
-
+    
+    public function message() {
+        $uid = $this->userinfo['uid'];
+        if(empty($uid)) {
+            redirect('user/login');
+            return;
+        }
+        $this->load->model('comment_model');
+        $data['comment'] = $this->comment_model->getCommentByUser($uid);
+        $this->comment_model->setCommentReadByUser($uid);
+        
+        $header ['userinfo'] = $this->userinfo;
+        $header ['title'] = '我的消息 --HustVote 在线投票';
+        $this->load->view('header', $header);
+        $this->load->view('message', $data);
+        $this->load->view('footer');
+    }
 }

@@ -8,6 +8,7 @@ class Vote extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('vote_model');
+        $this->load->model('comment_model');
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->setFormMessage();
@@ -149,12 +150,12 @@ class Vote extends MY_Controller {
         redirect('vote/join/' . $start_voteid);
     }
 
-    public function join($id) {
+    public function join($vid) {
         $code = $this->input->get('code');
         $callback = array('type' => 'none');
         //$this->_hasRightToVote($callback, $id, array(), $code);
         $ident = $this->getUserIdentification();
-        $this->vote_model->hasRightToVote($callback, $id, $ident, $code);
+        $this->vote_model->hasRightToVote($callback, $vid, $ident, $code);
         $data['error'] = $callback;
         if ($callback['type'] == 'errorvote' && empty($callback['vtime'])) {
             //不存在的投票
@@ -167,7 +168,8 @@ class Vote extends MY_Controller {
         $header ['act'] = 'hall';
         $header['css'] = array('umeditor/themes/default/css/umeditor', 'icheck-skins/square/green');
         $footer['js'] = array('umeditor/umeditor.config', 'umeditor/umeditor.min', 'icheck', 'jquery.pin', 'fingerprint', 'joinvote');
-        $data['detail'] = $this->vote_model->getVoteDetailById($id);
+        $data['detail'] = $this->vote_model->getVoteDetailById($vid);
+        $data['comment'] = $this->comment_model->getCommentByVote($vid);
         $data['code'] = $code;
         if (empty($data['detail']) || !$data['detail']['content']['is_completed']) {
             echo $this->errorhandler->getErrorDes('ErrorVote');
@@ -177,6 +179,43 @@ class Vote extends MY_Controller {
         $this->load->view('header', $header);
         $this->load->view('join_vote', $data);
         $this->load->view('footer', $footer);
+    }
+
+    public function doAddComment() {
+        $out = array('status' => false, 'msg' => 'null');
+        if (!$this->isLogin()) {
+            $out['msg'] = '请先登录';
+        } else {
+            $content = $this->input->post('content');
+            $vid = $this->input->post('vid');
+            $to_uid = $this->input->post('to_uid');
+            $uid = $this->userinfo['uid'];
+            $vtitle = $this->vote_model->getVoteTitle($vid);
+            if (empty($vtitle)) {
+                echo 'error vid';
+                return;
+            }
+            $data = array(
+                'from_uid' => $uid,
+                'to_uid' => $to_uid,
+                'vid' => $vid,
+                'content' => htmlspecialchars($content)
+            );
+            if (($cid = $this->comment_model->addComment($data))) {
+                $out['status'] = true;
+                $row = $this->comment_model->getCommentById($cid);
+                $str = '<li>
+                        <div class="media-body">
+                            <h4 class="comment-author">' . $row['from_nickname'] . ' <small> on ' . date('Y-m-d H:i:s', $row['create_time']) .
+                        '<a href="#" class="comment-reply" value="' . $row['from_uid'] . '" nickname ="' . $row['from_nickname'] . '">回复</a></small></h4>
+                            <div class="comment-content">' . $row['content'] .
+                        '</div></div></li>';
+                $out['str'] = $str;
+            } else {
+                $out['msg'] = '评论失败';
+            }
+        }
+        $this->output->set_content_type('json')->set_output(json_encode($out));
     }
 
     public function doJoinVote() {
@@ -281,30 +320,30 @@ class Vote extends MY_Controller {
             echo "no right";
             return;
         }
-        
+
         $data = $this->vote_model->getVoteLogByCode($vid, $code);
         $out = array('status' => false);
         if (!empty($data)) {
             $out['status'] = true;
             $votelog = $data['votelog'];
-            
+
             $logstr = "<b>【 $code 】投票者信息</b>\n"
                     . "邮箱：$votelog[email]\n"
                     . "邮箱验证：" . ($votelog['is_verified'] ? '已通过' : '未通过')
                     . "\n投票方式：$votelog[via]\n"
                     . "投票时间：" . date('Y-m-d H:i:s', $votelog['vote_time']);
             $out['log'] = nl2br($logstr);
-            
+
             $selectstr = "<b>选择</b>\n";
             foreach ($data['select'] as $row) {
                 $selectstr .= $row['choice_name'] . "\n";
             }
             $out['select'] = nl2br($selectstr);
         }
-        
+
         $this->output->set_content_type('application/json')->set_output(json_encode($out));
     }
-    
+
     public function addCode($vid) {
         $uid = $this->userinfo['uid'];
         if (empty($uid)) {
@@ -315,7 +354,7 @@ class Vote extends MY_Controller {
             echo "no right";
             return;
         }
-        
+
         $count = $this->input->post('count');
         $this->vote_model->addCode($vid, $uid, $count);
         redirect("vote/mycode/$vid");
