@@ -40,7 +40,7 @@ class S_user extends MY_Controller {
             $userinfo = $this->user_model->getUserInfo($callback);
             $this->setCode(1000);
             $this->setResult($userinfo);
-        } else if($callback == 'EmailExisted') {
+        } else if ($callback == 'EmailExisted') {
             $this->setCode(1008);
         } else {
             $this->setCode(1005);
@@ -63,19 +63,30 @@ class S_user extends MY_Controller {
         $this->setCode(1000);
         $this->reply();
     }
-    
+
     public function updateSaeToken() {
-        if(!$this->isLogin()) {
+        if (!$this->isLogin()) {
             $this->setCode(1002);
         } else {
             $uid = $this->input->post('uid');
             $token = $this->input->post('saetoken');
-            if($uid != $this->userinfo['uid']) {
+            if ($uid != $this->userinfo['uid']) {
                 $this->setCode(1006);
             } else {
                 $this->saepush_model->updateSAEToken($uid, $token);
                 $this->setCode(1000);
             }
+        }
+        $this->reply();
+    }
+
+    public function getUnreadComment() {
+        if (!$this->isLogin()) {
+            $this->setCode(1002);
+        } else {
+            $this->load->model('saepush_model');
+            $this->saepush_model->pushUnreadComment($this->userinfo['uid']);
+            $this->setCode(1000);
         }
         $this->reply();
     }
