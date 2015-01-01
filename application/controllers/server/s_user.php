@@ -63,5 +63,21 @@ class S_user extends MY_Controller {
         $this->setCode(1000);
         $this->reply();
     }
+    
+    public function updateSaeToken() {
+        if(!$this->isLogin()) {
+            $this->setCode(1002);
+        } else {
+            $uid = $this->input->post('uid');
+            $token = $this->input->post('saetoken');
+            if($uid != $this->userinfo['uid']) {
+                $this->setCode(1006);
+            } else {
+                $this->user_model->updateSAEToken($uid, $token);
+                $this->setCode(1000);
+            }
+        }
+        $this->reply();
+    }
 
 }

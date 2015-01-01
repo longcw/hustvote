@@ -207,7 +207,7 @@ class Vote extends MY_Controller {
                 $str = '<li>
                         <div class="media-body">
                             <h4 class="comment-author">' . $row['from_nickname'] . ' <small> on ' . date('Y-m-d H:i:s', $row['create_time']) .
-                        '<a href="#" class="comment-reply" value="' . $row['from_uid'] . '" nickname ="' . $row['from_nickname'] . '">回复</a></small></h4>
+                        ' <a href="#" class="comment-reply" value="' . $row['from_uid'] . '" nickname ="' . $row['from_nickname'] . '">回复</a></small></h4>
                             <div class="comment-content">' . $row['content'] .
                         '</div></div></li>';
                 $out['str'] = $str;

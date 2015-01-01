@@ -151,7 +151,11 @@ $(document).ready(function () {
             return;
         }
         var content = $('#comment-content').val().toString();
-        if(content.indexOf(to_token)) {
+        if(content.length === 0) {
+            alert('还是写点什么吧');
+            return;
+        }
+        if(content.indexOf(to_token) < 0) {
             to_uid = vote_uid;
         }
         
@@ -178,7 +182,8 @@ $(document).ready(function () {
     
     $('.comment-reply').die().live('click', function(e){
         e.preventDefault();
-        to_uid = $(this).attr('from-uid')
+        to_uid = $(this).attr('from-uid');
+        //alert(to_uid)
         var to_name = $(this).attr('nickname');
         to_token = '回复 ' + to_name + '：';
         $('#comment-content').val(to_token);

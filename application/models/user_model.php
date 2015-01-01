@@ -164,5 +164,21 @@ class User_model extends CI_Model {
         //var_dump($state);
         return $state;
     }
+    
+    public function updateSAEToken($uid, $token) {
+        $data = array('uid'=>$uid, 'saetoken'=>$token);
+        
+        if(empty($this->getSAEToken($uid))) {
+            $this->db->insert('SAEPushToken', $data);
+        } else {
+            $this->db->update('SAEPushToken', $data, array('uid'=>$uid));
+        }
+    }
+    
+    public function getSAEToken($uid) {
+        $this->db->limit(1)->select('saetoken, update_time');
+        $query = $this->db->get_where('SAEPushToken', array('uid'=>$uid));
+        return $query->row_array();
+    }
 
 }
