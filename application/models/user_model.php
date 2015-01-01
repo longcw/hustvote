@@ -81,18 +81,13 @@ class User_model extends CI_Model {
             return array();
         } else {
             unset($result['password']);
-            $result['msg_count'] = $this->getUnreadCommentCountByUser($uid);
+            $this->load->model('comment_model');
+            $result['msg_count'] = $this->comment_model->getUnreadCommentCountByUser($uid);
             return $result;
         }
     }
     
-    public function getUnreadCommentCountByUser($uid) {
-        $this->db->where('is_read', 0)->select('COUNT(cid) as count');
-        $this->db->where('to_uid', $uid)->order_by('create_time desc');
-        $query = $this->db->get('Comment');
-        $row = $query->row_array();
-        return $row['count'];
-    }
+    
 
     /**
      * 设置验证信息
@@ -165,20 +160,5 @@ class User_model extends CI_Model {
         return $state;
     }
     
-    public function updateSAEToken($uid, $token) {
-        $data = array('uid'=>$uid, 'saetoken'=>$token);
-        
-        if(empty($this->getSAEToken($uid))) {
-            $this->db->insert('SAEPushToken', $data);
-        } else {
-            $this->db->update('SAEPushToken', $data, array('uid'=>$uid));
-        }
-    }
-    
-    public function getSAEToken($uid) {
-        $this->db->limit(1)->select('saetoken, update_time');
-        $query = $this->db->get_where('SAEPushToken', array('uid'=>$uid));
-        return $query->row_array();
-    }
 
 }
