@@ -11,6 +11,7 @@ class SaePush_model extends CI_Model {
         $this->load->database();
     }
 
+
     public function pushMsg($token, $title, $msg,
             $acts = "[\"2,com.hustvote.hustvote,com.hustvote.hustvote.ui.NoticeActivity\"]",
             $extra = array('handle_by_app' => '0')) {
