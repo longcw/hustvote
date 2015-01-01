@@ -14,6 +14,9 @@ class Comment_model extends CI_Model {
      * @param array $data from_uid, to_uid, vid, content
      */
     public function addComment($data) {
+        if($data['from_uid'] == $data['to_uid']) {
+            $data['is_read'] = 1;
+        }
         $data['create_time'] = time();
         $this->db->insert('Comment', $data);
         return $this->db->insert_id();
@@ -31,7 +34,7 @@ class Comment_model extends CI_Model {
         $query = $this->db->get('Comment');
         return $query->result_array();
     }
-    
+
     public function getCommentById($cid) {
         $this->db->select('nickname as from_nickname, Comment.*')
                 ->join('User', 'Comment.from_uid=User.uid')->limit(1);
@@ -52,13 +55,20 @@ class Comment_model extends CI_Model {
         $query = $this->db->get('Comment');
         return $query->result_array();
     }
+    
+    public function getUnreadCommentCountByUser($uid) {
+        $this->db->where('is_read', 0)->select('COUNT(cid) as count');
+        $this->db->where('to_uid', $uid)->order_by('create_time desc');
+        $query = $this->db->get('Comment');
+        $row = $query->row_array();
+        return $row['count'];
+    }
 
-   
     public function setCommentRead($cid) {
         $this->db->limit(1);
         $this->db->update('Comment', array('is_read' => 1), array('cid' => $cid));
     }
-    
+
     public function setCommentReadByUser($uid) {
         $this->db->update('Comment', array('is_read' => 1), array('to_uid' => $uid));
     }

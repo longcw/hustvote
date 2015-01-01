@@ -7,7 +7,7 @@ class S_user extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('user_model');
+        $this->load->model('saepush_model');
     }
 
     public function login() {
@@ -73,7 +73,7 @@ class S_user extends MY_Controller {
             if($uid != $this->userinfo['uid']) {
                 $this->setCode(1006);
             } else {
-                $this->user_model->updateSAEToken($uid, $token);
+                $this->saepush_model->updateSAEToken($uid, $token);
                 $this->setCode(1000);
             }
         }

@@ -21,7 +21,7 @@ class MY_Controller extends CI_Controller {
 //            session_id($sid);
 //        }
         $this->load->library('session');
-
+        $this->load->model('comment_model');
         $this->load->model('user_model');
         $this->load->model('right_model');
         $uid = $this->session->userdata('uid');
