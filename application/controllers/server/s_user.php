@@ -74,6 +74,8 @@ class S_user extends MY_Controller {
                 $this->setCode(1006);
             } else {
                 $this->saepush_model->updateSAEToken($uid, $token);
+                //推送消息
+                $this->saepush_model->pushUnreadComment($uid);
                 $this->setCode(1000);
             }
         }

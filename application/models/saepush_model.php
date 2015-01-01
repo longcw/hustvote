@@ -34,7 +34,7 @@ class SaePush_model extends CI_Model {
         $title = $comment['from_nickname'] . ' 评论了你';
         $msg = $comment['content'];
 
-        $result = $this->push($token, $title, $msg);
+        $result = $this->pushMsg($token, $title, $msg);
         if ($result && is_array($result)) {
             return true;
         } else {
@@ -57,7 +57,7 @@ class SaePush_model extends CI_Model {
         $title = '新评论';
         $msg = "有 $count 条未读评论，点击查看";
 
-        $this->push($token, $title, $msg);
+        $this->pushMsg($token, $title, $msg);
     }
 
     public function updateSAEToken($uid, $token) {
