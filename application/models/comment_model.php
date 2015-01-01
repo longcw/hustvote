@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 class Comment_model extends CI_Model {
+    private static $PAGE_COUNT = 20;
 
     public function __construct() {
         $this->load->database();
@@ -47,7 +48,13 @@ class Comment_model extends CI_Model {
      * 获取用户评论
      * @param type $uid
      */
-    public function getCommentByUser($uid) {
+    public function getCommentByUser($uid, $page = 0, $ltime = 0) {
+        
+        if($ltime <= 0) {
+            $this->db->limit(self::$PAGE_COUNT, self::$PAGE_COUNT * $page);
+        } else {
+            $this->db->where('create_time >', $ltime);
+        }
         $this->db->select('nickname as from_nickname, Comment.*, StartVote.title')
                 ->join('User', 'Comment.from_uid=User.uid')
                 ->join('StartVote', 'StartVote.start_voteid=vid');

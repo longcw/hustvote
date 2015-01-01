@@ -90,5 +90,37 @@ class S_user extends MY_Controller {
         }
         $this->reply();
     }
+    
+    public function getCommentList() {
+        if(!$this->isLogin()) {
+            $this->setCode(1002);
+        } else {
+            $page = $this->input->post('page');
+            $comments = $this->comment_model->getCommentByUser($this->userinfo['uid'], $page);
+            if(empty($comments)) {
+                $this->setCode(1003);
+            } else {
+                $this->addResult('commentlist', $comments);
+                $this->setCode(1000);
+            }
+        }
+        $this->reply();
+    }
+    
+    public function getNewComment() {
+        if(!$this->isLogin()) {
+            $this->setCode(1002);
+        } else {
+            $ltime = $this->input->post('last_time');
+            $comments = $this->comment_model->getCommentByUser($this->userinfo['uid'], $ltime);
+            if(empty($comments)) {
+                $this->setCode(1003);
+            } else {
+                $this->addResult('commentlist', $comments);
+                $this->setCode(1000);
+            }
+        }
+        $this->reply();
+    }
 
 }
