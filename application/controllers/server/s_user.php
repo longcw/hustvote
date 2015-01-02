@@ -62,6 +62,11 @@ class S_user extends MY_Controller {
 
     public function logout() {
         $this->user_model->setLogout();
+        $uid = $this->userinfo['uid'];
+        if(!empty($uid)) {
+            $this->saepush_model->updateSAEToken($uid, "");
+        }
+        
         $this->setCode(1000);
         $this->reply();
     }

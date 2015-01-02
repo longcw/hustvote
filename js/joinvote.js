@@ -173,6 +173,12 @@ $(document).ready(function () {
                         } else {
                             $('#comment-head').after(data.str);
                             $('#comment-content').val('');
+                            var comment_count = $('#comment-count');
+                            var count = parseInt(comment_count.html());
+                            count++;
+                            comment_count.html(count);
+                            $('#comment-count-header').html(count + ' 条评论');
+                            
                         }
                     }
 
