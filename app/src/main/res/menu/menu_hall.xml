@@ -2,9 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.hustvote.hustvote.ui.BaseUI">
-    <item android:id="@+id/action_logout" android:title="注销"
-        android:orderInCategory="100" app:showAsAction="never" />
 
     <item android:id="@+id/action_scanner" android:title="扫描二维码"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_notice" android:title="查看消息"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_logout" android:title="注销"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

@@ -93,6 +93,7 @@ public class HustVoteRequest<T> extends Request<T> {
             headers = new HashMap<String, String>();
         }
         NetworkUtils.addSessionCookie(headers);
+        Log.i("session_add", headers.toString());
         return headers;
     }
 

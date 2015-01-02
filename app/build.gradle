@@ -28,4 +28,7 @@ dependencies {
     compile files('libs/android-core-3.1.0.jar')
     compile files('libs/zxing/android-core-3.1.0.jar')
     compile files('libs/android-core-3.1.0-javadoc.jar')
+    compile files('libs/SinaPush_2.6.0_release20141112.jar')
+    compile files('libs/SinaPush_2.4.0_SAE_release.jar')
+    compile files('libs/SinaPush_2.6.0_release20140925.jar')
 }

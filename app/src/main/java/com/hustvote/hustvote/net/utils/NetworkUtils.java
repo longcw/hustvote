@@ -21,12 +21,14 @@ public class NetworkUtils {
     //保存sessionID
     public static final String COOKIE_KEY = "Cookie";
     public static final String SET_COOKIE_KEY = "Set-Cookie";
-    public static final String SESSION_COOKIE = "hustvote_session";
+    public static final String HUSTVOTE_SESSION_COOKIE = "hustvote_session";
+    public static final String SAE_SESSION_COOKIE = "saeut";
     public static final String PREFERENCE_NAME = "Network";
+    public static final String NULL_STR = "NULL_STR";
 
-    private static String sessionID;
+    private static String HustvoteSessionId = NULL_STR;
+    private static String SAESessionId = NULL_STR;
     private static SharedPreferences preferences;
-    private static SharedPreferences.Editor editor;
 
     private static NetworkUtils mInstance;
     private RequestQueue mRequestQueue;
@@ -36,8 +38,9 @@ public class NetworkUtils {
     private NetworkUtils(Context context) {
         mCtx = context;
         preferences = mCtx.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-        editor = preferences.edit();
-        sessionID = preferences.getString(SESSION_COOKIE, "");
+        HustvoteSessionId = preferences.getString(HUSTVOTE_SESSION_COOKIE, NULL_STR);
+        SAESessionId = preferences.getString(SAE_SESSION_COOKIE, NULL_STR);
+        Log.i("shareSessionID", HustvoteSessionId+";"+SAESessionId);
 
         mRequestQueue = getRequestQueue();
 
@@ -87,16 +90,16 @@ public class NetworkUtils {
     }
 
 
-    /****************sessionID*******************/
+    /****************HustvoteSessionId*******************/
 
-    public static void setSessionID(String sessionID) {
-        NetworkUtils.sessionID = sessionID;
-        editor.putString(SESSION_COOKIE, sessionID);
-        editor.commit();
+    public static void setSessionId(String type ,String sessionid) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(type, sessionid);
+        editor.apply();
     }
 
-    public static String getSessionID() {
-        return sessionID;
+    public static String getHustvoteSessionId() {
+        return HustvoteSessionId;
     }
 
 
@@ -106,34 +109,47 @@ public class NetworkUtils {
      * @param headers Response Headers.
      */
     public static void checkSessionCookie(Map<String, String> headers) {
-        if (headers.containsKey(SET_COOKIE_KEY)
-                && headers.get(SET_COOKIE_KEY).startsWith(SESSION_COOKIE)) {
-            String cookie = headers.get(SET_COOKIE_KEY);
-            if (cookie.length() > 0) {
-                String[] splitCookie = cookie.split(";");
-                String[] splitSessionId = splitCookie[0].split("=");
-                cookie = splitSessionId[1];
-                editor.putString(SESSION_COOKIE, cookie);
-                NetworkUtils.sessionID = cookie;
-                editor.commit();
+        if (!headers.containsKey(SET_COOKIE_KEY)) {
+            return;
+        }
+        String cookie = headers.get(SET_COOKIE_KEY);
+        if (cookie.length() > 0) {
+            String[] splitCookie = cookie.split(";");
+            for (String item : splitCookie) {
+                if(item.contains(SAE_SESSION_COOKIE)) {
+                    SAESessionId = item;
+                    setSessionId(SAE_SESSION_COOKIE, item);
+                } else if(item.contains(HUSTVOTE_SESSION_COOKIE)) {
+                    HustvoteSessionId = item;
+                    setSessionId(HUSTVOTE_SESSION_COOKIE, item);
+                }
+
             }
         }
+//
+//        if (headers.containsKey(SET_COOKIE_KEY)) {
+//            String cookie = headers.get(SET_COOKIE_KEY);
+//            if (cookie.contains(HUSTVOTE_SESSION_COOKIE) || HustvoteSessionId == null || HustvoteSessionId.equals(NULL_STR)
+//                    || !HustvoteSessionId.contains(SAE_SESSION_COOKIE)) {
+//                setHustvoteSessionId(cookie);
+//            }
+//        }
+        Log.i("session_check", headers.toString());
     }
 
     public static void addSessionCookie(Map<String, String> headers) {
-        //Log.i("VolleySingletonSID", "SID=" + sessionId);
-        if (sessionID.length() > 0) {
-            StringBuilder builder = new StringBuilder();
-            builder.append(NetworkUtils.SESSION_COOKIE);
-            builder.append("=");
-            builder.append(sessionID);
-            if (headers.containsKey(NetworkUtils.COOKIE_KEY)) {
-                builder.append("; ");
-                builder.append(headers.get(NetworkUtils.COOKIE_KEY));
-            }
-            headers.put(NetworkUtils.COOKIE_KEY, builder.toString());
+        StringBuilder builder = new StringBuilder();
+        if (HustvoteSessionId != null && !HustvoteSessionId.equals(NULL_STR)) {
+            builder.append(HustvoteSessionId);
+            builder.append(";");
         }
-        //Log.i("session", headers.toString());
+        if(SAESessionId != null && !SAESessionId.equals(NULL_STR)) {
+            builder.append(SAESessionId);
+            builder.append(";");
+        }
+        headers.put(NetworkUtils.COOKIE_KEY, builder.toString());
+
+        Log.i("session_add_utils", headers.toString());
     }
 }
 

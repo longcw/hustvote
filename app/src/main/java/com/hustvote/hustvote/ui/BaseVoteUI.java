@@ -61,6 +61,10 @@ public class BaseVoteUI extends BaseUI {
             case R.id.action_scanner:
                 Intent scannerIntent = new Intent(BaseVoteUI.this, QRCodeScannerActivtiy.class);
                 startActivity(scannerIntent);
+
+            case R.id.action_notice:
+                Intent noticeIntent = new Intent(BaseVoteUI.this, NoticeActivity.class);
+                startActivity(noticeIntent);
         }
 
         return super.onOptionsItemSelected(item);

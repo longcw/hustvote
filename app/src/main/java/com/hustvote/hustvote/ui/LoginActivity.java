@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.net.bean.UserInfoBean;
+import com.hustvote.hustvote.net.push.UpdateSAEPushToken;
 import com.hustvote.hustvote.net.utils.HustVoteRequest;
 import com.hustvote.hustvote.utils.C;
 import com.lidroid.xutils.ViewUtils;
@@ -71,6 +72,8 @@ public class LoginActivity extends BaseUI {
                         progressDialog.cancel();
                         //toast(getString(R.string.login_ok));
                         userInfo.setUserInfoBean(response);
+                        //更新推送token
+                        UpdateSAEPushToken.update(getApplicationContext(), response.getUid(), userInfo.getSAEPushToken());
                         startActivityAndFinish(new Intent(LoginActivity.this, HallActivity.class));
                     }
                 }, new Response.ErrorListener() {
