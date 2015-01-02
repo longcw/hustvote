@@ -57,7 +57,7 @@ class SaePush_model extends CI_Model {
         $title = '新评论';
         $msg = "有 $count 条未读评论，点击查看";
 
-        $this->pushMsg($token, $title, $msg);
+        return $this->pushMsg($token, $title, $msg);
     }
 
     public function updateSAEToken($uid, $token) {

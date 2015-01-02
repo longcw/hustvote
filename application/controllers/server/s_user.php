@@ -21,6 +21,8 @@ class S_user extends MY_Controller {
             if ($status) {
                 $this->user_model->setLogin($callback);
                 $userinfo = $this->user_model->getUserInfo($callback);
+                $this->load->model('saepush_model');
+                $this->saepush_model->pushUnreadComment($userinfo['uid']);
                 $this->setCode(1000);
                 $this->setResult($userinfo);
             } else {
@@ -89,6 +91,39 @@ class S_user extends MY_Controller {
             $this->load->model('saepush_model');
             $this->saepush_model->pushUnreadComment($this->userinfo['uid']);
             $this->setCode(1000);
+        }
+        $this->reply();
+    }
+    
+    public function getCommentList() {
+        if(!$this->isLogin()) {
+            $this->setCode(1002);
+        } else {
+            $page = $this->input->post('page');
+            $comments = $this->comment_model->getCommentByUser($this->userinfo['uid'], $page);
+            if(empty($comments)) {
+                $this->setCode(1003);
+            } else {
+                $this->comment_model->setCommentReadByUser($this->userinfo['uid']);
+                $this->addResult('commentlist', $comments);
+                $this->setCode(1000);
+            }
+        }
+        $this->reply();
+    }
+    
+    public function getNewComment() {
+        if(!$this->isLogin()) {
+            $this->setCode(1002);
+        } else {
+            $ltime = $this->input->post('last_time');
+            $comments = $this->comment_model->getCommentByUser($this->userinfo['uid'], $ltime);
+            if(empty($comments)) {
+                $this->setCode(1003);
+            } else {
+                $this->addResult('commentlist', $comments);
+                $this->setCode(1000);
+            }
         }
         $this->reply();
     }
