@@ -62,8 +62,9 @@ class SaePush_model extends CI_Model {
 
     public function updateSAEToken($uid, $token) {
         $data = array('uid' => $uid, 'saetoken' => $token);
-        $old_token = $this->getSAEToken($uid);
-        if (empty($old_token)) {
+        $this->db->limit(1);
+        $old_token = $this->db->get_where('SAEPushToken', array('uid'=>$uid));
+        if ($old_token->num_rows() == 0) {
             $this->db->insert('SAEPushToken', $data);
         } else {
             $this->db->update('SAEPushToken', $data, array('uid' => $uid));
@@ -73,7 +74,11 @@ class SaePush_model extends CI_Model {
     public function getSAEToken($uid) {
         $this->db->limit(1)->select('saetoken, update_time');
         $query = $this->db->get_where('SAEPushToken', array('uid' => $uid));
-        return $query->row_array();
+        $row = $query->row_array();
+        if(empty($row['saetoken'])) {
+            return null;
+        }
+        return $row;
     }
 
 }
