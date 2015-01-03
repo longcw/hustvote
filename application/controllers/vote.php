@@ -203,7 +203,9 @@ class Vote extends MY_Controller {
             );
             if (($cid = $this->comment_model->addComment($data))) {
                 $this->load->model('saepush_model');
-                $this->saepush_model->pushComment($cid);
+                if($data['from_uid'] != $data['to_uid']) {
+                    $this->saepush_model->pushComment($cid);
+                }
                 $out['status'] = true;
                 $row = $this->comment_model->getCommentById($cid);
                 $str = '<li>
