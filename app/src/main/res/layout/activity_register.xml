@@ -1,0 +1,123 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.hustvote.hustvote.ui.RegisterActivity">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="400px"
+                android:layout_height="150px"
+                android:background="@drawable/title"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/title"/>'
+            </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100px">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20sp"
+                android:background="@drawable/reccir"
+                android:id="@+id/regemail_edit"
+                android:layout_weight="1"
+                android:hint="邮箱"
+                android:selectAllOnFocus="true"
+                android:gravity="center"
+                android:scrollHorizontally="true"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20sp"
+                android:background="@drawable/reccir"
+                android:id="@+id/regnickname_edit"
+                android:layout_weight="1"
+                android:hint="昵称"
+                android:selectAllOnFocus="true"
+                android:gravity="center"
+                android:scrollHorizontally="true"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20sp"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/regpassword_edit"
+                android:layout_weight="1"
+                android:background="@drawable/reccir"
+                android:hint="请输入密码"
+                android:selectAllOnFocus="true"
+                android:gravity="center"
+                android:scrollHorizontally="true"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:textSize="20sp"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/regpasswordaga_edit"
+                android:layout_weight="1"
+                android:background="@drawable/reccir"
+                android:hint="再次输入密码"
+                android:selectAllOnFocus="true"
+                android:gravity="center"
+                android:scrollHorizontally="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="50px">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="48dp"
+                android:layout_marginRight="5dp"
+                android:text="确定"
+                android:textSize="20sp"
+                android:textColor="#fff"
+                android:gravity="center"
+                android:background="@drawable/reccir_blue"
+                android:id="@+id/regButton" />
+
+
+        </LinearLayout>
+        </LinearLayout>
+
+</RelativeLayout>

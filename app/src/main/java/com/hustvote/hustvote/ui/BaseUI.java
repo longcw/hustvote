@@ -1,20 +1,17 @@
 package com.hustvote.hustvote.ui;
 
-import android.app.ActivityManager;
+
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.hustvote.hustvote.net.utils.NetworkUtils;
 import com.hustvote.hustvote.utils.UserInfo;
-import com.sina.push.PushManager;
-
-import java.util.List;
 
 /**
  * Created by chenlong on 14-12-18.
@@ -66,4 +63,6 @@ public class BaseUI extends ActionBarActivity {
         startActivity(intent);
         finish();
     }
+
+
 }
