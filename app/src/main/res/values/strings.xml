@@ -20,4 +20,7 @@
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
     <string name="title_vote_activity">VoteActivity</string>
 
+    <integer name="viewfinder_border_width">4</integer>
+    <integer name="viewfinder_border_length">60</integer>
+
 </resources>

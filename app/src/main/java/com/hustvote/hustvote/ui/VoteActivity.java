@@ -75,7 +75,7 @@ public class VoteActivity extends BaseVoteUI {
         Intent intent = getIntent();
         start_voteid = intent.getStringExtra("start_voteid")!=null ? intent.getStringExtra("start_voteid") : "";
         code = intent.getStringExtra("code") == null ? "" : intent.getStringExtra("code");
-
+        captcha = "";
 
         telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
         choiceItemBeanList = new ArrayList<>();
@@ -91,6 +91,7 @@ public class VoteActivity extends BaseVoteUI {
         params.put("code", code);
         params.put("IMEI", telephonyManager.getDeviceId());
         params.put("vid", start_voteid);
+
         HustVoteRequest<VoteDetailBean> request = new HustVoteRequest<VoteDetailBean>(Request.Method.POST,
                 C.Net.API.getVoteDetail, VoteDetailBean.class,
                 params, new Response.Listener<VoteDetailBean>() {
@@ -103,7 +104,8 @@ public class VoteActivity extends BaseVoteUI {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                toast(error.getMessage());
+
+                toast(error.getLocalizedMessage());
                 VoteActivity.this.finish();
             }
         });
