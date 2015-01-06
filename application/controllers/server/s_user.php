@@ -105,6 +105,7 @@ class S_user extends MY_Controller {
             if(empty($comments)) {
                 $this->setCode(1003);
             } else {
+                $this->comment_model->setCommentReadByUser($this->userinfo['uid']);
                 $this->addResult('commentlist', $comments);
                 $this->setCode(1000);
             }
