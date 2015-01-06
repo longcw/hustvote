@@ -147,7 +147,11 @@ public class NetworkUtils {
             builder.append(SAESessionId);
             builder.append(";");
         }
-        headers.put(NetworkUtils.COOKIE_KEY, builder.toString());
+
+        String cookie = builder.toString();
+        if(!cookie.isEmpty()) {
+            headers.put(NetworkUtils.COOKIE_KEY, cookie);
+        }
 
         Log.i("session_add_utils", headers.toString());
     }
