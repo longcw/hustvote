@@ -20,10 +20,7 @@ import java.util.List;
  * Created by chenlong on 14-12-18.
  */
 public class BaseUI extends ActionBarActivity {
-    private static final String NAME_PUSH_SERVICE = "com.sina.push.service.SinaPushService";
-
     protected RequestQueue requestQueue;
-    protected PushManager pushManager;
     protected UserInfo userInfo;
 
     protected ProgressDialog progressDialog;
@@ -44,12 +41,8 @@ public class BaseUI extends ActionBarActivity {
         progressDialog.setCanceledOnTouchOutside(false);
 
         requestQueue = NetworkUtils.getInstance(getApplicationContext()).getRequestQueue();
-        pushManager = PushManager.getInstance(getApplicationContext());
-        userInfo = UserInfo.getInstance(this);
 
-        if(!isPushRunning()) {
-            startSinaPushService();
-        }
+        userInfo = UserInfo.getInstance(this);
 
     }
 
@@ -72,58 +65,5 @@ public class BaseUI extends ActionBarActivity {
     protected void startActivityAndFinish(Intent intent) {
         startActivity(intent);
         finish();
-    }
-
-    /**
-     * push 是否正在后台运行
-     */
-    private boolean isPushRunning() {
-        // TODO Auto-generated method stub
-        ActivityManager mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> serviceList = mActivityManager
-                .getRunningServices(Integer.MAX_VALUE);
-
-        for (ActivityManager.RunningServiceInfo info : serviceList) {
-
-            if (NAME_PUSH_SERVICE.equals(info.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        //
-		/*
-		 * 点击率统计 if(pushSystemMethod != null){
-		 * pushSystemMethod.sendClickFeedBack(getIntent()); }
-		 */
-    }
-
-    /**
-     * 开启SinaPush服务
-     */
-    private void startSinaPushService() {
-
-        pushManager.initPushChannel("21592", "21592", "100", "100");
-    }
-
-    /**
-     * 关闭SinaPush服务
-     */
-    private void stopSinaPushService() {
-
-        pushManager.close();
-    }
-
-    /**
-     * 刷新Push服务长连接
-     */
-    private void refreshConnection() {
-        pushManager.refreshConnection();
-
     }
 }
