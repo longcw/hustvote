@@ -9,7 +9,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.hustvote.hustvote.R;
+import com.hustvote.hustvote.net.bean.EmptyBean;
 import com.hustvote.hustvote.net.bean.UserInfoBean;
+import com.hustvote.hustvote.net.push.UpdateSAEPushToken;
 import com.hustvote.hustvote.net.utils.HustVoteRequest;
 import com.hustvote.hustvote.utils.C;
 import com.lidroid.xutils.ViewUtils;
@@ -51,18 +53,31 @@ public class LoginActivity extends BaseUI {
             toast(getString(R.string.email_need));
             return;
         }
-
-        Map<String, String> params = new HashMap<>();
+        final Map<String, String> params = new HashMap<>();
         params.put("email", email);
         params.put("password", password);
         userInfo.setPassword(email, password);
-        doLogin(params);
 
+        //发送空消息获取session
+        progressDialog.setMessage(getString(R.string.logining));
+        progressDialog.show();
+        HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
+                EmptyBean.class, new Response.Listener<EmptyBean>() {
+            @Override
+            public void onResponse(EmptyBean response) {
+                doLogin(params);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                toast("登录失败："+error.getMessage());
+            }
+        });
+        addToRequsetQueue(request);
     }
 
     private void doLogin(Map<String, String> params) {
-        progressDialog.setMessage(getString(R.string.logining));
-        progressDialog.show();
+
         HustVoteRequest<UserInfoBean> request = new HustVoteRequest<UserInfoBean>(Request.Method.POST, C.Net.API.Login,
                 UserInfoBean.class, params,
                 new Response.Listener<UserInfoBean>() {
@@ -71,6 +86,8 @@ public class LoginActivity extends BaseUI {
                         progressDialog.cancel();
                         //toast(getString(R.string.login_ok));
                         userInfo.setUserInfoBean(response);
+                        //更新推送token
+                        UpdateSAEPushToken.update(getApplicationContext(), response.getUid(), userInfo.getSAEPushToken());
                         startActivityAndFinish(new Intent(LoginActivity.this, HallActivity.class));
                     }
                 }, new Response.ErrorListener() {

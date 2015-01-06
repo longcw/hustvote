@@ -4,14 +4,22 @@ package com.hustvote.hustvote.utils;
  * Created by chenlong on 14-12-18.
  */
 public class C {
+
+    public static final String NULL_STR = "NULL_STR";
+
     public class Net {
-        public final static String SiteUrl = "http://10.42.0.1:8088/";
+        public final static String SiteUrl = "http://hustvote.sinaapp.com/";
         public final static String BaseUrl = SiteUrl + "server/";
         public final static String SUCC_CODE = "1000";
+        public final static String SAE_PUSH_APPID = "21592";
         public class API {
             public final static String Login = "s_user/login";
             public final static String getUserInfo = "s_user/getUserInfo";
             public final static String Logout = "s_user/logout";
+            public final static String updateSaeToken = "s_user/updateSaeToken";
+            public final static String getUnreadComment = "s_user/getUnreadComment";
+            public final static String getCommentList = "s_user/getCommentList";
+            public final static String getNewComment = "s_user/getNewComment";
 
             public final static String getVoteList = "s_vote/getVoteList";
             public final static String getNewVote = "s_vote/getNewVote";
