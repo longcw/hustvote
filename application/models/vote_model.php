@@ -499,10 +499,20 @@ class Vote_model extends CI_Model {
     }
 
     public function getVoteTitle($vid) {
-        $this->db->select('title, start_voteid, uid')->where('start_voteid', $vid)->limit(1);
+        if(!is_numeric($vid)) {
+            return null;
+        }
+        $this->db->select('start_voteid, title, start_voteid, uid, summary, image')->where('start_voteid', $vid)->limit(1);
         $query = $this->db->get('StartVote');
         return $query->row_array();
     }
+    
+    public function getVoteIdByCode($code) {
+        $this->db->select('start_voteid, is_voted, vote_time');
+        $query = $this->db->limit(1)->get_where('Code', array('code'=>$code));
+        return $query->row_array();
+    }
+
 
     /**
      * 验证是否可以投票
