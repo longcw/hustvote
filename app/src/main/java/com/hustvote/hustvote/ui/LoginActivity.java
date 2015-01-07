@@ -35,14 +35,22 @@ public class LoginActivity extends BaseUI {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         if(userInfo.isLogin()) {
-            verfiyLogin();
+            verifyLogin();
         }
         Map<String, String> params = userInfo.getPassword();
         emailEdit.setText(params.get("email"));
         passwordEdit.setText(params.get("password"));
+    }
 
+    @OnClick(R.id.registerButton)
+    private void onClickRegisterButton(View view) {
+        startActivity(new Intent(this, RegisterActivity.class));
     }
 
     @OnClick(R.id.loginButton)
@@ -100,7 +108,7 @@ public class LoginActivity extends BaseUI {
         addToRequsetQueue(request);
     }
 
-    private void verfiyLogin() {
+    private void verifyLogin() {
         Map<String, String> params = userInfo.getPassword();
         doLogin(params);
     }
