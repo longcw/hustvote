@@ -38,7 +38,7 @@ class S_user extends MY_Controller {
         $data = elements(array('email', 'password', 'nickname'), $pdata, false);
         $data = array_filter($data);
         $callback = null;
-        if ($this->user_model->doReg($data)) {
+        if ($this->user_model->doReg($data, $callback)) {
             $userinfo = $this->user_model->getUserInfo($callback);
             $this->setCode(1000);
             $this->setResult($userinfo);
@@ -61,8 +61,8 @@ class S_user extends MY_Controller {
     }
 
     public function logout() {
-        $this->user_model->setLogout();
         $uid = $this->userinfo['uid'];
+        $this->user_model->setLogout();
         if(!empty($uid)) {
             $this->saepush_model->updateSAEToken($uid, "");
         }
