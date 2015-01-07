@@ -2,24 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="0dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/reccir_back"
-        android:weightSum="1">
+        android:background="@drawable/reccir_back">
 
         <view
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="225dp"
+            android:layout_margin="5dp"
             class="com.android.volley.toolbox.NetworkImageView"
             android:id="@+id/vote_item_image" />
 
@@ -27,9 +23,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp">
+            android:layout_margin="5dp">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -42,13 +36,13 @@
                     android:textSize="20sp"
                     android:textColor="#3c3c3c"
                     android:textStyle="bold"
-                    android:ems="11"
+                    android:ems="12"
                     android:id="@+id/vote_item_title" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:textColor="#9c9c9c"
                     android:textStyle="bold"
                     android:id="@+id/vote_item_time" />
@@ -57,13 +51,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp">
+                android:paddingTop="5dp"
+                android:paddingBottom="10dp">
                  <TextView
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:textColor="#3c3c3c"
-                     android:textSize="16sp"
+                     android:textSize="14sp"
+                     android:ems="50"
                      android:id="@+id/vote_item_summary" />
             </LinearLayout>
 

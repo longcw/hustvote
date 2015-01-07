@@ -57,7 +57,7 @@ public class VoteActivity extends BaseVoteUI {
     private ChoiceListAdapter choiceListAdapter;
 
     private List<Integer> selected;
-    private Button submitButton;
+    private TextView submitButton;
     View captchaLayout;
 
     @ViewInject(R.id.vote_detail_choicelist)
@@ -116,10 +116,9 @@ public class VoteActivity extends BaseVoteUI {
     private void doShowVoteDetail() {
         //添加header和footer
         View header = getLayoutInflater().inflate(R.layout.activity_vote_header_webview, null);
-        TextView title = (TextView)header.findViewById(R.id.vote_detail_title_webview);
         WebView introView = (WebView) header.findViewById(R.id.vote_detail_intro_webview);
         View footer = getLayoutInflater().inflate(R.layout.activity_vote_footer, null);
-        submitButton = (Button) footer.findViewById(R.id.vote_submit_button);
+        submitButton = (TextView) footer.findViewById(R.id.vote_submit_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +127,7 @@ public class VoteActivity extends BaseVoteUI {
             }
         });
 
-        Button resultButton = (Button) footer.findViewById(R.id.vote_result_button);
+        TextView resultButton = (TextView) footer.findViewById(R.id.vote_result_button);
         resultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,7 +136,7 @@ public class VoteActivity extends BaseVoteUI {
         });
 
         //提示信息
-        Button infoButton = (Button) footer.findViewById(R.id.vote_info_button);
+        TextView infoButton = (TextView) footer.findViewById(R.id.vote_info_button);
         infoButton.setVisibility(View.GONE);
         if(!voteDetailBean.getLogmsg().equals("none")) {
             //不能投票
@@ -172,7 +171,6 @@ public class VoteActivity extends BaseVoteUI {
         //传入listView，便于获取childView
         choiceListAdapter.setListView(choiceListView);
 
-        title.setText(voteDetailBean.getContent().getTitle());
         WebViewCSS.openWebView(introView, voteDetailBean.getContent().getIntro());
 
         choiceItemBeanList.addAll(voteDetailBean.getChoices());

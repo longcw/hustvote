@@ -14,4 +14,5 @@
         android:layout_height="wrap_content"
         android:id="@+id/vote_detail_intro"
         android:layout_gravity="center_horizontal" />
+
 </LinearLayout>
