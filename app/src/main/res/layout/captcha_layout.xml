@@ -7,18 +7,21 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_gravity="center_horizontal"
         android:id="@+id/captchaLayout">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
             android:id="@+id/captchaImage" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="点击更换"
+            android:textSize="20sp"
             android:id="@+id/captchaHint"
             android:layout_gravity="right" />
     </LinearLayout>
@@ -26,6 +29,12 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textSize="20sp"
+        android:textColor="#3c3c3c"
+        android:hint="请输入验证码"
+        android:selectAllOnFocus="true"
         android:id="@+id/captchaText"
         android:layout_gravity="center_horizontal" />
 

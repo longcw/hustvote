@@ -9,6 +9,6 @@
         android:top="5dp" />
     <stroke
         android:width="2dp"
-        android:color="#ff00bbe8" >
+        android:color="#ff03A5E4" >
     </stroke>
 </shape>

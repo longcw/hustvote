@@ -6,8 +6,14 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_height="48dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/reccir">
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -18,6 +24,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#3c3c3c"
             android:id="@+id/choice_item_name" />
     </LinearLayout>
 
