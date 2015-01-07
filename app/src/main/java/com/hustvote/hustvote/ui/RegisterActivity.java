@@ -1,47 +1,93 @@
 package com.hustvote.hustvote.ui;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.hustvote.hustvote.R;
+import com.hustvote.hustvote.net.bean.UserInfoBean;
+import com.hustvote.hustvote.net.utils.HustVoteRequest;
+import com.hustvote.hustvote.utils.C;
 
-public class RegisterActivity extends ActionBarActivity {
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+public class RegisterActivity extends BaseUI {
+
+    private EditText regEmail;
+    private EditText nickname;
+    private EditText regPassword;
+    private EditText regPasswordAga;
+    private TextView confirm;
+
+    private Map<String, String> params;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        EditText regEmail = (EditText)findViewById(R.id.regemail_edit);
-        EditText nickname = (EditText)findViewById(R.id.regnickname_edit);
-        EditText regPassword = (EditText)findViewById(R.id.regpassword_edit);
-        EditText regPasswordAga = (EditText)findViewById(R.id.regpasswordaga_edit);
-        TextView confirm = (TextView)findViewById(R.id.regButton);
+        regEmail = (EditText)findViewById(R.id.regemail_edit);
+        nickname = (EditText)findViewById(R.id.regnickname_edit);
+        regPassword = (EditText)findViewById(R.id.regpassword_edit);
+        regPasswordAga = (EditText)findViewById(R.id.regpasswordaga_edit);
+        confirm = (TextView)findViewById(R.id.regButton);
+
+        params = new HashMap<>();
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                params.put("email", regEmail.getText().toString());
+                params.put("password", regPassword.getText().toString());
+                params.put("nickname", nickname.getText().toString());
+                for(Map.Entry<String, String> item : params.entrySet()) {
+                    if(item.getValue().isEmpty()) {
+                        toast("请填写完整信息");
+                        return;
+                    }
+                }
+                if(!params.get("password").equals(regPasswordAga.getText().toString())) {
+                    toast("两次填写的密码不一致");
+                    return;
+                }
+                doRegister();
+            }
+        });
+    }
+
+    private void doRegister() {
+        progressDialog.setMessage("注册中...");
+        progressDialog.show();
+        HustVoteRequest<UserInfoBean> request = new HustVoteRequest<UserInfoBean>(Request.Method.POST,
+                C.Net.API.Register, UserInfoBean.class, params, new Response.Listener<UserInfoBean>() {
+            @Override
+            public void onResponse(UserInfoBean response) {
+                progressDialog.cancel();
+                userInfo.setUserInfoBean(response);
+                userInfo.setPassword(params.get("email"), params.get("password"));
+                //startActivityAndFinish(new Intent(RegisterActivity.this, LoginActivity.class));
+                finish();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.cancel();
+                toast(error.getMessage());
+            }
+        });
+        addToRequsetQueue(request);
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_register, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

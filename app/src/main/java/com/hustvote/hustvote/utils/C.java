@@ -14,6 +14,7 @@ public class C {
         public final static String SAE_PUSH_APPID = "21592";
         public class API {
             public final static String Login = "s_user/login";
+            public final static String Register = "s_user/register";
             public final static String getUserInfo = "s_user/getUserInfo";
             public final static String Logout = "s_user/logout";
             public final static String updateSaeToken = "s_user/updateSaeToken";
