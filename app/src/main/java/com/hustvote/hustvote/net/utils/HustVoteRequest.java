@@ -9,6 +9,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.hustvote.hustvote.utils.C;
 
@@ -54,6 +55,14 @@ public class HustVoteRequest<T> extends Request<T> {
 
 
     @Override
+    protected VolleyError parseNetworkError(VolleyError volleyError) {
+        if(volleyError.getMessage().isEmpty()) {
+            volleyError = new HustVoteError(volleyError.getCause().getCause().getMessage());
+        }
+        return volleyError;
+    }
+
+    @Override
     protected void deliverResponse(T response) {
         listener.onResponse(response);
     }
@@ -67,7 +76,7 @@ public class HustVoteRequest<T> extends Request<T> {
             JSONObject json = JSON.parseObject(body);
             Log.i("hustvote_session", json.getString("sid"));
             if(!json.getString("code").equals(SUCC_CODE)) {
-                String msg = json.getString("code") + ":" + json.getString("message");
+                String msg = json.getString("message");
                 return Response.error(new HustVoteError(msg));
             }
 

@@ -54,6 +54,8 @@ public class ResultActivity extends BaseVoteUI {
     }
 
     private void doGetResult() {
+        progressDialog.setMessage("获取中...");
+        progressDialog.show();
         Map<String, String>params = new HashMap<>();
         params.put("vid", vid);
         HustVoteRequest<VoteResultBean> request = new HustVoteRequest<VoteResultBean>(Request.Method.POST,
@@ -67,6 +69,7 @@ public class ResultActivity extends BaseVoteUI {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.cancel();
                 toast(error.getMessage());
             }
         });
@@ -87,6 +90,9 @@ public class ResultActivity extends BaseVoteUI {
         BarDataSet barDataSet = new BarDataSet(voteData, voteResultBean.getTitle());
         BarData barData = new BarData(xVals, barDataSet);
         barChart.setData(barData);
+
+        progressDialog.cancel();
         barChart.notifyDataSetChanged();
+        //barChart.notify();
     }
 }
