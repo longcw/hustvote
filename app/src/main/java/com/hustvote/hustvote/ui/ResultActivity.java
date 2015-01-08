@@ -3,6 +3,8 @@ package com.hustvote.hustvote.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -14,6 +16,8 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.RadarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.XLabels;
 import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.net.bean.ResultDataBean;
 import com.hustvote.hustvote.net.bean.VoteResultBean;
@@ -41,12 +45,19 @@ public class ResultActivity extends BaseVoteUI {
     @ViewInject(R.id.barChart)
     private BarChart barChart;
 
+    @ViewInject(R.id.result_title)
+    private TextView title;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setTitle(getString(R.string.vote_result));
         setContentView(R.layout.activity_result);
         ViewUtils.inject(this);
+
+        //隐藏
+        barChart.setVisibility(View.INVISIBLE);
+
 
         Intent intent = getIntent();
         vid = intent.getStringExtra("vid") == null ? "" : intent.getStringExtra("vid");
@@ -54,7 +65,7 @@ public class ResultActivity extends BaseVoteUI {
     }
 
     private void doGetResult() {
-        progressDialog.setMessage("获取中...");
+        progressDialog.setMessage(getString(R.string.geting));
         progressDialog.show();
         Map<String, String>params = new HashMap<>();
         params.put("vid", vid);
@@ -70,6 +81,7 @@ public class ResultActivity extends BaseVoteUI {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.cancel();
+                finish();
                 toast(error.getMessage());
             }
         });
@@ -77,7 +89,29 @@ public class ResultActivity extends BaseVoteUI {
     }
 
     private void doShowResult() {
-        //barChart.setDescription(voteResultBean.getTitle());
+        barChart.setDescription("");
+        title.setText("【" + voteResultBean.getTitle() + "】的投票结果");
+        //y轴坐标
+        barChart.setDrawYLabels(false);
+        //大小
+        barChart.setDrawYValues(true);
+
+        barChart.setPinchZoom(false);
+
+        //x轴坐标
+        XLabels xLabels = barChart.getXLabels();
+        xLabels.setPosition(XLabels.XLabelPosition.BOTTOM);
+        xLabels.setCenterXLabelText(true);
+        xLabels.setSpaceBetweenLabels(0);
+
+        // 动画效果
+        barChart.animateY(2000);
+
+        //背景表格
+        barChart.setDrawGridBackground(false);
+        barChart.setDrawHorizontalGrid(false);
+        barChart.setDrawVerticalGrid(false);
+
 
         ArrayList<BarEntry> voteData = new ArrayList<>();
         ArrayList<String> xVals = new ArrayList<>();
@@ -88,11 +122,18 @@ public class ResultActivity extends BaseVoteUI {
             i++;
         }
         BarDataSet barDataSet = new BarDataSet(voteData, voteResultBean.getTitle());
-        BarData barData = new BarData(xVals, barDataSet);
-        barChart.setData(barData);
+        barDataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
 
+        ArrayList<BarDataSet> barDataSets = new ArrayList<>();
+        barDataSets.add(barDataSet);
+
+        BarData barData = new BarData(xVals, barDataSets);
+        barChart.setData(barData);
+        barChart.invalidate();
+
+        //显示
+        barChart.setVisibility(View.VISIBLE);
         progressDialog.cancel();
-        barChart.notifyDataSetChanged();
-        //barChart.notify();
+
     }
 }

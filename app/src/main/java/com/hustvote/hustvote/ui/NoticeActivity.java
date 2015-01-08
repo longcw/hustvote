@@ -45,6 +45,8 @@ public class NoticeActivity extends BaseVoteUI implements XListView.IXListViewLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(R.string.message);
         setContentView(R.layout.activity_notice);
         ViewUtils.inject(this);
         commentItemList = new ArrayList<>();

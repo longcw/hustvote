@@ -32,6 +32,7 @@ public class BaseVoteUI extends BaseUI {
             startActivityAndFinish(new Intent(BaseVoteUI.this, LoginActivity.class));
         }
         pushManager = PushManager.getInstance(getApplicationContext());
+
     }
 
     @Override

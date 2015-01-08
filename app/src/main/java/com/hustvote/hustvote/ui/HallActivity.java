@@ -39,6 +39,8 @@ public class HallActivity extends BaseVoteUI implements XListView.IXListViewList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(getString(R.string.hall));
         setContentView(R.layout.activity_hall);
         ViewUtils.inject(this);
         voteItemList = new ArrayList<>();

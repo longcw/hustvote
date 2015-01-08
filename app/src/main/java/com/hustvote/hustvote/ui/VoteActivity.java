@@ -56,6 +56,8 @@ public class VoteActivity extends BaseVoteUI {
     private List<ChoiceItemBean> choiceItemBeanList;
     private ChoiceListAdapter choiceListAdapter;
 
+    private Dialog infoDialog;
+
     private List<Integer> selected;
     private TextView submitButton;
     View captchaLayout;
@@ -69,6 +71,7 @@ public class VoteActivity extends BaseVoteUI {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle(getString(R.string.join_vote));
         setContentView(R.layout.activity_vote);
         ViewUtils.inject(this);
 
@@ -141,7 +144,7 @@ public class VoteActivity extends BaseVoteUI {
         if(!voteDetailBean.getLogmsg().equals("none")) {
             //不能投票
             infoButton.setVisibility(View.VISIBLE);
-            submitButton.setEnabled(false);
+            //submitButton.setEnabled(false);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("提示").setMessage(voteDetailBean.getLogmsg() + "\n是否去查看投票结果");
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -154,7 +157,7 @@ public class VoteActivity extends BaseVoteUI {
                 public void onClick(DialogInterface dialogInterface, int i) {}
             });
 
-            final Dialog infoDialog = builder.create();
+            infoDialog = builder.create();
             infoDialog.show();
             infoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -180,6 +183,11 @@ public class VoteActivity extends BaseVoteUI {
     }
 
     private void doShowConfirmDialog() {
+        if(infoDialog != null) {
+            infoDialog.show();
+            return;
+        }
+
         //TODO 确认框(判断投票权限、空选、验证码)
         if(selected.isEmpty()) {
             toast("请至少选择一项");

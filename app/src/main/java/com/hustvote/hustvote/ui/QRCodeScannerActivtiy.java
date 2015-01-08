@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.zxing.Result;
+import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.utils.C;
 
 import java.util.regex.Matcher;
@@ -21,6 +22,8 @@ public class QRCodeScannerActivtiy extends BaseVoteUI implements ZXingScannerVie
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+
+        setTitle(R.string.qrcode);
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);                // Set the scanner view as the content view
     }
@@ -36,6 +39,7 @@ public class QRCodeScannerActivtiy extends BaseVoteUI implements ZXingScannerVie
     public void onPause() {
         super.onPause();
         mScannerView.stopCamera();           // Stop camera on pause
+        finish();
     }
 
     @Override
@@ -48,6 +52,7 @@ public class QRCodeScannerActivtiy extends BaseVoteUI implements ZXingScannerVie
         //TODO 本地调试
         siteUrl = siteUrl.replace("10.42.0.1", "localhost");
 
+        //正则表达式获取vid和code
         String pattern = siteUrl + "vote/join/(\\d+)(\\?code=(\\w+))?";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(text);

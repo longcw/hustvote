@@ -4,14 +4,20 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:gravity="center"
+    android:gravity="top|center"
     android:weightSum="1">
 
     <view
         android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_height="480dp"
         class="com.github.mikephil.charting.charts.BarChart"
         android:id="@+id/barChart"
+        android:layout_weight="0.26" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/result_title"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

@@ -34,6 +34,8 @@ public class RegisterActivity extends BaseUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(getString(R.string.register));
         setContentView(R.layout.activity_register);
         regEmail = (EditText)findViewById(R.id.regemail_edit);
         nickname = (EditText)findViewById(R.id.regnickname_edit);
@@ -51,12 +53,12 @@ public class RegisterActivity extends BaseUI {
                 params.put("nickname", nickname.getText().toString());
                 for(Map.Entry<String, String> item : params.entrySet()) {
                     if(item.getValue().isEmpty()) {
-                        toast("请填写完整信息");
+                        toast(getString(R.string.please_complete_info));
                         return;
                     }
                 }
                 if(!params.get("password").equals(regPasswordAga.getText().toString())) {
-                    toast("两次填写的密码不一致");
+                    toast(getString(R.string.password_different));
                     return;
                 }
                 doRegister();
@@ -65,7 +67,7 @@ public class RegisterActivity extends BaseUI {
     }
 
     private void doRegister() {
-        progressDialog.setMessage("注册中...");
+        progressDialog.setMessage(getString(R.string.register_loading));
         progressDialog.show();
         HustVoteRequest<UserInfoBean> request = new HustVoteRequest<UserInfoBean>(Request.Method.POST,
                 C.Net.API.Register, UserInfoBean.class, params, new Response.Listener<UserInfoBean>() {

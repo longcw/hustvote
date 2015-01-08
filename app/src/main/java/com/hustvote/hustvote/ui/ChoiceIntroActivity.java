@@ -30,6 +30,8 @@ public class ChoiceIntroActivity extends BaseVoteUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(getString(R.string.choice_intro));
         setContentView(R.layout.activity_choice_intro);
         ViewUtils.inject(this);
 
@@ -49,6 +51,7 @@ public class ChoiceIntroActivity extends BaseVoteUI {
                 if(response.getChoice_intro().isEmpty()) {
                     response.setChoice_intro(response.getChoice_name());
                 }
+                setTitle(response.getChoice_name() + " --" + getString(R.string.choice_intro));
                 WebViewCSS.openWebView(webView, response.getChoice_intro());
 
             }
