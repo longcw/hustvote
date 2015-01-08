@@ -227,4 +227,22 @@ class S_vote extends MY_Controller {
         $this->phptextclass->phpcaptcha($code, '#0000CC', '#fff', 140, 50, 10, 25);
     }
     
+    public function getCommentByVote() {
+        $vid = $this->input->post('vid');
+        $result = $this->comment_model->getCommentByVote($vid);
+        if(empty($result)) {
+            $this->setCode(1004);
+        } else {
+            $this->setCode(1000);
+            $title = $this->vote_model->getVoteTitle($vid);
+            $this->addResult("resultdata", $result);
+            $this->addResult("title", $title['title']);
+        }
+        $this->reply();
+    }
+    
+    public function addComment() {
+        
+    }
+    
 }

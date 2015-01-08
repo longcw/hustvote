@@ -9,10 +9,10 @@ class Weixin extends CI_Controller {
         parent::__construct();
 
         $options = array(
-            'token' => 'wxa4f573631ba6c5b2', //填写你设定的key
-            'encodingaeskey' => 'encodingaeskey', //填写加密用的EncodingAESKey
+            'token' => 'hustvote', //填写你设定的key
+            'encodingaeskey' => 'ZhMjNvuQpiaWY7ztjIl69Tkm54JNsTE185xpOBzqySj', //填写加密用的EncodingAESKey
             'appid' => 'wxa4f573631ba6c5b2', //填写高级调用功能的app id, 请在微信开发模式后台查询
-            'appsecret' => 'xxxxxxxxxxxxxxxxxxx', //填写高级调用功能的密钥
+            //'appsecret' => 'xxxxxxxxxxxxxxxxxxx', //填写高级调用功能的密钥
         );
 
         $this->load->library('wechat', $options);
@@ -54,12 +54,13 @@ class Weixin extends CI_Controller {
         if (empty($vote)) {
             return false;
         }
-
+        $img = empty($vote['image']) ? base_url('img/vote_default.jpg') : $vote['image'];
+        
         $data = array(
             '0' => array(
                 'Title' => $vote['title'],
                 'Description' => $vote['summary'],
-                'PicUrl' => $vote['image'],
+                'PicUrl' => $img,
                 'Url' => base_url('vote/join/' . $vid . ($code ? "?code=$code" : ""))
             )
         );

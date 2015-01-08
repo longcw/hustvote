@@ -4,6 +4,8 @@ $(document).ready(function () {
     var vote_uid = $('#vote-uid').html();
     var to_uid = vote_uid;
     var to_token;
+    var comment_page = 1;
+    var comment_add_count = 0;
 
     //检测投票权限
     var vote_error = $('#vote-error').attr('value').toString();
@@ -142,24 +144,24 @@ $(document).ready(function () {
         }
 
     });
-    
+
     //发表评论
-    $('#comment-button').on('click', function (e) {
+    $('#comment-button').on('click', function (e){
         e.preventDefault();
         if (uid === '0') {
             alert('请先登录');
             return;
         }
         var content = $('#comment-content').val().toString();
-        if(content.length === 0) {
+        if (content.length === 0) {
             alert('还是写点什么吧');
             return;
         }
-        if(content.indexOf(to_token) < 0) {
+        if (content.indexOf(to_token) < 0) {
             to_uid = vote_uid;
         }
-        
-        var str = 'content=' + content + '&vid='+vid + '&to_uid=' + to_uid;
+
+        var str = 'content=' + content + '&vid=' + vid + '&to_uid=' + to_uid;
         $.ajax(
                 {
                     url: "../doAddComment",
@@ -178,21 +180,46 @@ $(document).ready(function () {
                             count++;
                             comment_count.html(count);
                             $('#comment-count-header').html(count + ' 条评论');
-                            
+                            comment_add_count++;
                         }
                     }
 
                 });
 
     });
-    
-    $('.comment-reply').die().live('click', function(e){
+
+    $('.comment-reply').die().live('click', function (e){
         e.preventDefault();
         to_uid = $(this).attr('from-uid');
         //alert(to_uid)
         var to_name = $(this).attr('nickname');
         to_token = '回复 ' + to_name + '：';
         $('#comment-content').val(to_token);
+    });
+
+    $('#next-comment').on('click', function (e) {
+        if(comment_page <= 0) {
+            return;
+        }
+        $.ajax(
+                {
+                    url: "../doGetNextCommentPage/" + vid + '/' + comment_page + '/' + comment_add_count,
+                    async: true,
+                    type: "get",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.status !== true) {
+                            var button = $('#next-comment');
+                            button.html('没有更多评论了');
+                            button.addClass('disabled');
+                            comment_page = -1;
+                        } else {
+                            $('#comment-bottom').before(data.comments);
+                            comment_page++;
+                        }
+                    }
+
+                });
     });
 
 
