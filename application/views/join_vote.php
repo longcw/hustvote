@@ -5,7 +5,7 @@
                 <p class="entry-meta">
                     <span class="entry-author"><i class="icon-user"></i> <?= $voteuser['nickname'] ?></span>
                     <span class="entry-date"><i class="icon-calendar"></i> <?= date('Y-m-d', $detail['content']['create_time']) ?></span>
-                    <span class="entry-comments"><i class="icon-comments"></i> <span id="comment-count-header"><?= count($comment) ?> 条评论</span></span>
+                    <span class="entry-comments"><i class="icon-comments"></i> <span id="comment-count-header"><?= $comment_count ?> 条评论</span></span>
                 </p>
                 <h2><?= $detail['content']['title'] ?></h2>
             </div>
@@ -43,7 +43,7 @@
 
             
             <div class="entry-comments">
-                <h3><span id="comment-count"><?= count($comment) ?></span> 条评论</h3>
+                <h3><span id="comment-count"><?= $comment_count ?></span> 条评论</h3>
                 <ul id="comments-list">
                     <div id="comment-head" style="display:none"></div>
                     <?php foreach ($comment as $row):?>
@@ -56,7 +56,9 @@
                         </div>
                     </li>
                     <?php endforeach;?>
+                    <div id="comment-bottom" style="display:none"></div>
                 </ul>
+                <button class="btn btn-block" id="next-comment" type="button">加载下一页</button>
             </div>
             
             <div class="add-a-comment-form" id='comment-form'>

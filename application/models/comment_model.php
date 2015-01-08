@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 class Comment_model extends CI_Model {
-    private static $PAGE_COUNT = 20;
+    private static $PAGE_COUNT = 8;
 
     public function __construct() {
         $this->load->database();
@@ -28,12 +28,25 @@ class Comment_model extends CI_Model {
      * @param type $vid
      * @return type
      */
-    public function getCommentByVote($vid) {
+    public function getCommentByVote($vid, $page = 0, $ltime = 0, $offset = 0) {
+        if($ltime <= 0) {
+            $this->db->limit(self::$PAGE_COUNT, self::$PAGE_COUNT * $page + $offset);
+        } else {
+            $this->db->where('create_time >', $ltime);
+        }
+        
         $this->db->select('nickname as from_nickname, Comment.*')
                 ->join('User', 'Comment.from_uid=User.uid');
         $this->db->where('vid', $vid)->order_by('create_time desc');
         $query = $this->db->get('Comment');
         return $query->result_array();
+    }
+    
+    public function getCommentCountByVote($vid) {
+        $this->db->select('COUNT(vid) as count');
+        $query = $this->db->get_where('Comment', array('vid' => $vid));
+        $row = $query->row_array();
+        return $row['count'];
     }
 
     public function getCommentById($cid) {

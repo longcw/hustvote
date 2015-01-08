@@ -170,6 +170,7 @@ class Vote extends MY_Controller {
         $footer['js'] = array('umeditor/umeditor.config', 'umeditor/umeditor.min', 'icheck', 'jquery.pin', 'fingerprint', 'joinvote');
         $data['detail'] = $this->vote_model->getVoteDetailById($vid);
         $data['comment'] = $this->comment_model->getCommentByVote($vid);
+        $data['comment_count'] = $this->comment_model->getCommentCountByVote($vid);
         $data['code'] = $code;
         if (empty($data['detail']) || !$data['detail']['content']['is_completed']) {
             echo $this->errorhandler->getErrorDes('ErrorVote');
@@ -179,6 +180,25 @@ class Vote extends MY_Controller {
         $this->load->view('header', $header);
         $this->load->view('join_vote', $data);
         $this->load->view('footer', $footer);
+    }
+
+    public function doGetNextCommentPage($vid, $page, $offset = 0) {
+        $out = array(
+            'status' => false
+        );
+        $comments = $this->comment_model->getCommentByVote($vid, $page, 0, $offset);
+        if (!empty($comments)) {
+            $out['status'] = true;
+            $out['comments'] = '';
+            foreach ($comments as $row) {
+                $out['comments'] .= "<li><div class='media-body'>" .
+                        "<h4 class='comment-author'>$row[from_nickname] <small> on " . date('Y-m-d H:i:s', $row['create_time']) .
+                        " <a href='#' class='comment-reply' from-uid='$row[from_uid]' nickname ='$row[from_nickname]'>回复</a></small></h4>" .
+                        "<div class='comment-content'>$row[content]" .
+                        "</div></div></li>";
+            }
+        }
+        $this->output->set_content_type('json')->set_output(json_encode($out));
     }
 
     public function doAddComment() {
