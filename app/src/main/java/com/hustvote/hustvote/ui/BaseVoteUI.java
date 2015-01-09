@@ -66,7 +66,10 @@ public class BaseVoteUI extends BaseUI {
                 });
                 addToRequsetQueue(request);
                 userInfo.setUserInfoBean(null);
-                startActivityAndFinish(new Intent(BaseVoteUI.this, LoginActivity.class));
+
+                Intent intent = new Intent(BaseVoteUI.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 return true;
 
             case R.id.action_scanner:

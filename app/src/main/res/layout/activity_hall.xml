@@ -14,5 +14,6 @@
         android:dividerHeight="3dp"
         android:id="@+id/vote_list_view"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:scrollbars="none" />
 </RelativeLayout>

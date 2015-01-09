@@ -97,6 +97,4 @@ public class RegisterActivity extends BaseUI {
     }
 
 
-
-
 }

@@ -54,7 +54,7 @@ public class BaseUI extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_hall, menu);
+        getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
 
@@ -87,6 +87,9 @@ public class BaseUI extends ActionBarActivity {
         int id = item.getItemId();
 
         switch (id) {
+            case R.id.action_finish:
+                finish();
+                return true;
             case android.R.id.home:
                 finish();
                 return true;
