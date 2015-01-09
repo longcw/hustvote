@@ -14,11 +14,15 @@ class Comment_model extends CI_Model {
      * 添加评论
      * @param array $data from_uid, to_uid, vid, content
      */
-    public function addComment($data) {
+    public function addComment($data, $time = false) {
         if($data['from_uid'] == $data['to_uid']) {
             $data['is_read'] = 1;
         }
-        $data['create_time'] = time();
+        if(!$time) {
+            $time = time();
+        }
+        $data['create_time'] = $time;
+        
         $this->db->insert('Comment', $data);
         return $this->db->insert_id();
     }

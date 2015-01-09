@@ -498,9 +498,12 @@ class Vote_model extends CI_Model {
         return $votes;
     }
 
-    public function getVoteTitle($vid) {
+    public function getVoteTitle($vid, $is_completed = true) {
         if(!is_numeric($vid)) {
             return null;
+        }
+        if($is_completed) {
+            $this->db->where('is_completed', 1);
         }
         $this->db->select('start_voteid, title, start_voteid, uid, summary, image')->where('start_voteid', $vid)->limit(1);
         $query = $this->db->get('StartVote');
