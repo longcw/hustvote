@@ -35,6 +35,7 @@ public class BaseVoteUI extends BaseUI {
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -76,6 +77,10 @@ public class BaseVoteUI extends BaseUI {
             case R.id.action_notice:
                 Intent noticeIntent = new Intent(BaseVoteUI.this, NoticeActivity.class);
                 startActivity(noticeIntent);
+                return true;
+
+            case android.R.id.home:
+                finish();
                 return true;
         }
 

@@ -34,7 +34,7 @@ public class LoginActivity extends BaseUI {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle("HustVote 在线投票");
+        setTitle("HustVote");
         setContentView(R.layout.activity_login);
         ViewUtils.inject(this);
     }

@@ -6,11 +6,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.hustvote.hustvote.R;
+import com.hustvote.hustvote.net.bean.EmptyBean;
+import com.hustvote.hustvote.net.utils.HustVoteRequest;
 import com.hustvote.hustvote.net.utils.NetworkUtils;
+import com.hustvote.hustvote.utils.C;
 import com.hustvote.hustvote.utils.UserInfo;
 
 /**
@@ -43,6 +51,13 @@ public class BaseUI extends ActionBarActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_hall, menu);
+        return true;
+    }
+
     public void toast(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
@@ -64,5 +79,20 @@ public class BaseUI extends ActionBarActivity {
         finish();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 }

@@ -53,6 +53,7 @@ public class ResultActivity extends BaseVoteUI {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.vote_result));
         setContentView(R.layout.activity_result);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ViewUtils.inject(this);
 
         //隐藏
