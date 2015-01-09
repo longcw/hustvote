@@ -24,6 +24,7 @@ public class QRCodeScannerActivtiy extends BaseVoteUI implements ZXingScannerVie
         super.onCreate(state);
 
         setTitle(R.string.qrcode);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);                // Set the scanner view as the content view
     }

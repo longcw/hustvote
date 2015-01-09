@@ -2,6 +2,7 @@ package com.hustvote.hustvote.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ListView;
 
@@ -133,4 +134,5 @@ public class HallActivity extends BaseVoteUI implements XListView.IXListViewList
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         voteListView.setRefreshTime(df.format(new Date()));
     }
+
 }

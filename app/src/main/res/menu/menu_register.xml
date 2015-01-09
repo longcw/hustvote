@@ -4,10 +4,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.hustvote.hustvote.ui.LoginActivity">
 
-    <item
-        android:id="@+id/action_finish"
-        android:title="退出"
-        android:orderInCategory="100"
-        app:showAsAction="always" />
-
 </menu>

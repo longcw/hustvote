@@ -48,6 +48,7 @@ public class NoticeActivity extends BaseVoteUI implements XListView.IXListViewLi
 
         setTitle(R.string.message);
         setContentView(R.layout.activity_notice);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ViewUtils.inject(this);
         commentItemList = new ArrayList<>();
         noticeListAdapter = new NoticeListAdapter(this, commentItemList);

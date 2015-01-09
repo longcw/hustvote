@@ -73,6 +73,7 @@ public class VoteActivity extends BaseVoteUI {
 
         setTitle(getString(R.string.join_vote));
         setContentView(R.layout.activity_vote);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ViewUtils.inject(this);
 
         Intent intent = getIntent();

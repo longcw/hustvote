@@ -1,10 +1,10 @@
 package com.hustvote.hustvote.ui;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,6 +37,7 @@ public class RegisterActivity extends BaseUI {
 
         setTitle(getString(R.string.register));
         setContentView(R.layout.activity_register);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         regEmail = (EditText)findViewById(R.id.regemail_edit);
         nickname = (EditText)findViewById(R.id.regnickname_edit);
         regPassword = (EditText)findViewById(R.id.regpassword_edit);
@@ -87,6 +88,12 @@ public class RegisterActivity extends BaseUI {
             }
         });
         addToRequsetQueue(request);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_register, menu);
+        return true;
     }
 
 
