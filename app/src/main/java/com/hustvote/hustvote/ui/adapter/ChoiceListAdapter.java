@@ -112,6 +112,10 @@ public class ChoiceListAdapter extends BaseAdapter {
         int count = getCount();
         for (int i = 1; i <= count; i++) {
             View view = listView.getChildAt(i);
+            if(view == null) {
+                continue;
+            }
+
             CheckBox checkBox = (CheckBox) view.findViewById(R.id.choice_item_checkbox);
             if (!checkBox.isChecked()) {
                 checkBox.setEnabled(false);

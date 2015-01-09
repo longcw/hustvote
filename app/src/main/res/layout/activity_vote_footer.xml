@@ -10,7 +10,7 @@
         android:paddingTop="10dp"
         android:gravity="center_horizontal">
 
-        <TextView
+        <Button
             android:layout_width="100dp"
             android:layout_height="48dp"
             android:layout_marginRight="3dp"
@@ -22,7 +22,7 @@
             android:id="@+id/vote_submit_button"
             android:background="@drawable/reccir_blue"/>
 
-        <TextView
+        <Button
             android:layout_width="100dp"
             android:layout_height="48dp"
             android:layout_marginLeft="5dp"
@@ -35,7 +35,7 @@
             android:id="@+id/vote_info_button"
             android:background="@drawable/reccir_blue"/>
 
-        <TextView
+        <Button
             android:layout_width="100dp"
             android:layout_height="48dp"
             android:layout_marginLeft="3dp"
