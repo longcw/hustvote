@@ -229,20 +229,49 @@ class S_vote extends MY_Controller {
     
     public function getCommentByVote() {
         $vid = $this->input->post('vid');
-        $result = $this->comment_model->getCommentByVote($vid);
+        $page = $this->input->post('page');
+        //客户端刷新评论列表要更新offset
+        $offset = $this->input->post('offset');
+        $result = $this->comment_model->getCommentByVote($vid, $page, 0, $offset);
         if(empty($result)) {
-            $this->setCode(1004);
+            $this->setCode(1003);
         } else {
             $this->setCode(1000);
-            $title = $this->vote_model->getVoteTitle($vid);
-            $this->addResult("resultdata", $result);
-            $this->addResult("title", $title['title']);
+            $this->addResult("commentlist", $result);
         }
         $this->reply();
     }
     
+    public function getNewCommentByVote() {
+        $vid = $this->input->post('vid');
+        $ltime = $this->input->post('last_time');
+        $result = $this->comment_model->getCommentByVote($vid, 0, $ltime);
+        if(empty($result)) {
+            $this->setCode(1003);
+        } else {
+            $this->setCode(1000);
+            $this->addResult("commentlist", $result);
+        }
+        $this->reply();
+    }
+
+
     public function addComment() {
-        
+        if(!$this->isLogin()) {
+            $this->setCode(1002);
+        } else {
+            $pdata = $this->input->post();
+            //$data from_uid, to_uid, vid, content
+            $data = array_filter($pdata);
+            if(count($data) != 4) {
+                $this->setCode(1005);
+            } else {
+                $ctime = time();
+                $this->comment_model->addComment($data, $ctime);
+                $this->setCode(1000);
+            }
+        }
+        $this->reply();
     }
     
 }
