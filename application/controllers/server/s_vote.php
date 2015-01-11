@@ -97,6 +97,10 @@ class S_vote extends MY_Controller {
         $limit = array_filter($limit);
         $ltime = $this->input->post("last_time");
 
+        if(isset($limit['is_hot']) && $limit['is_hot'] == 1) {
+            $limit = 0;
+        }
+        
         if (!is_numeric($ltime)) {
             $this->setCode(1005);
         } else {
@@ -267,7 +271,9 @@ class S_vote extends MY_Controller {
                 $this->setCode(1005);
             } else {
                 $ctime = time();
-                $this->comment_model->addComment($data, $ctime);
+                $cid = $this->comment_model->addComment($data, $ctime);
+                $new = $this->comment_model->getCommentById($cid);
+                $this->setResult($new);
                 $this->setCode(1000);
             }
         }
