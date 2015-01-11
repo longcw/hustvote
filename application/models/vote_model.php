@@ -185,13 +185,20 @@ class Vote_model extends CI_Model {
      * 按页获取投票
      * @param int $page
      * @param array $limit
-     *  支持 is_end, is_start, is_completed
+     *  支持 is_end, is_start, is_completed, is_hot获取热门投票
      * 
-     * @param int $count
+     * @param int $count 每页的数量
+     * @param int $ltime 获取该时间之后的所有投票
+     * 
      * @return array
      */
     public function getVotesByPage($page = 0, $limit = array(), $count = 8, $ltime = 0, $getcount = false) {
         $ctime = time();
+        if(isset($limit['is_hot']) && $limit['is_hot'] == 1) {
+            $this->db->order_by('log_count desc');
+            $this->db->where('log_count > 0');
+        }
+        
         if (isset($limit['is_end'])) {
             $op = $limit['is_end'] ? '<' : '>=';
             $this->db->where('end_time' . $op, $ctime);
@@ -229,6 +236,19 @@ class Vote_model extends CI_Model {
     public function getVotePage($limit = array(), $count = 8) {
         $total = $this->getVotesByPage(0, $limit, $count, 0, true);
         return ceil($total / 8);
+    }
+    
+    public function countLog() {
+        $this->db->select('start_voteid, COUNT(*) as log_count');
+        $this->db->group_by('start_voteid');
+        $query = $this->db->get('VoteLog');
+        $result = $query->result_array();
+        
+        foreach ($result as $row) {
+            $this->db->where('start_voteid', $row['start_voteid']);
+            $this->db->update('StartVote', $row);
+        }
+        return $result;
     }
 
     public function getVoteDetailById($id) {
@@ -471,7 +491,14 @@ class Vote_model extends CI_Model {
             $identify['openid'] = $identify['thirdtype'] . ':' . $identify['openid'];
         }
         $this->db->insert('VoteLog', $identify);
-        return $this->db->insert_id();
+        $logid = $this->db->insert_id();
+        
+        //更新count
+        $this->db->set('log_count', 'log_count+1', FALSE);
+        $this->db->where('start_voteid', $start_voteid);
+        $this->db->update('StartVote');
+        
+        return $logid;
     }
 
     /**
@@ -482,7 +509,7 @@ class Vote_model extends CI_Model {
     public function getVoteResult($vid) {
         $votes = $this->getVoteChoices($vid);
 
-        $this->db->select("JoinVote.choiceid, COUNT(JoinVote.choiceid) AS 'count'");
+        $this->db->select("JoinVote.choiceid, COUNT(*) AS 'count'");
         $this->db->where('JoinVote.start_voteid', $vid);
         $this->db->group_by('JoinVote.choiceid');
         $query = $this->db->get('JoinVote');
@@ -497,7 +524,7 @@ class Vote_model extends CI_Model {
         }
         return $votes;
     }
-
+    
     public function getVoteTitle($vid, $is_completed = true) {
         if(!is_numeric($vid)) {
             return null;
