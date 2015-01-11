@@ -14,6 +14,11 @@ class Vote extends MY_Controller {
         $this->setFormMessage();
         date_default_timezone_set('PRC');
     }
+    
+    public function countlog() {
+        $result = $this->vote_model->countLog();
+        var_dump($result);
+    }
 
     private function setFormMessage() {
         $this->form_validation->set_message('required', '请填写 %s');

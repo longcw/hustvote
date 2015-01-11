@@ -20,7 +20,7 @@ class S_vote extends MY_Controller {
         $pdata = $this->input->post();
         $page = empty($pdata['page']) ? 0 : $pdata['page'];
         $keys = array(
-            'is_end', 'is_start', 'is_completed'
+            'is_end', 'is_start', 'is_completed', 'is_hot'
         );
         $limit = elements($pdata, $keys, NULL);
         $limit = array_filter($limit);
@@ -91,7 +91,7 @@ class S_vote extends MY_Controller {
     public function getNewVote() {
         $pdata = $this->input->post();
         $keys = array(
-            'is_end', 'is_start', 'is_completed'
+            'is_end', 'is_start', 'is_completed', 'is_hot'
         );
         $limit = elements($pdata, $keys, NULL);
         $limit = array_filter($limit);
