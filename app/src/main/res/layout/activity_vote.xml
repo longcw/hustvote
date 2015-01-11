@@ -10,9 +10,45 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_weight="1"
         android:divider="#00000000"
         android:id="@+id/vote_detail_choicelist"
         android:layout_gravity="center_vertical"
         android:background="#ffffffff" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:gravity="bottom|center">
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="查看评论"
+            android:textSize="18sp"
+            android:textColor="#7c7c7c"
+            android:textStyle="bold"
+            android:layout_weight="2"
+            android:background="@drawable/background_info"
+            android:id="@+id/checkReview"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="投票结果"
+            android:textSize="18sp"
+            android:textColor="#7c7c7c"
+            android:textStyle="bold"
+            android:layout_weight="2"
+            android:background="@drawable/background_info"
+            android:id="@+id/vote_result_button"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>

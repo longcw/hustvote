@@ -20,19 +20,5 @@
         android:id="@+id/result_title"
         android:layout_gravity="center_horizontal" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginRight="85dp"
-        android:layout_marginLeft="85dp"
-        android:layout_marginTop="10dp"
-        android:text="查看评论"
-        android:textColor="#03A5E4"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:background="@drawable/reccir"
-        android:gravity="center"
-        android:id="@+id/checkReview"/>
-
 
 </LinearLayout>
