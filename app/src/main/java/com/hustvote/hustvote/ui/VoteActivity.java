@@ -125,7 +125,8 @@ public class VoteActivity extends BaseVoteUI {
             }
         });
 
-        TextView resultButton = (TextView) footer.findViewById(R.id.vote_result_button);
+        //投票结果
+        TextView resultButton = (TextView) findViewById(R.id.vote_result_button);
         resultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,13 +134,21 @@ public class VoteActivity extends BaseVoteUI {
             }
         });
 
+        //评论
+        TextView checkRev = (TextView) findViewById(R.id.checkReview);
+        checkRev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(VoteActivity.this, ReviewActivity.class);
+                intent.putExtra("vid", Integer.toString(voteDetailBean.getContent().getStart_voteid()));
+                intent.putExtra("vote_uid", Integer.toString(voteDetailBean.getContent().getUid()));
+                startActivity(intent);
+            }
+        });
+
         //提示信息
-        TextView infoButton = (TextView) footer.findViewById(R.id.vote_info_button);
-        infoButton.setVisibility(View.GONE);
         if(!voteDetailBean.getLogmsg().equals("none")) {
             //不能投票
-            infoButton.setVisibility(View.VISIBLE);
-            //submitButton.setEnabled(false);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("提示").setMessage(voteDetailBean.getLogmsg() + "\n是否去查看投票结果");
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -154,12 +163,7 @@ public class VoteActivity extends BaseVoteUI {
 
             infoDialog = builder.create();
             infoDialog.show();
-            infoButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    infoDialog.show();
-                }
-            });
+
         }
 
         //设置listView

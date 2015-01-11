@@ -50,16 +50,6 @@ public class ResultActivity extends BaseVoteUI {
         setContentView(R.layout.activity_result);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView checkRev = (TextView) findViewById(R.id.checkReview);
-        checkRev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ResultActivity.this, ReviewActivity.class);
-                intent.putExtra("vid", vid);
-                startActivity(intent);
-            }
-        });
-
         barChart = (BarChart) findViewById(R.id.barChart);
         title = (TextView) findViewById(R.id.result_title);
 

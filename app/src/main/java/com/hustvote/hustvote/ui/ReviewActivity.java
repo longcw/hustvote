@@ -2,6 +2,13 @@ package com.hustvote.hustvote.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -51,6 +58,40 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
             finish();
             return;
         }
+
+        final EditText commit = (EditText) findViewById(R.id.commit);
+        final ImageButton sendButton = (ImageButton) findViewById(R.id.send);
+        sendButton.setEnabled(false);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                content = commit.getText().toString();
+                doCommit();
+            }
+        });
+
+        commit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.toString().isEmpty()) {
+                    sendButton.setEnabled(false);
+                } else {
+                    sendButton.setEnabled(true);
+                }
+            }
+        });
+
+
 
         commentListView = (XListView) findViewById(R.id.review_list_view);
 

@@ -27,6 +27,7 @@ public class ChoiceIntroFragment extends BaseFragment {
 
     private int cid;
     private WebView webView;
+    private boolean geted;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class ChoiceIntroFragment extends BaseFragment {
 
         Bundle args = getArguments();
         cid = args.getInt(ARG_CID, -1);
+        geted = false;
     }
 
     @Override
@@ -49,6 +51,9 @@ public class ChoiceIntroFragment extends BaseFragment {
 
 
     private void doGetDetail() {
+        if(geted) {
+            return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("cid", Integer.toString(cid));
         HustVoteRequest<ChoiceDetailBean> request = new HustVoteRequest<ChoiceDetailBean>(Request.Method.POST,
@@ -60,6 +65,7 @@ public class ChoiceIntroFragment extends BaseFragment {
                     response.setChoice_intro(response.getChoice_name());
                 }
                 WebViewCSS.openWebView(webView, response.getChoice_intro());
+                geted = true;
 
             }
         }, new Response.ErrorListener() {
