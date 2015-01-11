@@ -13,16 +13,18 @@ import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.net.bean.CommentItemBean;
 import com.hustvote.hustvote.net.bean.VoteItemBean;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by chenlong on 15-1-1.
  */
-public class NoticeListAdapter extends BaseAdapter {
+public class CommentListAdapter extends BaseAdapter {
     List<CommentItemBean> data;
     LayoutInflater layoutInflater;
 
-    public NoticeListAdapter(Context context, List<CommentItemBean> commentItemBeanList) {
+    public CommentListAdapter(Context context, List<CommentItemBean> commentItemBeanList) {
         data = commentItemBeanList;
         layoutInflater = LayoutInflater.from(context);
     }
@@ -46,24 +48,23 @@ public class NoticeListAdapter extends BaseAdapter {
     public View getView(int pos, View convertView, ViewGroup arg2) {
         View itemView = null;
         if(convertView == null) {
-            itemView = layoutInflater.inflate(R.layout.noticeitem_layout, null);
+            itemView = layoutInflater.inflate(R.layout.review_item, null);
         } else {
             itemView = convertView;
         }
 
-        TextView title = (TextView) itemView.findViewById(R.id.notice_title);
-        TextView content = (TextView) itemView.findViewById(R.id.notice_content);
+        TextView nickname = (TextView) itemView.findViewById(R.id.nickname);
+        TextView time = (TextView) itemView.findViewById(R.id.time);
+        TextView content = (TextView) itemView.findViewById(R.id.content);
 
         CommentItemBean commentItemBean = data.get(pos);
-        String titleStr = commentItemBean.getFrom_nickname() + "在【" +commentItemBean.getTitle() +
-                "】评论了你";
-        title.setText(titleStr);
-        if(commentItemBean.getIs_read() == 0) {
-            //TODO 未读消息
-            title.setTextColor(Color.RED);
-        } else {
-            title.setTextColor(Color.BLACK);
-        }
+
+        nickname.setText(commentItemBean.getFrom_nickname());
+
+        Date create_time = new Date(Long.valueOf(commentItemBean.getCreate_time()) * 1000);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        time.setText(df.format(create_time));
+
         content.setText(commentItemBean.getContent());
         return itemView;
     }

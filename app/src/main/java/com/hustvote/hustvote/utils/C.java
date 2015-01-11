@@ -29,6 +29,7 @@ public class C {
             public final static String getVoteLog = "s_vote/getVoteLog";
             public final static String doJoinVote = "s_vote/doJoinVote";
             public final static String doGetVoteResult = "s_vote/getVoteResult";
+            public final static String getCommentByVote = "s_vote/getCommentByVote";
 
             public final static String doGetCaptcha = BaseUrl +"s_vote/captcha";
         }

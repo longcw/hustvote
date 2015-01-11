@@ -58,7 +58,8 @@
                 android:layout_marginBottom="10dp"
                 android:text="谁说我们产品组的头像不好了真是的噢！讨厌！"
                 android:textColor="#acacac"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:id="@+id/content" />
 
         </LinearLayout>
     </LinearLayout>

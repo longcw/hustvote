@@ -61,6 +61,13 @@
         <activity android:name=".ui.QRCodeScannerActivtiy" />
         <activity android:name=".ui.NoticeActivity" />
 
+
+        <activity
+            android:name=".ui.ReviewActivity"
+            android:label="@string/title_activity_review" >
+        </activity>
+
+
         <!-- ************* 以下内容是SAE云推送功能 ************* -->
 
 
@@ -102,10 +109,7 @@
             android:name="sinapush_appid"
             android:value="21592" />
 
-        <activity
-            android:name=".ui.review"
-            android:label="@string/title_activity_review" >
-        </activity>
+
     </application>
 
 </manifest>

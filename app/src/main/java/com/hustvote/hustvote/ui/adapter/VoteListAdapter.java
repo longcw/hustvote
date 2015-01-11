@@ -1,6 +1,7 @@
 package com.hustvote.hustvote.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.net.bean.VoteItemBean;
 import com.hustvote.hustvote.net.utils.NetworkUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,8 +66,22 @@ public class VoteListAdapter extends BaseAdapter {
         NetworkImageView imageView = (NetworkImageView)itemView.findViewById(R.id.vote_item_image);
         TextView titleView = (TextView) itemView.findViewById(R.id.vote_item_title);
         TextView summaryView = (TextView) itemView.findViewById(R.id.vote_item_summary);
+        TextView deadline = (TextView) itemView.findViewById(R.id.vote_item_deadline);
 
         VoteItemBean voteItem = data.get(pos);
+        long mTime = Long.valueOf(voteItem.getEnd_time()) * 1000;
+        long cTime = System.currentTimeMillis();
+        if (mTime <= 0) {
+            deadline.setText("本投票长期有效");
+        } else if (cTime <= mTime) {
+            Date date = new Date(mTime);
+            SimpleDateFormat df = new SimpleDateFormat("yyyy年MM月dd日 hh时mm分");
+            String timeStr = df.format(date);
+            deadline.setText("本投票将于" + timeStr + "结束");
+        } else {
+            deadline.setText("投票已经结束");
+        }
+
         imageView.setDefaultImageResId(R.drawable.vote_default);
         imageView.setErrorImageResId(R.drawable.vote_default);
         imageView.setImageUrl(voteItem.getImage(), imageLoader);

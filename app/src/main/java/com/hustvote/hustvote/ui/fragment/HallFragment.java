@@ -91,6 +91,10 @@ public class HallFragment extends BaseFragment implements XListView.IXListViewLi
                     @Override
                     public void onResponse(VoteListBean response) {
                         onLoad();
+                        //热门投票
+                        if(section == 1) {
+                            voteItemList.clear();
+                        }
                         page++;
                         voteItemList.addAll(response.getVotelist());
                         voteListAdapter.notifyDataSetChanged();
@@ -120,11 +124,6 @@ public class HallFragment extends BaseFragment implements XListView.IXListViewLi
                     @Override
                     public void onResponse(VoteListBean response) {
                         onLoad();
-
-                        //热门投票
-                        if(section == 1) {
-                            voteItemList.clear();
-                        }
                         voteItemList.addAll(0, response.getVotelist());
                         voteListAdapter.notifyDataSetChanged();
                     }
