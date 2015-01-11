@@ -56,9 +56,9 @@ public class HustVoteRequest<T> extends Request<T> {
 
     @Override
     protected VolleyError parseNetworkError(VolleyError volleyError) {
-        if(volleyError.getMessage().isEmpty()) {
-            volleyError = new HustVoteError(volleyError.getCause().getCause().getMessage());
-        }
+//        if(volleyError.getMessage().isEmpty()) {
+//            volleyError = new HustVoteError(volleyError.getCause().getCause().getMessage());
+//        }
         return volleyError;
     }
 
