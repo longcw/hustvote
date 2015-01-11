@@ -219,7 +219,7 @@ class Vote_model extends CI_Model {
             return $query->num_rows();
         }
 
-        $this->db->select("start_voteid, title, summary, image, start_time, end_time, create_time, uid, choice_max");
+        $this->db->select("start_voteid, title, summary, image, start_time, end_time, create_time, uid, choice_max, log_count");
         $this->db->order_by('create_time desc');
 
         if ($ltime <= 0) {

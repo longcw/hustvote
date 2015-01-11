@@ -22,7 +22,7 @@ class S_vote extends MY_Controller {
         $keys = array(
             'is_end', 'is_start', 'is_completed', 'is_hot'
         );
-        $limit = elements($pdata, $keys, NULL);
+        $limit = elements($keys, $pdata, NULL);
         $limit = array_filter($limit);
         $list = $this->vote_model->getVotesByPage($page, $limit);
         if (empty($list)) {
@@ -93,7 +93,7 @@ class S_vote extends MY_Controller {
         $keys = array(
             'is_end', 'is_start', 'is_completed', 'is_hot'
         );
-        $limit = elements($pdata, $keys, NULL);
+        $limit = elements($keys, $pdata, NULL);
         $limit = array_filter($limit);
         $ltime = $this->input->post("last_time");
 
