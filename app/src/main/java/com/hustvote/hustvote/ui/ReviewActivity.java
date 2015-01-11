@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.net.bean.CommentItemBean;
 import com.hustvote.hustvote.net.bean.CommentListBean;
+import com.hustvote.hustvote.net.bean.EmptyBean;
 import com.hustvote.hustvote.net.utils.HustVoteRequest;
 import com.hustvote.hustvote.ui.adapter.CommentListAdapter;
 import com.hustvote.hustvote.utils.C;
@@ -27,8 +28,12 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
     private int page = 0;
     private int offset = 0;
     private String vid;
+    private String vote_uid;
     private List<CommentItemBean> commentItemList;
     private CommentListAdapter commentListAdapter;
+
+    private String content;
+    private String to_uid;
 
     private XListView commentListView;
 
@@ -41,7 +46,8 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
 
         Intent intent = getIntent();
         vid = intent.getStringExtra("vid");
-        if(vid == null) {
+        vote_uid = intent.getStringExtra("vote_uid");
+        if(vid == null || vote_uid == null) {
             finish();
             return;
         }
@@ -59,10 +65,10 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
         progressDialog.setMessage(getString(R.string.geting));
         //progressDialog.show();
 
-        doGetNoticeList();
+        doGetCommentList();
     }
 
-    private void doGetNoticeList() {
+    private void doGetCommentList() {
         Map<String,String> params = new HashMap<>();
         params.put("page", Integer.toString(page));
         params.put("vid", vid);
@@ -89,13 +95,14 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
 
     private void doRefresh() {
         if(commentItemList.isEmpty()) {
-            doGetNoticeList();
+            doGetCommentList();
             return;
         }
         String last_time = commentItemList.get(0).getCreate_time();
         Map<String,String> params = new HashMap<>();
         params.put("last_time", last_time);
-        HustVoteRequest<CommentListBean> request = new HustVoteRequest<CommentListBean>(Request.Method.POST, C.Net.API.getNewComment,
+        params.put("vid", vid);
+        HustVoteRequest<CommentListBean> request = new HustVoteRequest<CommentListBean>(Request.Method.POST, C.Net.API.getNewCommentByVote,
                 CommentListBean.class, params,
                 new Response.Listener<CommentListBean>() {
                     @Override
@@ -114,6 +121,39 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
         addToRequsetQueue(request);
     }
 
+
+    private void doCommit() {
+        if(to_uid == null || to_uid.isEmpty()) {
+            to_uid = vote_uid;
+        }
+
+        progressDialog.setMessage("提交中");
+        progressDialog.show();
+        Map<String,String> params = new HashMap<>();
+        params.put("from_uid", Integer.toString(userInfo.getUserInfoBean().getUid()));
+        params.put("vid", vid);
+        params.put("to_uid", to_uid);
+        params.put("content", content);
+        HustVoteRequest<CommentItemBean> request = new HustVoteRequest<>(Request.Method.POST, C.Net.API.addComment,
+                CommentItemBean.class, params,
+                new Response.Listener<CommentItemBean>() {
+                    @Override
+                    public void onResponse(CommentItemBean response) {
+                        offset++;
+                        commentItemList.add(0, response);
+                        commentListAdapter.notifyDataSetChanged();
+                        progressDialog.cancel();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                toast(error.getMessage());
+                progressDialog.cancel();
+            }
+        });
+        addToRequsetQueue(request);
+    }
+
     @Override
     public void onRefresh() {
         doRefresh();
@@ -122,7 +162,7 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
 
     @Override
     public void onLoadMore() {
-        doGetNoticeList();
+        doGetCommentList();
     }
 
     private void onLoad() {
