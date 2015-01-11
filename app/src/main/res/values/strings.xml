@@ -9,12 +9,11 @@
     <string name="cancel">取消</string>
     <string name="logout_ok">注销成功</string>
     <string name="geting">获取中...</string>
-
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>
     <string name="xlistview_header_hint_loading">正在加载...</string>
     <string name="xlistview_header_last_time">上次更新时间：</string>
-    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_normal">点击查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
     <string name="title_vote_activity">VoteActivity</string>
     <string name="vote_result">投票结果</string>
@@ -31,5 +30,9 @@
 
     <integer name="viewfinder_border_width">4</integer>
     <integer name="viewfinder_border_length">60</integer>
+
+    <string name="title_activity_review">review</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="发表评论："
+        android:textColor="#9c9c9c"
+        android:textSize="16sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:inputType="textMultiLine"
+        android:gravity="left|top"
+        android:hint="请输入评论。"
+        android:textSize="16sp"
+        android:lines="5"
+        android:selectAllOnFocus="false"
+        android:background="@drawable/reccir"
+        android:id="@+id/commit"/>
+
+    <TextView
+        android:layout_width="121dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginRight="5dp"
+        android:text="发布"
+        android:textSize="20sp"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:background="@drawable/reccir_blue"
+        android:id="@+id/loginButton" />
+
+
+</LinearLayout>

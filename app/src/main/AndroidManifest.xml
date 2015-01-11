@@ -4,16 +4,15 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="com.hustvote.hustvote.permission.SINA_PUSH" />
+
     <permission
         android:name="com.hustvote.hustvote.permission.SINA_PUSH"
         android:protectionLevel="normal" />
@@ -52,20 +51,18 @@
         <activity
             android:name=".ui.ChoiceIntroActivity"
             android:label="ChoiceIntro" />
-
         <activity
             android:name=".ui.RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
-
-        <activity android:name=".ui.ResultActivity" android:label="Result" />
-
+        <activity
+            android:name=".ui.ResultActivity"
+            android:label="Result" />
         <activity android:name=".ui.QRCodeScannerActivtiy" />
-
         <activity android:name=".ui.NoticeActivity" />
 
-
         <!-- ************* 以下内容是SAE云推送功能 ************* -->
+
 
         <!--
         	声明使用SinaPushSDK必须启动的服务com.sina.push.service.SinaPushService
@@ -88,24 +85,27 @@
             </intent-filter>
         </service>
 
-
-
-        <!--  声明使用SinaPushSDK 接收透传消息的广播事件   -->
+        <!-- 声明使用SinaPushSDK 接收透传消息的广播事件 -->
         <receiver android:name=".net.push.SAEMsgReceiver" >
             <intent-filter>
                 <action android:name="com.sina.push.msg.broadcast.21592" />
             </intent-filter>
         </receiver>
 
-
-        <provider android:name="com.sina.push.datacenter.PushProvider"
-            android:process=":remote"
+        <provider
+            android:name="com.sina.push.datacenter.PushProvider"
+            android:authorities="com.sina.push.pushprovider.21592"
             android:multiprocess="false"
-            android:authorities="com.sina.push.pushprovider.21592"/>
+            android:process=":remote" />
 
+        <meta-data
+            android:name="sinapush_appid"
+            android:value="21592" />
 
-        <meta-data android:name="sinapush_appid" android:value="21592" />
-
+        <activity
+            android:name=".ui.review"
+            android:label="@string/title_activity_review" >
+        </activity>
     </application>
 
 </manifest>
