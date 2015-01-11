@@ -23,8 +23,6 @@ import com.hustvote.hustvote.net.bean.ResultDataBean;
 import com.hustvote.hustvote.net.bean.VoteResultBean;
 import com.hustvote.hustvote.net.utils.HustVoteRequest;
 import com.hustvote.hustvote.utils.C;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,10 +40,7 @@ public class ResultActivity extends BaseVoteUI {
     private String vid;
     private VoteResultBean voteResultBean;
 
-    @ViewInject(R.id.barChart)
     private BarChart barChart;
-
-    @ViewInject(R.id.result_title)
     private TextView title;
 
     @Override
@@ -54,7 +49,9 @@ public class ResultActivity extends BaseVoteUI {
         setTitle(getString(R.string.vote_result));
         setContentView(R.layout.activity_result);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ViewUtils.inject(this);
+
+        barChart = (BarChart) findViewById(R.id.barChart);
+        title = (TextView) findViewById(R.id.result_title);
 
         //隐藏
         barChart.setVisibility(View.INVISIBLE);

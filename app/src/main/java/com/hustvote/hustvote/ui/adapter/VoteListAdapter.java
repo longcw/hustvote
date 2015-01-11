@@ -31,6 +31,12 @@ public class VoteListAdapter extends BaseAdapter {
         imageLoader = NetworkUtils.getInstance(context).getImageLoader();
     }
 
+    public VoteListAdapter(LayoutInflater inflater, List<VoteItemBean> data) {
+        this.data = data;
+        layoutInflater = inflater;
+        imageLoader = NetworkUtils.getInstance(context).getImageLoader();
+    }
+
     @Override
     public int getCount() {
         return data.size();

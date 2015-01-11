@@ -36,6 +36,14 @@
             android:name=".ui.HallActivity"
             android:label="@string/title_activity_hall" >
         </activity>
+
+        <activity
+            android:name=".ui.HallFragmentActivity"
+            android:label="@string/app_name"
+            android:logo="@drawable/logo"
+
+            />
+
         <activity
             android:name=".ui.VoteActivity"
             android:label="VoteActivity_WebView" />

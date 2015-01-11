@@ -3,7 +3,9 @@ package com.hustvote.hustvote.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -14,9 +16,6 @@ import com.hustvote.hustvote.net.bean.UserInfoBean;
 import com.hustvote.hustvote.net.push.UpdateSAEPushToken;
 import com.hustvote.hustvote.net.utils.HustVoteRequest;
 import com.hustvote.hustvote.utils.C;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,10 +23,7 @@ import java.util.Map;
 
 public class LoginActivity extends BaseUI {
 
-    @ViewInject(R.id.email_edit)
     private EditText emailEdit;
-
-    @ViewInject(R.id.password_edit)
     private EditText passwordEdit;
 
     @Override
@@ -36,7 +32,51 @@ public class LoginActivity extends BaseUI {
 
         setTitle("HustVote");
         setContentView(R.layout.activity_login);
-        ViewUtils.inject(this);
+
+        emailEdit = (EditText) findViewById(R.id.email_edit);
+        passwordEdit = (EditText) findViewById(R.id.password_edit);
+
+        TextView registerButton = (TextView) findViewById(R.id.registerButton);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
+
+        TextView loginButton = (TextView) findViewById(R.id.loginButton);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = emailEdit.getText().toString();
+                String password = passwordEdit.getText().toString();
+                if(email.isEmpty() || password.isEmpty()) {
+                    toast(getString(R.string.email_need));
+                    return;
+                }
+                final Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("password", password);
+                userInfo.setPassword(email, password);
+
+                //发送空消息获取session
+                progressDialog.setMessage(getString(R.string.logining));
+                progressDialog.show();
+                HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
+                        EmptyBean.class, new Response.Listener<EmptyBean>() {
+                    @Override
+                    public void onResponse(EmptyBean response) {
+                        doLogin(params);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        toast("登录失败："+error.getMessage());
+                    }
+                });
+                addToRequsetQueue(request);
+            }
+        });
     }
 
     @Override
@@ -50,41 +90,6 @@ public class LoginActivity extends BaseUI {
         passwordEdit.setText(params.get("password"));
     }
 
-    @OnClick(R.id.registerButton)
-    private void onClickRegisterButton(View view) {
-        startActivity(new Intent(this, RegisterActivity.class));
-    }
-
-    @OnClick(R.id.loginButton)
-    private void onClickLoginButton(View view) {
-        String email = emailEdit.getText().toString();
-        String password = passwordEdit.getText().toString();
-        if(email.isEmpty() || password.isEmpty()) {
-            toast(getString(R.string.email_need));
-            return;
-        }
-        final Map<String, String> params = new HashMap<>();
-        params.put("email", email);
-        params.put("password", password);
-        userInfo.setPassword(email, password);
-
-        //发送空消息获取session
-        progressDialog.setMessage(getString(R.string.logining));
-        progressDialog.show();
-        HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
-                EmptyBean.class, new Response.Listener<EmptyBean>() {
-            @Override
-            public void onResponse(EmptyBean response) {
-                doLogin(params);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                toast("登录失败："+error.getMessage());
-            }
-        });
-        addToRequsetQueue(request);
-    }
 
     private void doLogin(Map<String, String> params) {
 
@@ -98,7 +103,7 @@ public class LoginActivity extends BaseUI {
                         userInfo.setUserInfoBean(response);
                         //更新推送token
                         UpdateSAEPushToken.update(getApplicationContext(), response.getUid(), userInfo.getSAEPushToken());
-                        startActivityAndFinish(new Intent(LoginActivity.this, HallActivity.class));
+                        startActivityAndFinish(new Intent(LoginActivity.this, HallFragmentActivity.class));
                     }
                 }, new Response.ErrorListener() {
             @Override

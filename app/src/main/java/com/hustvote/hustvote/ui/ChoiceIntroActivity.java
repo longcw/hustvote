@@ -12,8 +12,6 @@ import com.hustvote.hustvote.net.bean.ChoiceDetailBean;
 import com.hustvote.hustvote.net.utils.HustVoteRequest;
 import com.hustvote.hustvote.utils.C;
 import com.hustvote.hustvote.utils.WebViewCSS;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +22,6 @@ import java.util.Map;
 public class ChoiceIntroActivity extends BaseVoteUI {
     private int cid;
 
-    @ViewInject(R.id.choice_intro_webview)
     private WebView webView;
 
     @Override
@@ -33,7 +30,7 @@ public class ChoiceIntroActivity extends BaseVoteUI {
 
         setTitle(getString(R.string.choice_intro));
         setContentView(R.layout.activity_choice_intro);
-        ViewUtils.inject(this);
+        webView = (WebView) findViewById(R.id.choice_intro_webview);
 
         Intent intent = getIntent();
         cid = intent.getIntExtra("cid", -1);

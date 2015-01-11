@@ -3,6 +3,7 @@ package com.hustvote.hustvote.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -17,9 +18,6 @@ import com.hustvote.hustvote.net.utils.HustVoteRequest;
 import com.hustvote.hustvote.ui.adapter.NoticeListAdapter;
 import com.hustvote.hustvote.ui.adapter.VoteListAdapter;
 import com.hustvote.hustvote.utils.C;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lidroid.xutils.view.annotation.event.OnItemClick;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,7 +37,6 @@ public class NoticeActivity extends BaseVoteUI implements XListView.IXListViewLi
     private List<CommentItemBean> commentItemList;
     private NoticeListAdapter noticeListAdapter;
 
-    @ViewInject(R.id.notice_list_view)
     private XListView noticeListView;
 
     @Override
@@ -49,7 +46,20 @@ public class NoticeActivity extends BaseVoteUI implements XListView.IXListViewLi
         setTitle(R.string.message);
         setContentView(R.layout.activity_notice);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ViewUtils.inject(this);
+
+        noticeListView = (XListView) findViewById(R.id.notice_list_view);
+        noticeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                if(pos > 0 && pos <= commentItemList.size()) {
+                    int vid = commentItemList.get(pos - 1).getVid();
+                    Intent intent = new Intent(NoticeActivity.this, VoteActivity.class);
+                    intent.putExtra("start_voteid", Integer.toString(vid));
+                    startActivity(intent);
+                }
+            }
+        });
+
         commentItemList = new ArrayList<>();
         noticeListAdapter = new NoticeListAdapter(this, commentItemList);
         noticeListView.setAdapter(noticeListAdapter);
@@ -112,16 +122,6 @@ public class NoticeActivity extends BaseVoteUI implements XListView.IXListViewLi
             }
         });
         addToRequsetQueue(request);
-    }
-
-    @OnItemClick(R.id.notice_list_view)
-    private void onItemClickVoteListView(ListView parent, View view, int pos, long id) {
-        if(pos > 0 && pos <= commentItemList.size()) {
-            int vid = commentItemList.get(pos - 1).getVid();
-            Intent intent = new Intent(NoticeActivity.this, VoteActivity.class);
-            intent.putExtra("start_voteid", Integer.toString(vid));
-            startActivity(intent);
-        }
     }
 
     @Override

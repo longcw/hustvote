@@ -33,11 +33,6 @@ import com.hustvote.hustvote.net.utils.HustVoteRequest;
 import com.hustvote.hustvote.ui.adapter.ChoiceListAdapter;
 import com.hustvote.hustvote.utils.C;
 import com.hustvote.hustvote.utils.WebViewCSS;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lidroid.xutils.view.annotation.event.OnClick;
-import com.lidroid.xutils.view.annotation.event.OnItemClick;
-import com.lidroid.xutils.view.annotation.event.OnItemSelected;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +57,6 @@ public class VoteActivity extends BaseVoteUI {
     private TextView submitButton;
     View captchaLayout;
 
-    @ViewInject(R.id.vote_detail_choicelist)
     private ListView choiceListView;
 
     private TelephonyManager telephonyManager;
@@ -74,7 +68,7 @@ public class VoteActivity extends BaseVoteUI {
         setTitle(getString(R.string.join_vote));
         setContentView(R.layout.activity_vote);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ViewUtils.inject(this);
+        choiceListView = (ListView) findViewById(R.id.vote_detail_choicelist);
 
         Intent intent = getIntent();
         start_voteid = intent.getStringExtra("start_voteid")!=null ? intent.getStringExtra("start_voteid") : "";
