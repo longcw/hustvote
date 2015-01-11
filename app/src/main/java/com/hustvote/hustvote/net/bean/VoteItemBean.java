@@ -8,6 +8,7 @@ public class VoteItemBean {
     private int start_voteid;
     private int uid;
     private int is_completed;
+    private int log_count;
     private String title;
     private String summary;
     private String image;
@@ -22,10 +23,11 @@ public class VoteItemBean {
 
     @Override
     public String toString() {
-        return "VoteItem{" +
+        return "VoteItemBean{" +
                 "start_voteid=" + start_voteid +
                 ", uid=" + uid +
                 ", is_completed=" + is_completed +
+                ", log_count=" + log_count +
                 ", title='" + title + '\'' +
                 ", summary='" + summary + '\'' +
                 ", image='" + image + '\'' +
@@ -34,6 +36,14 @@ public class VoteItemBean {
                 ", end_time='" + end_time + '\'' +
                 ", create_time='" + create_time + '\'' +
                 '}';
+    }
+
+    public int getLog_count() {
+        return log_count;
+    }
+
+    public void setLog_count(int log_count) {
+        this.log_count = log_count;
     }
 
     public int getStart_voteid() {

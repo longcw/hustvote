@@ -2,10 +2,8 @@ package com.hustvote.hustvote.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -39,7 +37,7 @@ public class HallActivity extends BaseVoteUI implements XListView.IXListViewList
         super.onCreate(savedInstanceState);
 
         setTitle(getString(R.string.hall));
-        setContentView(R.layout.activity_hall);
+        setContentView(R.layout.fregment_hall);
 
         voteListView = (XListView) findViewById(R.id.vote_list_view);
 

@@ -2,12 +2,10 @@ package com.hustvote.hustvote.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -59,7 +57,7 @@ public class HallFragment extends BaseFragment implements XListView.IXListViewLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_hall, container, false);
+        View rootView = inflater.inflate(R.layout.fregment_hall, container, false);
         voteListView = (XListView)rootView.findViewById(R.id.vote_list_view);
 
         voteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,7 +84,7 @@ public class HallFragment extends BaseFragment implements XListView.IXListViewLi
     private void doGetVoteList() {
         Map<String,String> params = new HashMap<>();
         params.put("page", Integer.toString(page));
-        params.put("section", Integer.toString(section));
+        params.put("is_hot", Integer.toString(section));
         HustVoteRequest<VoteListBean> request = new HustVoteRequest<VoteListBean>(Request.Method.POST, C.Net.API.getVoteList,
                 VoteListBean.class, params,
                 new Response.Listener<VoteListBean>() {
@@ -108,7 +106,8 @@ public class HallFragment extends BaseFragment implements XListView.IXListViewLi
     }
 
     private void doRefresh() {
-        if(voteItemList.isEmpty()) {
+        if(voteItemList.isEmpty() || section == 1) {
+            page = 0;
             doGetVoteList();
             return;
         }
@@ -121,6 +120,11 @@ public class HallFragment extends BaseFragment implements XListView.IXListViewLi
                     @Override
                     public void onResponse(VoteListBean response) {
                         onLoad();
+
+                        //热门投票
+                        if(section == 1) {
+                            voteItemList.clear();
+                        }
                         voteItemList.addAll(0, response.getVotelist());
                         voteListAdapter.notifyDataSetChanged();
                     }

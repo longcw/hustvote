@@ -29,7 +29,7 @@ public class ChoiceIntroActivity extends BaseVoteUI {
         super.onCreate(savedInstanceState);
 
         setTitle(getString(R.string.choice_intro));
-        setContentView(R.layout.activity_choice_intro);
+        setContentView(R.layout.fregment_choice_intro);
         webView = (WebView) findViewById(R.id.choice_intro_webview);
 
         Intent intent = getIntent();

@@ -44,6 +44,8 @@
 
             />
 
+        <activity android:name=".ui.ChoiceIntroFragmentActivity" android:label="@string/choice_intro" />
+
         <activity
             android:name=".ui.VoteActivity"
             android:label="VoteActivity_WebView" />

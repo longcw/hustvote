@@ -1,9 +1,11 @@
 package com.hustvote.hustvote.net.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by chenlong on 14-12-20.
  */
-public class ChoiceItemBean {
+public class ChoiceItemBean implements Serializable{
 
     private int choiceid;
     private int start_voteid;

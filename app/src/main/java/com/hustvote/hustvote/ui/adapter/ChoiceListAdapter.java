@@ -15,7 +15,10 @@ import android.widget.TextView;
 import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.net.bean.ChoiceItemBean;
 import com.hustvote.hustvote.ui.ChoiceIntroActivity;
+import com.hustvote.hustvote.ui.ChoiceIntroFragmentActivity;
+import com.hustvote.hustvote.ui.fragment.ChoiceIntroFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +26,7 @@ import java.util.List;
  */
 public class ChoiceListAdapter extends BaseAdapter {
     private Context context;
-    private List<ChoiceItemBean> data;
+    private ArrayList<ChoiceItemBean> data;
     private LayoutInflater layoutInflater;
 
     private List<Integer> selected;
@@ -32,7 +35,7 @@ public class ChoiceListAdapter extends BaseAdapter {
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
 
-    public ChoiceListAdapter(Context context, List<ChoiceItemBean> data,
+    public ChoiceListAdapter(Context context, ArrayList<ChoiceItemBean> data,
                              List<Integer> selected) {
         this.context = context;
         this.data = data;
@@ -95,8 +98,10 @@ public class ChoiceListAdapter extends BaseAdapter {
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, ChoiceIntroActivity.class);
-                intent.putExtra("cid", data.get(pos).getChoiceid());
+                Intent intent = new Intent(context, ChoiceIntroFragmentActivity.class);
+                intent.putExtra(ChoiceIntroFragmentActivity.ARG_CID, data.get(pos).getChoiceid());
+                intent.putExtra(ChoiceIntroFragmentActivity.ARG_CHOICE_LIST, data);
+
                 context.startActivity(intent);
             }
         });

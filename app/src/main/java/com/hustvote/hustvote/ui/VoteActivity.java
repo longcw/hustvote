@@ -48,7 +48,7 @@ public class VoteActivity extends BaseVoteUI {
     private String captcha;
     private String start_voteid;
     private VoteDetailBean voteDetailBean;
-    private List<ChoiceItemBean> choiceItemBeanList;
+    private ArrayList<ChoiceItemBean> choiceItemBeanList;
     private ChoiceListAdapter choiceListAdapter;
 
     private Dialog infoDialog;
