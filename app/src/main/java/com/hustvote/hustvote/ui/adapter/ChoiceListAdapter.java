@@ -14,9 +14,7 @@ import android.widget.TextView;
 
 import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.net.bean.ChoiceItemBean;
-import com.hustvote.hustvote.ui.ChoiceIntroActivity;
 import com.hustvote.hustvote.ui.ChoiceIntroFragmentActivity;
-import com.hustvote.hustvote.ui.fragment.ChoiceIntroFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +97,7 @@ public class ChoiceListAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ChoiceIntroFragmentActivity.class);
-                intent.putExtra(ChoiceIntroFragmentActivity.ARG_CID, data.get(pos).getChoiceid());
+                intent.putExtra(ChoiceIntroFragmentActivity.ARG_POS, pos);
                 intent.putExtra(ChoiceIntroFragmentActivity.ARG_CHOICE_LIST, data);
 
                 context.startActivity(intent);

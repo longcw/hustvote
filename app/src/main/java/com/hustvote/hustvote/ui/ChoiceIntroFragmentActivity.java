@@ -21,14 +21,14 @@ import java.util.ArrayList;
 public class ChoiceIntroFragmentActivity extends BaseVoteUI {
 
     public static final String ARG_CHOICE_LIST = "ARG_CHOICE_LIST";
-    public static final String ARG_CID = "cid";
+    public static final String ARG_POS = "cid";
 
     private Fragment []fragments;
 
     private ViewPager mViewPager;
     private ChoiceIntroPagerAdapter introPagerAdapter;
 
-    private int current_cid;
+    private int current_pos;
     private ArrayList<ChoiceItemBean> choiceList;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class ChoiceIntroFragmentActivity extends BaseVoteUI {
             finish();
             return;
         }
-        current_cid = intent.getIntExtra(ARG_CID, -1);
+        current_pos = intent.getIntExtra(ARG_POS, -1);
 
         fragments = new Fragment[choiceList.size()];
         introPagerAdapter = new ChoiceIntroPagerAdapter(getSupportFragmentManager());
@@ -54,6 +54,7 @@ public class ChoiceIntroFragmentActivity extends BaseVoteUI {
         // Set up the ViewPager, attaching the adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(introPagerAdapter);
+        mViewPager.setCurrentItem(current_pos);
     }
 
     public class ChoiceIntroPagerAdapter extends FragmentStatePagerAdapter {

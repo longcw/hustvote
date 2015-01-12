@@ -111,16 +111,6 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
 
         //自动弹出键盘
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        commit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if(b) {
-                    imm.showSoftInput(commit, InputMethodManager.SHOW_IMPLICIT);
-                } else {
-                    imm.hideSoftInputFromWindow(commit.getWindowToken(), 0);
-                }
-            }
-        });
 
         commentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -132,6 +122,7 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
                     commit.setText(to_token);
                     commit.requestFocus();
                     commit.setSelection(to_token.length());
+                    imm.showSoftInput(commit, InputMethodManager.SHOW_IMPLICIT);
                 }
 
             }
