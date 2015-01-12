@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 
 import com.hustvote.hustvote.R;
 import com.hustvote.hustvote.net.bean.ChoiceItemBean;
@@ -22,6 +23,8 @@ public class ChoiceIntroFragmentActivity extends BaseVoteUI {
     public static final String ARG_CHOICE_LIST = "ARG_CHOICE_LIST";
     public static final String ARG_CID = "cid";
 
+    private Fragment []fragments;
+
     private ViewPager mViewPager;
     private ChoiceIntroPagerAdapter introPagerAdapter;
 
@@ -33,7 +36,6 @@ public class ChoiceIntroFragmentActivity extends BaseVoteUI {
         setContentView(R.layout.activity_choiceintro_fragment);
 
         Intent intent = getIntent();
-
         choiceList = (ArrayList<ChoiceItemBean>)intent.getSerializableExtra(ARG_CHOICE_LIST);
         if(choiceList == null) {
             finish();
@@ -41,6 +43,7 @@ public class ChoiceIntroFragmentActivity extends BaseVoteUI {
         }
         current_cid = intent.getIntExtra(ARG_CID, -1);
 
+        fragments = new Fragment[choiceList.size()];
         introPagerAdapter = new ChoiceIntroPagerAdapter(getSupportFragmentManager());
 
         // Set up action bar.
@@ -61,10 +64,16 @@ public class ChoiceIntroFragmentActivity extends BaseVoteUI {
 
         @Override
         public Fragment getItem(int i) {
+            if(fragments[i] != null) {
+                Log.i("choiceIntroFragment", "fragment match:"+Integer.toString(i));
+                return fragments[i];
+            }
+
             Fragment fragment = new ChoiceIntroFragment();
             Bundle args = new Bundle();
             args.putInt(ChoiceIntroFragment.ARG_CID, choiceList.get(i).getChoiceid());
             fragment.setArguments(args);
+            fragments[i] = fragment;
             return fragment;
         }
 

@@ -53,8 +53,8 @@ public class NoticeActivity extends BaseVoteUI implements XListView.IXListViewLi
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 if(pos > 0 && pos <= commentItemList.size()) {
                     int vid = commentItemList.get(pos - 1).getVid();
-                    Intent intent = new Intent(NoticeActivity.this, VoteActivity.class);
-                    intent.putExtra("start_voteid", Integer.toString(vid));
+                    Intent intent = new Intent(NoticeActivity.this, ReviewActivity.class);
+                    intent.putExtra("vid", Integer.toString(vid));
                     startActivity(intent);
                 }
             }

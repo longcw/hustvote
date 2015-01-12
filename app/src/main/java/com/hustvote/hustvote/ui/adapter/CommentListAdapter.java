@@ -41,7 +41,7 @@ public class CommentListAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int pos) {
-        return data.get(pos).getCid();
+        return (long) pos;
     }
 
     @Override

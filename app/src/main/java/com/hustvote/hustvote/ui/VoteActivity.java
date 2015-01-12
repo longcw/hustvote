@@ -276,6 +276,7 @@ public class VoteActivity extends BaseVoteUI {
                     public void onResponse(EmptyBean response) {
                         toast("投票成功");
                         submitButton.setEnabled(false);
+                        choiceListAdapter.clearSelected();
                         toResultActivity();
                     }
                 }, new Response.ErrorListener() {
