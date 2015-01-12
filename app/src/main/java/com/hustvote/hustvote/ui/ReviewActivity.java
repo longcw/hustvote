@@ -6,6 +6,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -41,8 +44,10 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
 
     private String content;
     private String to_uid;
+    private String to_token;
 
     private XListView commentListView;
+    private EditText commit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +58,14 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
 
         Intent intent = getIntent();
         vid = intent.getStringExtra("vid");
-        vote_uid = intent.getStringExtra("vote_uid");
+        //vote_uid = intent.getStringExtra("vote_uid");
+        vote_uid = "-1";
         if(vid == null || vote_uid == null) {
             finish();
             return;
         }
 
-        final EditText commit = (EditText) findViewById(R.id.commit);
+        commit = (EditText) findViewById(R.id.commit);
         final ImageButton sendButton = (ImageButton) findViewById(R.id.send);
         sendButton.setEnabled(false);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +108,21 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
         commentListView.setPullRefreshEnable(true);
         commentListView.setXListViewListener(this);
 
+        commentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i > 0 && i <= commentItemList.size()){
+                    CommentItemBean item = commentItemList.get(i-1);
+                    to_uid = Integer.toString(item.getFrom_uid());
+                    to_token = "回复 " + item.getFrom_nickname() + ": ";
+                    commit.setText(to_token);
+                    commit.requestFocus();
+                    commit.setSelection(to_token.length());
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                }
+
+            }
+        });
 
         progressDialog.setMessage(getString(R.string.geting));
         //progressDialog.show();
@@ -164,7 +185,7 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
 
 
     private void doCommit() {
-        if(to_uid == null || to_uid.isEmpty()) {
+        if(to_uid == null || to_uid.isEmpty() || !content.startsWith(to_token)) {
             to_uid = vote_uid;
         }
 
@@ -180,6 +201,7 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
                 new Response.Listener<CommentItemBean>() {
                     @Override
                     public void onResponse(CommentItemBean response) {
+                        commit.setText("");
                         offset++;
                         commentItemList.add(0, response);
                         commentListAdapter.notifyDataSetChanged();
