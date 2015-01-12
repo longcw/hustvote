@@ -20,7 +20,7 @@ class S_vote extends MY_Controller {
         $pdata = $this->input->post();
         $page = empty($pdata['page']) ? 0 : $pdata['page'];
         $keys = array(
-            'is_end', 'is_start', 'is_completed', 'is_hot'
+            'is_end', 'is_start', 'is_completed', 'is_hot', 'offset'
         );
         $limit = elements($keys, $pdata, NULL);
         $limit = array_filter($limit);

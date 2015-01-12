@@ -185,7 +185,7 @@ class Vote_model extends CI_Model {
      * 按页获取投票
      * @param int $page
      * @param array $limit
-     *  支持 is_end, is_start, is_completed, is_hot获取热门投票
+     *  支持 is_end, is_start, is_completed, is_hot, offset获取热门投票
      * 
      * @param int $count 每页的数量
      * @param int $ltime 获取该时间之后的所有投票
@@ -194,6 +194,8 @@ class Vote_model extends CI_Model {
      */
     public function getVotesByPage($page = 0, $limit = array(), $count = 8, $ltime = 0, $getcount = false) {
         $ctime = time();
+        $offset = isset($limit['offset']) ? $limit['offset'] : 0;
+        
         if(isset($limit['is_hot']) && $limit['is_hot'] == 1) {
             $this->db->order_by('log_count desc');
             $this->db->where('log_count > 0');
@@ -223,8 +225,7 @@ class Vote_model extends CI_Model {
         $this->db->order_by('create_time desc');
 
         if ($ltime <= 0) {
-            $offset = $page * $count;
-            $this->db->limit($count, $offset);
+            $this->db->limit($count, $page * $count + $offset);
         } else {
             $this->db->where('create_time >', $ltime);
         }
