@@ -37,6 +37,7 @@ public class HallFragment extends BaseFragment implements XListView.IXListViewLi
     //排序方式 0-时间， 1-热门
     private int section;
 
+    private int offset = 0;
     private int page = 0;
     private List<VoteItemBean> voteItemList;
     private VoteListAdapter voteListAdapter;
@@ -85,6 +86,7 @@ public class HallFragment extends BaseFragment implements XListView.IXListViewLi
         Map<String,String> params = new HashMap<>();
         params.put("page", Integer.toString(page));
         params.put("is_hot", Integer.toString(section));
+        params.put("offset", Integer.toString(offset));
         HustVoteRequest<VoteListBean> request = new HustVoteRequest<VoteListBean>(Request.Method.POST, C.Net.API.getVoteList,
                 VoteListBean.class, params,
                 new Response.Listener<VoteListBean>() {
@@ -92,7 +94,7 @@ public class HallFragment extends BaseFragment implements XListView.IXListViewLi
                     public void onResponse(VoteListBean response) {
                         onLoad();
                         //热门投票
-                        if(section == 1) {
+                        if(section == 1 && page == 0) {
                             voteItemList.clear();
                         }
                         page++;
@@ -124,6 +126,7 @@ public class HallFragment extends BaseFragment implements XListView.IXListViewLi
                     @Override
                     public void onResponse(VoteListBean response) {
                         onLoad();
+                        offset += response.getVotelist().size();
                         voteItemList.addAll(0, response.getVotelist());
                         voteListAdapter.notifyDataSetChanged();
                     }

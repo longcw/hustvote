@@ -58,23 +58,8 @@ public class LoginActivity extends BaseUI {
                 params.put("email", email);
                 params.put("password", password);
                 userInfo.setPassword(email, password);
+                doSendEmptyRequest(params);
 
-                //发送空消息获取session
-                progressDialog.setMessage(getString(R.string.logining));
-                progressDialog.show();
-                HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
-                        EmptyBean.class, new Response.Listener<EmptyBean>() {
-                    @Override
-                    public void onResponse(EmptyBean response) {
-                        doLogin(params);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        toast("登录失败："+error.getMessage());
-                    }
-                });
-                addToRequsetQueue(request);
             }
         });
     }
@@ -88,8 +73,27 @@ public class LoginActivity extends BaseUI {
         Map<String, String> params = userInfo.getPassword();
         emailEdit.setText(params.get("email"));
         passwordEdit.setText(params.get("password"));
+
     }
 
+    //发送空消息获取session
+    private void doSendEmptyRequest(final Map<String, String> params) {
+        progressDialog.setMessage(getString(R.string.logining));
+        progressDialog.show();
+        HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
+                EmptyBean.class, new Response.Listener<EmptyBean>() {
+            @Override
+            public void onResponse(EmptyBean response) {
+                doLogin(params);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                toast("登录失败："+error.getMessage());
+            }
+        });
+        addToRequsetQueue(request);
+    }
 
     private void doLogin(Map<String, String> params) {
 
@@ -117,6 +121,6 @@ public class LoginActivity extends BaseUI {
 
     private void verifyLogin() {
         Map<String, String> params = userInfo.getPassword();
-        doLogin(params);
+        doSendEmptyRequest(params);
     }
 }
