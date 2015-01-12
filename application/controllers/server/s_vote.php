@@ -282,6 +282,13 @@ class S_vote extends MY_Controller {
                 $ctime = time();
                 $cid = $this->comment_model->addComment($data, $ctime);
                 $new = $this->comment_model->getCommentById($cid);
+                
+                //发送消息
+                if($data['from_uid'] != $data['to_uid']) {
+                    $this->load->model('saepush_model');
+                    $this->saepush_model->pushComment($cid);
+                }
+                
                 $this->setResult($new);
                 $this->setCode(1000);
             }
