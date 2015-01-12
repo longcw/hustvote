@@ -1,6 +1,7 @@
 package com.hustvote.hustvote.ui.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,8 @@ public class ChoiceIntroFragment extends BaseFragment {
 
     private int cid;
     private WebView webView;
-    private boolean geted;
+
+    private View rootView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,13 +37,18 @@ public class ChoiceIntroFragment extends BaseFragment {
 
         Bundle args = getArguments();
         cid = args.getInt(ARG_CID, -1);
-        geted = false;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fregment_choice_intro, container, false);
+        if(rootView != null) {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+            Log.i("choiceIntroFragment", "rootView match");
+            return rootView;
+        }
+
+        rootView = inflater.inflate(R.layout.fregment_choice_intro, container, false);
 
         webView = (WebView) rootView.findViewById(R.id.choice_intro_webview);
         doGetDetail();
@@ -51,9 +58,6 @@ public class ChoiceIntroFragment extends BaseFragment {
 
 
     private void doGetDetail() {
-        if(geted) {
-            return;
-        }
         Map<String, String> params = new HashMap<>();
         params.put("cid", Integer.toString(cid));
         HustVoteRequest<ChoiceDetailBean> request = new HustVoteRequest<ChoiceDetailBean>(Request.Method.POST,
@@ -65,7 +69,6 @@ public class ChoiceIntroFragment extends BaseFragment {
                     response.setChoice_intro(response.getChoice_name());
                 }
                 WebViewCSS.openWebView(webView, response.getChoice_intro());
-                geted = true;
 
             }
         }, new Response.ErrorListener() {

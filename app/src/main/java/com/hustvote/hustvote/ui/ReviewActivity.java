@@ -1,5 +1,6 @@
 package com.hustvote.hustvote.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -98,7 +100,6 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
         });
 
 
-
         commentListView = (XListView) findViewById(R.id.review_list_view);
 
         commentItemList = new ArrayList<>();
@@ -107,6 +108,19 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
         commentListView.setPullLoadEnable(true);
         commentListView.setPullRefreshEnable(true);
         commentListView.setXListViewListener(this);
+
+        //自动弹出键盘
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        commit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b) {
+                    imm.showSoftInput(commit, InputMethodManager.SHOW_IMPLICIT);
+                } else {
+                    imm.hideSoftInputFromWindow(commit.getWindowToken(), 0);
+                }
+            }
+        });
 
         commentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -118,11 +132,12 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
                     commit.setText(to_token);
                     commit.requestFocus();
                     commit.setSelection(to_token.length());
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 }
 
             }
         });
+
+
 
         progressDialog.setMessage(getString(R.string.geting));
         //progressDialog.show();
