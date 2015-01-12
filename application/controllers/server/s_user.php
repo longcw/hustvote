@@ -118,7 +118,7 @@ class S_user extends MY_Controller {
             $this->setCode(1002);
         } else {
             $ltime = $this->input->post('last_time');
-            $comments = $this->comment_model->getCommentByUser($this->userinfo['uid'], $ltime);
+            $comments = $this->comment_model->getCommentByUser($this->userinfo['uid'], 0, $ltime);
             if(empty($comments)) {
                 $this->setCode(1003);
             } else {

@@ -70,12 +70,12 @@ class Comment_model extends CI_Model {
         if($ltime <= 0) {
             $this->db->limit(self::$PAGE_COUNT, self::$PAGE_COUNT * $page);
         } else {
-            $this->db->where('create_time >', $ltime);
+            $this->db->where('Comment.create_time >', $ltime);
         }
         $this->db->select('nickname as from_nickname, Comment.*, StartVote.title')
                 ->join('User', 'Comment.from_uid=User.uid')
                 ->join('StartVote', 'StartVote.start_voteid=vid');
-        $this->db->where('to_uid', $uid)->order_by('create_time desc');
+        $this->db->where('to_uid', $uid)->order_by('Comment.create_time desc');
         $query = $this->db->get('Comment');
         return $query->result_array();
     }
