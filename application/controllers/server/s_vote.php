@@ -97,10 +97,10 @@ class S_vote extends MY_Controller {
         $limit = array_filter($limit);
         $ltime = $this->input->post("last_time");
 
-        if(isset($limit['is_hot']) && $limit['is_hot'] == 1) {
+        if (isset($limit['is_hot']) && $limit['is_hot'] == 1) {
             $limit = 0;
         }
-        
+
         if (!is_numeric($ltime)) {
             $this->setCode(1005);
         } else {
@@ -206,12 +206,11 @@ class S_vote extends MY_Controller {
         }
         return 1000;
     }
-    
-    
+
     public function getVoteResult() {
         $vid = $this->input->post('vid');
         $result = $this->vote_model->getVoteResult($vid);
-        if(empty($result)) {
+        if (empty($result)) {
             $this->setCode(1004);
         } else {
             $this->setCode(1000);
@@ -221,23 +220,23 @@ class S_vote extends MY_Controller {
         }
         $this->reply();
     }
-    
+
     public function captcha() {
         $this->load->library('PhptextClass');
         $code = rand(10000, 99999);
         $this->session->set_userdata('captcha_code', $code);
-        
+
         $this->output->set_content_type('jpeg');
         $this->phptextclass->phpcaptcha($code, '#0000CC', '#fff', 140, 50, 10, 25);
     }
-    
+
     public function getCommentByVote() {
         $vid = $this->input->post('vid');
         $page = $this->input->post('page');
         //客户端刷新评论列表要更新offset
         $offset = $this->input->post('offset');
         $result = $this->comment_model->getCommentByVote($vid, $page, 0, $offset);
-        if(empty($result)) {
+        if (empty($result)) {
             $this->setCode(1003);
         } else {
             $this->setCode(1000);
@@ -245,12 +244,12 @@ class S_vote extends MY_Controller {
         }
         $this->reply();
     }
-    
+
     public function getNewCommentByVote() {
         $vid = $this->input->post('vid');
         $ltime = $this->input->post('last_time');
         $result = $this->comment_model->getCommentByVote($vid, 0, $ltime);
-        if(empty($result)) {
+        if (empty($result)) {
             $this->setCode(1003);
         } else {
             $this->setCode(1000);
@@ -259,15 +258,25 @@ class S_vote extends MY_Controller {
         $this->reply();
     }
 
-
     public function addComment() {
-        if(!$this->isLogin()) {
+        if (!$this->isLogin()) {
             $this->setCode(1002);
+            $this->reply();
+            return;
+        }
+
+        $pdata = $this->input->post();
+        //$data from_uid, to_uid, vid, content
+        $data = array_filter($pdata);
+        $vote = $this->vote_model->getVoteTitle($data['vid']);
+        if (empty($vote)) {
+            $this->setCode(1004);
         } else {
-            $pdata = $this->input->post();
-            //$data from_uid, to_uid, vid, content
-            $data = array_filter($pdata);
-            if(count($data) != 4) {
+            if (!isset($data['to_uid']) || $data['to_uid'] <= 0) {
+                $data['to_uid'] = $vote['uid'];
+            }
+
+            if (count($data) != 4) {
                 $this->setCode(1005);
             } else {
                 $ctime = time();
@@ -279,5 +288,5 @@ class S_vote extends MY_Controller {
         }
         $this->reply();
     }
-    
+
 }
