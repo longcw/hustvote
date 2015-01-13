@@ -11,6 +11,7 @@ import com.hustvote.hustvote.net.bean.EmptyBean;
 import com.hustvote.hustvote.net.utils.HustVoteRequest;
 import com.hustvote.hustvote.net.utils.NetworkUtils;
 import com.hustvote.hustvote.utils.C;
+import com.hustvote.hustvote.utils.UserInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class UpdateSAEPushToken {
         if (token == null || token.equals(C.NULL_STR)) {
             return;
         }
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = UserInfo.getInstance(context).getPassword();
         params.put("uid", Integer.toString(uid));
         params.put("saetoken", token);
         RequestQueue requestQueue = NetworkUtils.getInstance(context).getRequestQueue();
@@ -38,7 +39,7 @@ public class UpdateSAEPushToken {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("updatetoken", "update failded, token = " + token);
+                Log.i("updatetoken", "update failded, token = " + token + "\nerror:" + error.getMessage());
             }
         });
        requestQueue.add(request);

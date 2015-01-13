@@ -80,19 +80,21 @@ public class LoginActivity extends BaseUI {
     private void doSendEmptyRequest(final Map<String, String> params) {
         progressDialog.setMessage(getString(R.string.logining));
         progressDialog.show();
-        HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
-                EmptyBean.class, new Response.Listener<EmptyBean>() {
-            @Override
-            public void onResponse(EmptyBean response) {
-                doLogin(params);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                toast("登录失败："+error.getMessage());
-            }
-        });
-        addToRequsetQueue(request);
+//        HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
+//                EmptyBean.class, new Response.Listener<EmptyBean>() {
+//            @Override
+//            public void onResponse(EmptyBean response) {
+//                doLogin(params);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                toast("登录失败："+error.getMessage());
+//            }
+//        });
+//        addToRequsetQueue(request);
+
+        doLogin(params);
     }
 
     private void doLogin(Map<String, String> params) {
