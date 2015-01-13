@@ -34,7 +34,7 @@
                     android:text="小坚果大见大大大"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:maxLength="7"
+                    android:maxLength="5"
                     android:id="@+id/nickname"/>
 
                 <TextView

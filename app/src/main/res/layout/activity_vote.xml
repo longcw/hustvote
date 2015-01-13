@@ -11,10 +11,10 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_weight="1"
-        android:divider="#00000000"
+        android:divider="#bcbcbc"
+        android:dividerHeight="1dp"
         android:id="@+id/vote_detail_choicelist"
-        android:layout_gravity="center_vertical"
-        android:background="#ffffffff" />
+        android:layout_gravity="center_vertical"/>
 
     <LinearLayout
         android:layout_width="match_parent"
