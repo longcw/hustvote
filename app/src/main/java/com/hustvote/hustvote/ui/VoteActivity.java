@@ -11,12 +11,14 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.AlphaAnimation;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -80,11 +82,14 @@ public class VoteActivity extends BaseVoteUI {
         selected = new ArrayList<>();
         choiceListAdapter = new ChoiceListAdapter(this, choiceItemBeanList, selected);
 
+        progressDialog.setMessage(getString(R.string.geting));
+
         doGetVoteDetail();
     }
 
     //联网获取
     private void doGetVoteDetail() {
+        progressDialog.show();
         Map<String, String> params = new HashMap<>();
         params.put("code", code);
         params.put("IMEI", telephonyManager.getDeviceId());
@@ -97,12 +102,13 @@ public class VoteActivity extends BaseVoteUI {
             public void onResponse(VoteDetailBean response) {
                 voteDetailBean = response;
                 //doGetVoteLog();
+                progressDialog.cancel();
                 doShowVoteDetail();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                progressDialog.cancel();
                 toast(error.getLocalizedMessage());
                 VoteActivity.this.finish();
             }

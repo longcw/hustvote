@@ -78,27 +78,26 @@ public class LoginActivity extends BaseUI {
 
     //发送空消息获取session
     private void doSendEmptyRequest(final Map<String, String> params) {
-        progressDialog.setMessage(getString(R.string.logining));
-        progressDialog.show();
-//        HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
-//                EmptyBean.class, new Response.Listener<EmptyBean>() {
-//            @Override
-//            public void onResponse(EmptyBean response) {
-//                doLogin(params);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                toast("登录失败："+error.getMessage());
-//            }
-//        });
-//        addToRequsetQueue(request);
 
-        doLogin(params);
+        HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
+                EmptyBean.class, new Response.Listener<EmptyBean>() {
+            @Override
+            public void onResponse(EmptyBean response) {
+                doLogin(params);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                toast("登录失败："+error.getMessage());
+            }
+        });
+        addToRequsetQueue(request);
+
     }
 
     private void doLogin(Map<String, String> params) {
-
+        progressDialog.setMessage(getString(R.string.logining));
+        progressDialog.show();
         HustVoteRequest<UserInfoBean> request = new HustVoteRequest<UserInfoBean>(Request.Method.POST, C.Net.API.Login,
                 UserInfoBean.class, params,
                 new Response.Listener<UserInfoBean>() {

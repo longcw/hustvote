@@ -39,7 +39,7 @@ public class BaseUI extends ActionBarActivity {
         progressDialog = new ProgressDialog(this){
             @Override
             protected void onStop() {
-                //取消登录
+                //取消
                 requestQueue.cancelAll(this);
             }
         };

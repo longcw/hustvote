@@ -22,12 +22,15 @@ import java.util.Map;
 public class UpdateSAEPushToken {
     public static void update(Context context, int uid, final String token) {
         Log.i("UpdateSAEToken", token);
-        if (token == null || token.equals(C.NULL_STR)) {
-            return;
-        }
+
         Map<String, String> params = UserInfo.getInstance(context).getPassword();
         params.put("uid", Integer.toString(uid));
-        params.put("saetoken", token);
+
+        if (token == null || token.equals(C.NULL_STR)) {
+            params.put("saetoken", " ");
+        } else {
+            params.put("saetoken", token);
+        }
         RequestQueue requestQueue = NetworkUtils.getInstance(context).getRequestQueue();
         Request<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.POST,
                 C.Net.API.updateSaeToken, EmptyBean.class, params,

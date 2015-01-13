@@ -61,7 +61,7 @@ public class HallActivity extends BaseVoteUI implements XListView.IXListViewList
 
 
         progressDialog.setMessage(getString(R.string.geting));
-        //progressDialog.show();
+        progressDialog.show();
 
         doGetVoteList();
     }
@@ -128,6 +128,9 @@ public class HallActivity extends BaseVoteUI implements XListView.IXListViewList
     }
 
     private void onLoad() {
+        if (progressDialog.isShowing()) {
+            progressDialog.cancel();
+        }
         voteListView.stopRefresh();
         voteListView.stopLoadMore();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

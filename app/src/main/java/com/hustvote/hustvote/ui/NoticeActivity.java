@@ -15,6 +15,7 @@ import com.hustvote.hustvote.net.bean.CommentListBean;
 import com.hustvote.hustvote.net.bean.VoteItemBean;
 import com.hustvote.hustvote.net.bean.VoteListBean;
 import com.hustvote.hustvote.net.utils.HustVoteRequest;
+import com.hustvote.hustvote.ui.adapter.CommentListAdapter;
 import com.hustvote.hustvote.ui.adapter.NoticeListAdapter;
 import com.hustvote.hustvote.ui.adapter.VoteListAdapter;
 import com.hustvote.hustvote.utils.C;
@@ -35,7 +36,7 @@ public class NoticeActivity extends BaseVoteUI implements XListView.IXListViewLi
 
     private int page = 0;
     private List<CommentItemBean> commentItemList;
-    private NoticeListAdapter noticeListAdapter;
+    private CommentListAdapter noticeListAdapter;
 
     private XListView noticeListView;
 
@@ -61,7 +62,7 @@ public class NoticeActivity extends BaseVoteUI implements XListView.IXListViewLi
         });
 
         commentItemList = new ArrayList<>();
-        noticeListAdapter = new NoticeListAdapter(this, commentItemList);
+        noticeListAdapter = new CommentListAdapter(this, commentItemList);
         noticeListView.setAdapter(noticeListAdapter);
         noticeListView.setPullLoadEnable(true);
         noticeListView.setPullRefreshEnable(true);

@@ -131,7 +131,7 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
 
 
         progressDialog.setMessage(getString(R.string.geting));
-        //progressDialog.show();
+        progressDialog.show();
 
         doGetCommentList();
     }
@@ -235,6 +235,9 @@ public class ReviewActivity extends BaseVoteUI implements XListView.IXListViewLi
     }
 
     private void onLoad() {
+        if(progressDialog.isShowing()) {
+            progressDialog.cancel();
+        }
         commentListView.stopRefresh();
         commentListView.stopLoadMore();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

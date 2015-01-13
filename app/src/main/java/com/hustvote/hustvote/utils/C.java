@@ -7,11 +7,14 @@ public class C {
 
     public static final String NULL_STR = "NULL_STR";
 
+    public static final int FACE_COUNT = 10;
+
     public class Net {
         public final static String SiteUrl = "http://hustvote.sinaapp.com/";
         public final static String BaseUrl = SiteUrl + "server/";
         public final static String SUCC_CODE = "1000";
         public final static String SAE_PUSH_APPID = "21592";
+
         public class API {
             public final static String Login = "s_user/login";
             public final static String Register = "s_user/register";
@@ -34,6 +37,7 @@ public class C {
             public final static String addComment = "s_vote/addComment";
 
             public final static String doGetCaptcha = BaseUrl +"s_vote/captcha";
+            public final static String getUserFace = SiteUrl + "img/icon/";
         }
     }
 }
