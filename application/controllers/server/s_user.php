@@ -15,19 +15,27 @@ class S_user extends MY_Controller {
             $this->setCode(1000);
             $this->setResult($this->userinfo);
         } else {
-            $callback = null;
             $pdata = $this->input->post();
-            $status = $this->user_model->doLogin($pdata, $callback);
-            if ($status) {
-                $this->user_model->setLogin($callback);
-                $userinfo = $this->user_model->getUserInfo($callback);
+            $uid = $this->doLogin($pdata);
+            if ($uid > 0) {
                 $this->setCode(1000);
+                $userinfo = $this->user_model->getUserInfo($uid);
                 $this->setResult($userinfo);
             } else {
                 $this->setCode(1001);
             }
         }
         $this->reply();
+    }
+
+    private function doLogin($data) {
+        $callback = null;
+        $status = $this->user_model->doLogin($data, $callback);
+        if ($status) {
+            $this->user_model->setLogin($callback);
+            return $callback;
+        }
+        return -1;
     }
 
     public function register() {
@@ -61,26 +69,24 @@ class S_user extends MY_Controller {
     public function logout() {
         $uid = $this->userinfo['uid'];
         $this->user_model->setLogout();
-        if(!empty($uid)) {
+        if (!empty($uid)) {
             $this->saepush_model->updateSAEToken($uid, "");
         }
-        
+
         $this->setCode(1000);
         $this->reply();
     }
 
     public function updateSaeToken() {
-        if (!$this->isLogin()) {
-            $this->setCode(1002);
+        $pdata = $this->input->post();
+        $uid = $this->doLogin($pdata);
+
+        if ($uid != $pdata['uid']) {
+            $this->setCode(1009);
         } else {
-            $uid = $this->input->post('uid');
             $token = $this->input->post('saetoken');
-            if ($uid != $this->userinfo['uid']) {
-                $this->setCode(1006);
-            } else {
-                $this->saepush_model->updateSAEToken($uid, $token);
-                $this->setCode(1000);
-            }
+            $this->saepush_model->updateSAEToken($uid, $token);
+            $this->setCode(1000);
         }
         $this->reply();
     }
@@ -95,14 +101,14 @@ class S_user extends MY_Controller {
         }
         $this->reply();
     }
-    
+
     public function getCommentList() {
-        if(!$this->isLogin()) {
+        if (!$this->isLogin()) {
             $this->setCode(1002);
         } else {
             $page = $this->input->post('page');
             $comments = $this->comment_model->getCommentByUser($this->userinfo['uid'], $page);
-            if(empty($comments)) {
+            if (empty($comments)) {
                 $this->setCode(1003);
             } else {
                 $this->comment_model->setCommentReadByUser($this->userinfo['uid']);
@@ -112,14 +118,14 @@ class S_user extends MY_Controller {
         }
         $this->reply();
     }
-    
+
     public function getNewComment() {
-        if(!$this->isLogin()) {
+        if (!$this->isLogin()) {
             $this->setCode(1002);
         } else {
             $ltime = $this->input->post('last_time');
             $comments = $this->comment_model->getCommentByUser($this->userinfo['uid'], 0, $ltime);
-            if(empty($comments)) {
+            if (empty($comments)) {
                 $this->setCode(1003);
             } else {
                 $this->addResult('commentlist', $comments);
