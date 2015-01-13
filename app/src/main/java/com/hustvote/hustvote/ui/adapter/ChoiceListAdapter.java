@@ -141,11 +141,17 @@ public class ChoiceListAdapter extends BaseAdapter {
     public void clearSelected() {
         selected.clear();
         int count = getCount();
-        for (int i = 1; i <= count; i++) {
+        int count_all = listView.getCount();
+
+        for (int i = 1; i <= count && i < count_all; i++) {
             View view = listView.getChildAt(i);
             CheckBox checkBox = (CheckBox) view.findViewById(R.id.choice_item_checkbox);
+            if(checkBox == null) {
+                continue;
+            }
             checkBox.setChecked(false);
         }
+        setCheckable();
     }
 
     public void setMaxChoice(int maxChoice) {

@@ -78,7 +78,8 @@ public class LoginActivity extends BaseUI {
 
     //发送空消息获取session
     private void doSendEmptyRequest(final Map<String, String> params) {
-
+        progressDialog.setMessage(getString(R.string.logining));
+        progressDialog.show();
         HustVoteRequest<EmptyBean> request = new HustVoteRequest<EmptyBean>(Request.Method.GET, C.Net.API.Logout,
                 EmptyBean.class, new Response.Listener<EmptyBean>() {
             @Override
@@ -96,8 +97,7 @@ public class LoginActivity extends BaseUI {
     }
 
     private void doLogin(Map<String, String> params) {
-        progressDialog.setMessage(getString(R.string.logining));
-        progressDialog.show();
+
         HustVoteRequest<UserInfoBean> request = new HustVoteRequest<UserInfoBean>(Request.Method.POST, C.Net.API.Login,
                 UserInfoBean.class, params,
                 new Response.Listener<UserInfoBean>() {
