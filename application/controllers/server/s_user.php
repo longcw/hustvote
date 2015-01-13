@@ -85,6 +85,7 @@ class S_user extends MY_Controller {
             $this->setCode(1009);
         } else {
             $token = $this->input->post('saetoken');
+            $token = trim($token);
             $this->saepush_model->updateSAEToken($uid, $token);
             $this->setCode(1000);
         }
