@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -27,37 +28,56 @@ public class ChoiceListAdapter extends BaseAdapter {
     private ArrayList<ChoiceItemBean> data;
     private LayoutInflater layoutInflater;
 
-    private List<Integer> selected;
-    private ListView listView;
     private int maxChoice;
+    private int countChoice = 0;
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
+    private View.OnClickListener onClickListener;
 
-    public ChoiceListAdapter(Context context, ArrayList<ChoiceItemBean> data,
-                             List<Integer> selected) {
+    public ChoiceListAdapter(Context context, ArrayList<ChoiceItemBean> data, int max) {
         this.context = context;
         this.data = data;
         layoutInflater = LayoutInflater.from(context);
 
-        this.selected = selected;
+        this.maxChoice = max;
+
+        onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CompoundButton button = (CompoundButton)view;
+                boolean b = button.isChecked();
+                int count = countChoice + (b ? 1 : -1);
+                if(count < 0 || count > maxChoice) {
+                    Log.i("choice count error: ", Integer.toString(count));
+                    return;
+                }
+                countChoice = count;
+
+                ChoiceItemBean choice = (ChoiceItemBean)getItem((int)button.getTag());
+                choice.isSelected = b;
+
+                if(b && countChoice >= maxChoice || !b && countChoice == maxChoice - 1) {
+                    notifyDataSetChanged();
+                }
+                Log.i("select changed:",
+                        (b ? "select " : "unselect ") + Integer.toString(choice.getChoiceid()));
+                Log.i("select count:", Integer.toString(countChoice));
+            }
+        };
 
         //选择事件的监听器
         onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton button, boolean b) {
-                if(b) {
-                    ChoiceListAdapter.this.selected.add((Integer) button.getTag());
-
-                    if(ChoiceListAdapter.this.selected.size() >= maxChoice) {
-                        setUnCheckable();
-                    }
-                } else {
-                    ChoiceListAdapter.this.selected.remove(button.getTag());
-                    if(ChoiceListAdapter.this.selected.size() == maxChoice-1) {
-                        setCheckable();
-                    }
+                ChoiceItemBean choice = (ChoiceItemBean)getItem((int)button.getTag());
+                choice.isSelected = b;
+                countChoice += b ? 1 : -1;
+                if(b && countChoice >= maxChoice || !b && countChoice == maxChoice - 1) {
+                    notifyDataSetChanged();
                 }
-                Log.i("selected", ChoiceListAdapter.this.selected.toString());
+                Log.i("select changed:",
+                        (b ? "select " : "unselect ") + Integer.toString(choice.getChoiceid()));
+                Log.i("select count:", Integer.toString(countChoice));
             }
         };
 
@@ -90,9 +110,16 @@ public class ChoiceListAdapter extends BaseAdapter {
         CheckBox checkBox = (CheckBox)itemView.findViewById(R.id.choice_item_checkbox);
         TextView name = (TextView) itemView.findViewById(R.id.choice_item_name);
         checkBox.setFocusableInTouchMode(false);
-        checkBox.setTag(data.get(pos).getChoiceid());
 
-        name.setText(data.get(pos).getChoice_name());
+        checkBox.setTag(pos);
+
+        //判断是否可选
+        ChoiceItemBean choice = (ChoiceItemBean)getItem(pos);
+        boolean enable = countChoice < maxChoice || choice.isSelected;
+        checkBox.setEnabled(enable);
+        checkBox.setChecked(choice.isSelected);
+
+        name.setText(choice.getChoice_name());
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,61 +131,14 @@ public class ChoiceListAdapter extends BaseAdapter {
             }
         });
 
-        checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
+        //checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
+        checkBox.setOnClickListener(onClickListener);
 
         return itemView;
     }
 
-
-    //未选中的全部禁止
-    private void setUnCheckable() {
-        int count = getCount();
-        for (int i = 1; i <= count; i++) {
-            View view = listView.getChildAt(i);
-            if(view == null) {
-                continue;
-            }
-
-            CheckBox checkBox = (CheckBox) view.findViewById(R.id.choice_item_checkbox);
-            if (!checkBox.isChecked()) {
-                checkBox.setEnabled(false);
-            }
-        }
+    public int getCountChoice() {
+        return countChoice;
     }
 
-    //允许未选中的选择
-    private void setCheckable() {
-        int count = getCount();
-        for (int i = 1; i <= count; i++) {
-            View view = listView.getChildAt(i);
-            CheckBox checkBox = (CheckBox) view.findViewById(R.id.choice_item_checkbox);
-            if (!checkBox.isChecked()) {
-                checkBox.setEnabled(true);
-            }
-        }
-    }
-
-    public void clearSelected() {
-        selected.clear();
-        int count = getCount();
-        int count_all = listView.getCount();
-
-        for (int i = 1; i <= count && i < count_all; i++) {
-            View view = listView.getChildAt(i);
-            CheckBox checkBox = (CheckBox) view.findViewById(R.id.choice_item_checkbox);
-            if(checkBox == null) {
-                continue;
-            }
-            checkBox.setChecked(false);
-        }
-        setCheckable();
-    }
-
-    public void setMaxChoice(int maxChoice) {
-        this.maxChoice = maxChoice;
-    }
-
-    public void setListView(ListView listView) {
-        this.listView = listView;
-    }
 }

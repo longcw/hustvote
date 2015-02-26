@@ -55,7 +55,6 @@ public class VoteActivity extends BaseVoteUI {
 
     private Dialog infoDialog;
 
-    private List<Integer> selected;
     private TextView submitButton;
     View captchaLayout;
 
@@ -79,8 +78,6 @@ public class VoteActivity extends BaseVoteUI {
 
         telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
         choiceItemBeanList = new ArrayList<>();
-        selected = new ArrayList<>();
-        choiceListAdapter = new ChoiceListAdapter(this, choiceItemBeanList, selected);
 
         progressDialog.setMessage(getString(R.string.geting));
 
@@ -175,14 +172,15 @@ public class VoteActivity extends BaseVoteUI {
         //设置listView
         choiceListView.addHeaderView(header);
         choiceListView.addFooterView(footer);
+
+        //初始化listAdepter
+        choiceListAdapter = new ChoiceListAdapter(this, choiceItemBeanList,
+                voteDetailBean.getContent().getChoice_max());
         choiceListView.setAdapter(choiceListAdapter);
-        //传入listView，便于获取childView
-        choiceListAdapter.setListView(choiceListView);
 
         WebViewCSS.openWebView(introView, voteDetailBean.getContent().getIntro());
 
         choiceItemBeanList.addAll(voteDetailBean.getChoices());
-        choiceListAdapter.setMaxChoice(voteDetailBean.getContent().getChoice_max());
 
         choiceListAdapter.notifyDataSetChanged();
     }
@@ -194,7 +192,7 @@ public class VoteActivity extends BaseVoteUI {
         }
 
         //TODO 确认框(判断投票权限、空选、验证码)
-        if(selected.isEmpty()) {
+        if(choiceListAdapter.getCountChoice() == 0) {
             toast("请至少选择一项");
             return;
         }
@@ -268,10 +266,14 @@ public class VoteActivity extends BaseVoteUI {
         params.put("email", userInfo.getPassword().get("email"));
         params.put("password", userInfo.getPassword().get("password"));
         StringBuilder stringBuilder = new StringBuilder();
-        for(Integer integer : selected) {
-            stringBuilder.append(integer.toString());
-            stringBuilder.append(":");
+
+        for(ChoiceItemBean choice : choiceItemBeanList) {
+            if(choice.isSelected) {
+                stringBuilder.append(Integer.toString(choice.getChoiceid()));
+                stringBuilder.append(":");
+            }
         }
+
         params.put("choice", stringBuilder.toString());
         Log.i("choice", params.get("choice"));
 
@@ -282,7 +284,7 @@ public class VoteActivity extends BaseVoteUI {
                     public void onResponse(EmptyBean response) {
                         toast("投票成功");
                         submitButton.setEnabled(false);
-                        choiceListAdapter.clearSelected();
+                        //choiceListAdapter.clearSelected();
                         toResultActivity();
                     }
                 }, new Response.ErrorListener() {

@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class ChoiceItemBean implements Serializable{
 
+    public boolean isSelected = false;
     private int choiceid;
     private int start_voteid;
     private String choice_name;
